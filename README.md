@@ -1,8 +1,33 @@
 # StudySwap
-Knowledge as a common good is the ideology behind our project, “StudySwap”. We aim to revolutionize education by providing a space where students can find the help they need and contribute to the platform's growth through a model that rewards active participants. The platform operates on an internal credit system, earned by performing actions or supporting other students. Money is not part of our ethics. It features three main sections:
-- Notes: users can upload and download notes on any subject/topic.
-- Tutoring: users can request or offer private lessons.
-- Book Exchange: users can connect buyers and sellers of used physical books, both school-related and not (only in this case, a payment is necessary, but it occurs outside the platform).
 
-An internal messaging system will allow users to communicate with each other.
-Anyone using any service can leave a review for the student who provided it. The homepage will feature a regularly updated ranking of the users who have contributed the most.
+## Overview
+StudySwap aims to revolutionize education by providing a space where students can find the help they need and contribute to the platform's growth through a model that rewards active participants.
+The platform operates on an internal credit system that rewards active participation.
+
+### Key Principles
+- **Ethics:** No monetary transactions for services except for book exchanges, which occur outside the platform.
+- **Community:** Users contribute to the platform's growth by earning credits through actions like sharing notes or tutoring.
+- **Recognition:** Active contributors are featured in a ranking system on the homepage.
+
+---
+
+## Features
+
+### Notes
+- Upload and download notes on any subject or topic.
+- Share your expertise while earning credits.
+
+### Tutoring
+- Offer or request private lessons tailored to individual needs.
+- Build connections and improve skills collaboratively.
+
+### Book Exchange
+- Connect buyers and sellers of used physical books (school-related or not).
+- Payments for books are handled externally, outside StudySwap.
+
+### Messaging System
+- Communicate directly with other users through an integrated messaging tool.
+
+### Reviews & Rankings
+- Leave reviews for users who provide services.
+- A leaderboard highlights top contributors based on their engagement and support.
