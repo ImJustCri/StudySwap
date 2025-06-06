@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
         useMaterial3: true,
+        fontFamily: 'InstrumentSans'
       ),
       home: const MyHomePage(title: 'StudySwap'),
     );

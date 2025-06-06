@@ -51,6 +51,15 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+    - family: InstrumentSans
+      fonts:
+        - asset: fonts/InstrumentSans-Regular.ttf
+        - asset: fonts/InstrumentSans-Bold.ttf
+          weight: 700
+        - asset: fonts/InstrumentSans-Italic.ttf
+          style: italic
+
   assets:
     - assets/
 
