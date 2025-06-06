@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import 'home_page_content.dart';
+import 'package:studyswap/search/search_page.dart';
+import 'package:studyswap/profile/profile_page.dart';
+import 'package:studyswap/exchange/exchange_page.dart';
+import '../bottom_nav_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -12,14 +16,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   int _selectedIndex = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,8 +26,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   static const List<Widget> _pages = <Widget>[
     HomePageContent(),
-    Center(child: Text('Search Page', style: TextStyle(fontSize: 24))),
-    Center(child: Text('Profile Page', style: TextStyle(fontSize: 24))),
+    SearchPage(),
+    ExchangePage(),
+    ProfilePage(),
   ];
 
   @override
@@ -40,37 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _pages[_selectedIndex],
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {},
         tooltip: 'Upload something',
         child: const Icon(Icons.add_circle_outlined),
       )
           : null,
-      bottomNavigationBar: NavigationBar(
+      bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: _onItemTapped,
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        destinations: const <NavigationDestination>[
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.compare_arrows_rounded),
-            selectedIcon: Icon(Icons.compare_arrows_rounded),
-            label: 'Exchange',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'You',
-          ),
-        ],
+        onItemTapped: _onItemTapped,
       ),
     );
   }

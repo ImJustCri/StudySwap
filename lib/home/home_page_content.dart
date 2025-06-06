@@ -12,7 +12,7 @@ class HomePageContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
           Text(
-            "Latest from Benedetto Radice",
+            "Latest from <School Name>",
             style: TextStyle(
               fontSize: 18,
             ),
