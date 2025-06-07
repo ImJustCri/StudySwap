@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../widgets/custom_app_bar.dart';
 import 'home_page_content.dart';
-import 'package:studyswap/search/search_page.dart';
-import 'package:studyswap/profile/profile_page.dart';
-import 'package:studyswap/exchange/exchange_page.dart';
+import 'package:studyswap/pages/search_page.dart';
+import 'package:studyswap/pages/profile_page.dart';
+import 'package:studyswap/pages/exchange_page.dart';
 import '../bottom_nav_bar.dart';
 
 class MyHomePage extends StatefulWidget {
