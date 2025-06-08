@@ -18,7 +18,7 @@ class HomePageContent extends StatelessWidget {
             ),
           ),
           SizedBox(height: 8),
-          CircolariCarousel(),  // Use the extracted carousel widget here
+          CircolariCarousel(),
         ],
       ),
     );

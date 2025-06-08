@@ -11,7 +11,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlueAccent),
         useMaterial3: true,
-        fontFamily: 'InstrumentSans'
+        fontFamily: 'InstrumentSans',
+
+        // Disable ripple and highlight globally
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        hoverColor: Colors.transparent,
       ),
       home: const MyHomePage(title: 'StudySwap'),
     );
