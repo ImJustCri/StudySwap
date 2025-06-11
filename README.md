@@ -4,7 +4,7 @@
 
 ## Overview
 StudySwap aims to revolutionize education by providing a space where students can find the help they need and contribute to the platform's growth through a model that rewards active participants.
-The platform operates on an internal credit system that rewards active participation.
+The platform operates on an internal credit system that rewards users for uploading notes or leaving reviews.
 
 ### Key Principles
 - **Ethics:** No monetary transactions for services except for book exchanges, which occur outside the platform.
