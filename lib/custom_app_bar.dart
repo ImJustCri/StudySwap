@@ -5,19 +5,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: Image.asset(
-        "assets/logo.png",
-        height: 32,
-      ),
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.notifications),
-          onPressed: () {},
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: AppBar(
+        title: Image.asset(
+          "assets/logo.png",
+          height: 32,
         ),
-      ],
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      toolbarHeight: 64,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            color: Theme.of(context).colorScheme.onSurface,
+            onPressed: () {},
+          ),
+        ],
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        toolbarHeight: 64,
+      ),
     );
   }
 

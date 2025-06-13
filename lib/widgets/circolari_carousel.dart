@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'circolare_content.dart';
 import 'package:http/http.dart' as http;
 import 'package:dart_rss/dart_rss.dart';
+import 'package:intl/intl.dart';
 
 final client = http.Client();
+
+String? readableDate(String? date) {
+  DateTime dateTime = DateFormat("EEE, dd MMM yyyy HH:mm:ss Z").parse(date!);
+  String formattedDate = DateFormat("dd/MM/yyyy").format(dateTime);
+  return formattedDate;
+}
 
 class CircolariCarousel extends StatefulWidget {
   const CircolariCarousel({super.key});
@@ -46,20 +53,6 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
     }
   }
 
-  String cleanCircolareTitle(String title) {
-    final pattern = RegExp(r'^\d{1,2}-\d{1,2}\.\s*Circolare n\. \d+\s*', caseSensitive: false);
-    return title.replaceFirst(pattern, '').trim();
-  }
-
-  String? extractCircolareNumber(String title) {
-    final numberPattern = RegExp(r'Circolare n\. (\d+)', caseSensitive: false);
-    final match = numberPattern.firstMatch(title);
-    if (match != null && match.groupCount >= 1) {
-      return match.group(1);
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -82,13 +75,11 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
         shrinkExtent: 330,
         itemExtent: 330,
         children: _items.map((item) {
-          final originalTitle = item.title ?? 'No title';
-          final cleanedTitle = cleanCircolareTitle(originalTitle);
-          final circolareNumber = extractCircolareNumber(originalTitle) ?? 'Unknown';
-
+          final title = item.title ?? 'No title';
+          final date = readableDate(item.pubDate) ?? 'No date';
           return CircolareContent(
-            number: circolareNumber,
-            title: cleanedTitle,
+            date: date,
+            title: title,
           );
         }).toList(),
       ),
