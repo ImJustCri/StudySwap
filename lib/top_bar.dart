@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+class TopBar extends StatelessWidget implements PreferredSizeWidget {
+  const TopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: AppBar(
+    return AppBar(
         title: Image.asset(
           "assets/logo.png",
-          height: 32,
+          fit: BoxFit.cover,
+          filterQuality: FilterQuality.high,
         ),
         actions: [
           IconButton(
@@ -20,9 +19,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
         backgroundColor: Theme.of(context).colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
         toolbarHeight: 64,
-      ),
-    );
+      );
   }
 
   @override
