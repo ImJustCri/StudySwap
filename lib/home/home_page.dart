@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../custom_app_bar.dart';
+import '../top_bar.dart';
 import 'home_page_content.dart';
 import 'package:studyswap/pages/search_page.dart';
-import 'package:studyswap/pages/profile_page.dart';
+import 'package:studyswap/pages/profile/profile_page.dart';
 import 'package:studyswap/pages/exchange_page.dart';
 import '../bottom_nav_bar.dart';
 
@@ -28,13 +28,13 @@ class _MyHomePageState extends State<MyHomePage> {
     HomePageContent(),
     SearchPage(),
     ExchangePage(),
-    ProfilePage(),
+    ProfilePage(hasAppBar: false,),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const TopBar(),
       body: _pages[_selectedIndex],
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(

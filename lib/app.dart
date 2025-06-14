@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studyswap/pages/profile/profile_page.dart';
 import 'home/home_page.dart';
 
 class MyApp extends StatelessWidget {
@@ -18,6 +19,10 @@ class MyApp extends StatelessWidget {
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
       ),
+      initialRoute: '/',
+      routes: {
+        '/profile': (context) => const ProfilePage(hasAppBar: true,),
+      },
       home: const MyHomePage(title: 'StudySwap'),
     );
   }
