@@ -1,7 +1,15 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  bool agreeTerms = false;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +28,7 @@ class LoginPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Look who's back!",
+                        "Welcome!",
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -43,31 +51,45 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Confirm password',
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Switch(
-                            value: true,
-                            onChanged: (_) {},
+                          Checkbox(
+                            value: agreeTerms,
+                            onChanged: (value) {
+                              setState(() {
+                                agreeTerms = value ?? false;
+                              });
+                            },
                             activeColor: theme.colorScheme.primary,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Remember me',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          const Spacer(),
-                          TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: Text(
-                              'Forgot your password?',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                decoration: TextDecoration.underline,
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurface,
+                                ),
+                                children: [
+                                  const TextSpan(text: 'I agree with '),
+                                  TextSpan(
+                                    text: 'Terms and Conditions',
+                                    style: const TextStyle(
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        // TODO: Redirect to studyswap.it for terms and conditions
+                                      },
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -78,7 +100,9 @@ class LoginPage extends StatelessWidget {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: agreeTerms ? () {
+                            // TODO: Handle register action
+                          } : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,
@@ -89,7 +113,7 @@ class LoginPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          child: const Text('Log In'),
+                          child: const Text('Register'),
                         ),
                       ),
                     ],
@@ -101,10 +125,10 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 32.0),
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/register');
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
                 child: Text(
-                  "Don’t have an account?",
+                  "Already have an account?",
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                   ),
