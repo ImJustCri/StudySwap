@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studyswap/pages/onboarding/onboarding_page.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import 'home/home_page.dart';
 import 'package:studyswap/pages/login.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(hasAppBar: true,),
       },
-      home: const MyHomePage(title: 'StudySwap'),
+      home: const OnboardingPage(),
     );
   }
 }
