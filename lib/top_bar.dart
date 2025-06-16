@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studyswap/pages/notifications_page.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -15,7 +16,9 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: const Icon(Icons.notifications),
             color: Theme.of(context).colorScheme.onSurface,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/notifications');
+            },
           ),
         ],
         backgroundColor: Theme.of(context).colorScheme.surface,
