@@ -5,6 +5,7 @@ class ExchangePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Center(
       child: Text('Exchange Page', style: TextStyle(fontSize: 24)),
     );

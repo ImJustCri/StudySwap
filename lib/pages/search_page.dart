@@ -18,6 +18,8 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0),
       child: Column(
@@ -29,10 +31,10 @@ class SearchPage extends StatelessWidget {
             padding: const WidgetStatePropertyAll<EdgeInsets>(
               EdgeInsets.symmetric(horizontal: 16.0),
             ),
-            backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.surface),
+            backgroundColor: WidgetStateProperty.all(theme.colorScheme.surface),
             elevation: WidgetStateProperty.all(0),
             side: WidgetStateProperty.all(BorderSide(
-              color: Theme.of(context).colorScheme.secondaryFixedDim,
+              color: theme.colorScheme.secondaryFixedDim,
               width: 1,
             )),
           ),
@@ -66,9 +68,8 @@ class SearchPage extends StatelessWidget {
                   onTap: () {
                     // TODO: Navigate to the corresponding section
                   },
-                  hoverColor: Theme.of(context).colorScheme.secondaryFixed,
-                  splashColor: Theme.of(context).colorScheme.secondaryFixed,
-
+                  hoverColor: theme.colorScheme.secondaryFixed,
+                  splashColor: theme.colorScheme.secondaryFixed,
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 24),

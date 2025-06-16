@@ -55,6 +55,8 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -70,7 +72,7 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: theme.colorScheme.primaryContainer,
         itemSnapping: true,
         shrinkExtent: 330,
         itemExtent: 330,

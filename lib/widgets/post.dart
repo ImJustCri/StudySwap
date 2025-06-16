@@ -5,6 +5,8 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +31,7 @@ class Post extends StatelessWidget {
                 ),
                 Text(
                   "Mathematics",
-                  style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(fontSize: 14, color: theme.colorScheme.secondary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -38,7 +40,7 @@ class Post extends StatelessWidget {
                   width: 64,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: theme.colorScheme.onSurface,
                     borderRadius: BorderRadius.circular(12), // pill shape
                   ),
                   child: Center(

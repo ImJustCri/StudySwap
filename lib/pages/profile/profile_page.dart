@@ -12,7 +12,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultStyle = Theme.of(context).textTheme.bodyMedium!;
+    final theme = Theme.of(context);
 
     return DefaultTabController(
       length: 4,
@@ -67,18 +67,18 @@ class ProfilePage extends StatelessWidget {
                       width: 55,
                       height: 32,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: theme.colorScheme.onSurface,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.star, size: 16, color: Theme.of(context).colorScheme.surface),
+                          Icon(Icons.star, size: 16, color: theme.colorScheme.surface),
                           const SizedBox(width: 4),
                           Text(
                             '4.5',
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.surface,
+                              color: theme.colorScheme.surface,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),

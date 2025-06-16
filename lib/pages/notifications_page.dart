@@ -4,10 +4,12 @@ import 'package:studyswap/widgets/notifications_tile.dart';
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
 
-  // For now, notifications are hardcoded
-  // TODO: Implement real notifications loading from device
   @override
   Widget build(BuildContext context) {
+    final colorTheme = Theme.of(context).colorScheme;
+
+    // For now, notifications are hardcoded
+    // TODO: Implement real notifications loading from device
     final notifications = [
       {
         "title": "Test",
@@ -33,7 +35,7 @@ class NotificationsPage extends StatelessWidget {
           ),
         ),
         leading: BackButton(),
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: colorTheme.surface,
         elevation: 0,
       ),
       body: ListView.separated(

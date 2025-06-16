@@ -16,6 +16,8 @@ class NotificationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       height: 80,
       color: isUnread ? Colors.blue[50] : Colors.transparent,

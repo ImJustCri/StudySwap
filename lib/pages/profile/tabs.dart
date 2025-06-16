@@ -5,26 +5,26 @@ class Tabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultStyle = Theme.of(context).textTheme.bodyMedium!;
+    final theme = Theme.of(context);
 
     return TabBar(
       isScrollable: true,
       tabAlignment: TabAlignment.start,
-      labelColor: Theme.of(context).colorScheme.onSurface,
-      unselectedLabelColor: Theme.of(context).colorScheme.secondary,
+      labelColor: theme.colorScheme.onSurface,
+      unselectedLabelColor: theme.colorScheme.secondary,
       indicator: BoxDecoration(),
       dividerColor: Colors.transparent,
-      labelStyle: defaultStyle.copyWith(
+      labelStyle: theme.textTheme.bodyMedium!.copyWith(
         fontWeight: FontWeight.w500,
         fontSize: 18,
       ),
-      unselectedLabelStyle: defaultStyle.copyWith(
+      unselectedLabelStyle: theme.textTheme.bodyMedium!.copyWith(
         fontWeight: FontWeight.normal,
         fontSize: 18,
       ),
       overlayColor: WidgetStateProperty.resolveWith<Color?>(
             (Set<WidgetState> states) {
-          return Theme.of(context).colorScheme.secondaryFixedDim;
+          return theme.colorScheme.secondaryFixedDim;
         },
       ),
       tabs: const [

@@ -6,6 +6,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppBar(
         title: Image.asset(
           "assets/logo.png",
@@ -15,13 +16,13 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
-            color: Theme.of(context).colorScheme.onSurface,
+            color: theme.colorScheme.onSurface,
             onPressed: () {
               Navigator.pushNamed(context, '/notifications');
             },
           ),
         ],
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: theme.colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         toolbarHeight: 64,
       );
