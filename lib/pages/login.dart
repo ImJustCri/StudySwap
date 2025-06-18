@@ -88,8 +88,9 @@ class LoginPage extends StatelessWidget {
                           onPressed: () async{
                             final emailT=email.text.trim();
                             final passwordT=password.text.trim();
-                            final error= await auth.login(emailT, passwordT);
-                            if(error != null){
+                            if(emailT.isNotEmpty && passwordT.isNotEmpty){
+                              final error= await auth.login(emailT, passwordT);
+                              if(error != null){
                               showDialog(
                                 context: context,
                                 builder: (context)=> 
@@ -102,8 +103,24 @@ class LoginPage extends StatelessWidget {
                                   ],
                                 ),
                                 );
+                            }else{
+                              Navigator.pushReplacementNamed(context, '/homescreen');
                             }
-                            Navigator.pushReplacementNamed(context, '/homescreen');
+                            }else{
+                              showDialog(
+                                context: context, 
+                                builder: (context) => AlertDialog(
+                                  title: const Text("Error"),
+                                  content: Text("Enter a valid email o password before continuing"),
+                                  actions: [
+                                    TextButton(onPressed: ()=> Navigator.pop(context), 
+                                    child: const Text("OK")),
+                                  ],
+                                ),
+                                );
+                            }
+                            
+                            
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
@@ -111,7 +128,7 @@ class LoginPage extends StatelessWidget {
                             textStyle: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
-                            shape: RoundedRectangleBorder(
+                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
