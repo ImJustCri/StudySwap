@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class Verification extends StatelessWidget {
+  const Verification({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,6 +9,16 @@ class LoginPage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -21,7 +31,7 @@ class LoginPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Look who's back!",
+                        "Enter your verification code",
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -30,52 +40,13 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 104),
                       TextField(
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert email',
+                          hintText: 'Enter code',
                         ),
                       ),
                       const SizedBox(height: 16),
-                      TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Insert password',
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Switch(
-                            value: false,
-                            onChanged: (_) {
-                              // TODO: Implement "remember me"
-                            },
-                            activeColor: theme.colorScheme.primary,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Remember me',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          const Spacer(),
-                          TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: Text(
-                              'Forgot your password?',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(height: 32),
                       SizedBox(
                         width: double.infinity,
@@ -92,7 +63,7 @@ class LoginPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          child: const Text('Log In'),
+                          child: const Text('Verify'),
                         ),
                       ),
                     ],
@@ -104,10 +75,10 @@ class LoginPage extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 32.0),
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/register');
+                  // TODO: Implement "send mail again"
                 },
                 child: Text(
-                  "Don’t have an account?",
+                  "Haven't received it?",
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                   ),
