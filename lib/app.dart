@@ -6,7 +6,7 @@ import 'home/home_page.dart';
 import 'package:studyswap/pages/login.dart';
 import 'package:studyswap/pages/register.dart';
 import 'package:studyswap/pages/notifications_page.dart';
-import 'package:is_first_run/is_first_run.dart';
+import 'pages/verification.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/onboarding': (context) => const OnboardingPage(),
+        '/mail-verification': (context) => const Verification(),
         '/homescreen': (context) => const MyHomePage(title: "StudySwap"),
         '/notifications': (context) => const NotificationsPage(),
         '/login': (context) => const LoginPage(),

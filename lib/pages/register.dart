@@ -16,6 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -102,6 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         child: ElevatedButton(
                           onPressed: agreeTerms ? () {
                             // TODO: Handle register action
+                            Navigator.pushNamed(context, '/mail-verification');
                           } : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
