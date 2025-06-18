@@ -14,19 +14,24 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   static const _contents = [
     Onboarding(
-        "Didn't take notes during your lesson?",
-        "Upload and download notes on any subject or topic",
-        R.imageOnboarding1,
+      "Missed a note?",
+      "Upload and download notes, save your brain",
+      R.imageOnboarding1,
     ),
     Onboarding(
-        "Need second hand books?",
-        "Connect buyers and sellers of used physical books (school-related or not).",
+      "Broke from buying books?",
+      "Buy, sell, and swap used books, save your wallet",
       R.imageOnboarding2,
     ),
     Onboarding(
-        "Give some feedback!",
-        "Leave reviews for users who provide services.",
+      "Share your thoughts",
+      "Leave reviews, help others make informed choices",
       R.imageOnboarding3,
+    ),
+    Onboarding(
+      "You made it!",
+      "Thou art ready to enter the StudySwap realm",
+      R.imageOnboarding4,
     ),
   ];
 
