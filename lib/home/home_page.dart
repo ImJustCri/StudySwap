@@ -23,7 +23,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _selectedIndex = index;
     });
   }
-
   static const List<Widget> _pages = <Widget>[
     HomePageContent(),
     SearchPage(),
