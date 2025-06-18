@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:studyswap/auth.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final auth = Auth(); // creo L'oggetto AuthS
+    final email=TextEditingController();
+    final password=TextEditingController();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -30,6 +32,7 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 104),
                       TextField(
+                      	controller: email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Insert email',
@@ -37,6 +40,7 @@ class LoginPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       TextField(
+                        controller: password,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -81,7 +85,26 @@ class LoginPage extends StatelessWidget {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async{
+                            final emailT=email.text.trim();
+                            final passwordT=password.text.trim();
+                            final error= await auth.login(emailT, passwordT);
+                            if(error != null){
+                              showDialog(
+                                context: context,
+                                builder: (context)=> 
+                                AlertDialog(
+                                  title: const Text("Error"),
+                                  content: Text(error),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(context), 
+                                    child: const Text("OK")),
+                                  ],
+                                ),
+                                );
+                            }
+                            Navigator.pushReplacementNamed(context, '/homescreen');
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,
