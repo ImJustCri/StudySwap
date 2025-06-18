@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/pages/notifications_page.dart';
+import 'package:studyswap/misc/resources.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   const TopBar({super.key});
@@ -9,7 +10,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
     return AppBar(
         title: Image.asset(
-          "assets/logo.png",
+          R.logo,
+          height: 32,
           fit: BoxFit.cover,
           filterQuality: FilterQuality.high,
         ),

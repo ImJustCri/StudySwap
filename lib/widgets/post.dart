@@ -20,7 +20,10 @@ class Post extends StatelessWidget {
                 Container(
                   width: 200,
                   height: 148,
-                  color: Colors.blue,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
                 SizedBox(height: 16),
                 Text(
