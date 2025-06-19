@@ -6,7 +6,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final auth = Auth(); // creo L'oggetto AuthS
+    final auth = Auth(); // Creates Auth Object
     final email=TextEditingController();
     final password=TextEditingController();
     return Scaffold(

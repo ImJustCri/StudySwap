@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool agreeTerms = false;
-  final auth = Auth();// creo l'oggetto di auth.dart
+  final auth = Auth();// Creates Auth object
   final email = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
   				}
 
 	  			
-	  			final error = await auth.registerWithEmail(emailT, passwordT); // chiamo il metodo creato in auth.dart
+	  			final error = await auth.registerWithEmail(emailT, passwordT); // Calls method created in auth.dart
   				if (error != null) {
     					showDialog(
       					context: context,
