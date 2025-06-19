@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:studyswap/auth.dart';
 
-class Verification extends StatelessWidget {
-  const Verification({super.key});
+class PassRecovery extends StatelessWidget {
+  const PassRecovery({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final email=TextEditingController();
+    final auth = Auth(); // Creates Auth Object
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -19,8 +22,7 @@ class Verification extends StatelessWidget {
           },
         ),
       ),
-      body: SafeArea(
-        child: Column(
+      body: Column(
           children: [
             Expanded(
               child: Center(
@@ -31,7 +33,7 @@ class Verification extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Enter your verification code",
+                        "Recover your password",
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -40,10 +42,10 @@ class Verification extends StatelessWidget {
                       ),
                       const SizedBox(height: 104),
                       TextField(
-                        keyboardType: TextInputType.number,
+                        controller: email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Enter code',
+                          hintText: 'Insert email',
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -52,7 +54,9 @@ class Verification extends StatelessWidget {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,
@@ -71,23 +75,8 @@ class Verification extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 32.0),
-              child: TextButton(
-                onPressed: () {
-                  // TODO: Implement "send mail again"
-                },
-                child: Text(
-                  "Haven't received it?",
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
-      ),
     );
   }
 }

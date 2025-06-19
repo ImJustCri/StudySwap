@@ -50,7 +50,7 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(height: 16),
                       TextButton(
                         onPressed: () {
-                          // TODO: Implement password recovery
+                          Navigator.pushNamed(context, '/password-recovery');
                         },
                         child: Text(
                           "Forgot your password?",
@@ -99,8 +99,6 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 );
                             }
-                            
-                            
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
