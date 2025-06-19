@@ -5,7 +5,6 @@ import 'package:studyswap/misc/resources.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
-
   Future<bool> _checkFirstRun() => IsFirstRun.isFirstRun();
 
   Future<String> _getInitialRoute() async {
@@ -23,6 +22,8 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return FutureBuilder<String>(
       future: _getInitialRoute(),
       builder: (context, snapshot) {
@@ -40,8 +41,11 @@ class LandingPage extends StatelessWidget {
           });
 
           // Optional: splash image while redirecting
-          return Center(
-            child: Image.asset(R.imageOnboarding4, width: 128),
+          return Container(
+            color: theme.colorScheme.surface,
+            child: Center(
+              child: Image.asset(R.imageOnboarding4, width: 128),
+            ),
           );
         }
       },
