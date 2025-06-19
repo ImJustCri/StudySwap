@@ -48,37 +48,17 @@ class LoginPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Switch(
-                            value: false,
-                            onChanged: (_) {
-                              // TODO: Implement "remember me"
-                            },
-                            activeColor: theme.colorScheme.primary,
+                      TextButton(
+                        onPressed: () {
+                          // TODO: Implement password recovery
+                        },
+                        child: Text(
+                          "Forgot your password?",
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            decoration: TextDecoration.underline,
+                            color: theme.colorScheme.onSurface,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Remember me',
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                          const Spacer(),
-                          TextButton(
-                            onPressed: () {},
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                            child: Text(
-                              'Forgot your password?',
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                       const SizedBox(height: 32),
                       SizedBox(

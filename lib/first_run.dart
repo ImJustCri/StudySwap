@@ -40,7 +40,6 @@ class LandingPage extends StatelessWidget {
             Navigator.of(context).pushReplacementNamed(snapshot.data!);
           });
 
-          // Optional: splash image while redirecting
           return Container(
             color: theme.colorScheme.surface,
             child: Center(

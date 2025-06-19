@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../top_bar.dart';
+import '../main_top_bar.dart';
 import 'home_page_content.dart';
 import 'package:studyswap/pages/search_page.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
