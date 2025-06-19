@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:studyswap/auth.dart';
+
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -10,6 +12,10 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool agreeTerms = false;
+  final auth = Auth();// Creates Auth object
+  final email = TextEditingController();
+  final password = TextEditingController();
+  final confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(height: 104),
                       TextField(
+                        controller: email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Insert email',
@@ -45,6 +52,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(height: 16),
                       TextField(
+                        controller: password,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -53,6 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(height: 16),
                       TextField(
+                        controller: confirmPassword,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -101,10 +110,65 @@ class _RegisterPageState extends State<RegisterPage> {
                         width: double.infinity,
                         height: 56,
                         child: ElevatedButton(
-                          onPressed: agreeTerms ? () {
-                            // TODO: Handle register action
-                            Navigator.pushNamed(context, '/mail-verification');
-                          } : null,
+                          onPressed: agreeTerms ? () async {
+  			  final emailT = email.text.trim();
+  			  final passwordT= password.text.trim();
+  			  final confirmPasswordT = confirmPassword.text.trim();
+
+  			  if (!emailT.endsWith('.edu.it')) {
+    				showDialog(
+      				context: context,
+      				builder: (context) => AlertDialog(
+        			title: const Text("Invalid email"),
+        			content: const Text("You can register only with an institutional email"),
+        				actions: [
+          				TextButton(
+            				onPressed: () => Navigator.pop(context),
+            				child: const Text("OK"),
+          				)
+        				],
+     					 ),
+    					);
+    					return;
+  					}
+
+  			if (passwordT != confirmPasswordT) {
+    				showDialog(
+      				context: context,
+     				builder: (context) => AlertDialog(
+        			title: const Text("Error"),
+        			content: const Text("Incorrect password"),
+        			actions: [
+         		 	TextButton(
+            			onPressed: () => Navigator.pop(context),
+            			child: const Text("OK"),
+          			)
+        			],
+      				),
+    				);
+    				return;
+  				}
+
+	  			
+	  			final error = await auth.registerWithEmail(emailT, passwordT); // Calls method created in auth.dart
+  				if (error != null) {
+    					showDialog(
+      					context: context,
+      					builder: (context) => AlertDialog(
+        				title: const Text("Error"),
+        				content: Text(error),
+        				actions: [
+          				TextButton(
+            				onPressed: () => Navigator.pop(context),
+            				child: const Text("OK"),
+          				)
+        				],
+      					),
+   				 	);
+    					return;
+  					}
+  				Navigator.pushNamed(context, '/mail-verification');
+				} : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,
                             foregroundColor: theme.colorScheme.onPrimary,

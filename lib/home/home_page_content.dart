@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/widgets/circolari_carousel.dart';
 import 'package:studyswap/widgets/post.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final List<Post> posts = [
   const Post(),
@@ -19,15 +20,7 @@ class HomePageContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Latest from <School Name>",
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(height: 8),
             const CircolariCarousel(),
-            const SizedBox(height: 24),
             const Text(
               "Suggested",
               style: TextStyle(

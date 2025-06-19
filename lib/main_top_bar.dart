@@ -9,6 +9,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return AppBar(
+        automaticallyImplyLeading: false,
         title: Image.asset(
           R.logo,
           height: 32,
