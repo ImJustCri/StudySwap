@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+
+final Uri _url = Uri.parse('https://studyswap.it/terms');
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -90,13 +93,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                 children: [
                                   const TextSpan(text: 'I agree with '),
                                   TextSpan(
-                                    text: 'Terms and Conditions',
+                                    text: 'Terms of Service',
                                     style: const TextStyle(
                                       decoration: TextDecoration.underline,
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // TODO: Redirect to studyswap.it for terms and conditions
+                                        _launchUrl();
                                       },
                                   ),
                                 ],
@@ -206,4 +209,11 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
+
 }
