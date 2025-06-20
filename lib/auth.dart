@@ -1,17 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Auth {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final db = FirebaseFirestore.instance;
 
   Future<String?> registerWithEmail(String email, String password) async {
     try {
       // Call to create the account on Firebase
-      UserCredential utente = await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      // Update collection "Users" to add new entry
+      await db
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({
+        'username': email.split('@')[0],
+        'aboutme' : "Hey there!",
+        'stars': 0.0,
+      });
+
       // Send verification email
-      await utente.user?.sendEmailVerification();
+      await userCredential.user?.sendEmailVerification();
       return null;
     } on FirebaseAuthException catch (ex) {
       return ex.message;
@@ -21,10 +34,10 @@ class Auth {
   Future<String?> login(String email, String password) async {
     try {
       // Call to check if the account exists
-      UserCredential utente = await auth.signInWithEmailAndPassword(email: email, password: password);
-      await utente.user?.reload();
-      final userAggiornato = auth.currentUser;
-      if (userAggiornato != null && !userAggiornato.emailVerified) {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
+      await userCredential.user?.reload();
+      final currentUser = auth.currentUser;
+      if (currentUser != null && !currentUser.emailVerified) {
         await auth.signOut();
         return "Verify your email before logging in";
       }
