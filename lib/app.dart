@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/first_run.dart';
 import 'package:studyswap/pages/onboarding/onboarding_page.dart';
+import 'package:studyswap/pages/profile/about.dart';
+import 'package:studyswap/pages/profile/edit_profile.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import 'home/home_page.dart';
 import 'package:studyswap/pages/login.dart';
@@ -15,6 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'StudySwap',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF082030)),
         useMaterial3: true,
@@ -34,6 +37,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(hasAppBar: true,),
+        '/edit-profile': (context) => const EditProfile(),
       },
       home: LandingPage(),
     );

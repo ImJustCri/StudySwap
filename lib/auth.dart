@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -19,9 +21,11 @@ class Auth {
           .doc(userCredential.user!.email)
           .set({
         'username': email.split('@')[0],
+        'school': email.split('@')[1],
         'aboutme' : "Hey there!",
         'stars': 0.0,
         'coins': 0,
+        'color': math.Random().nextDouble() * 0xFFFFFF,
       });
 
       // Send verification email

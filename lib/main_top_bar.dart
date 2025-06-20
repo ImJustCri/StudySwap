@@ -53,8 +53,24 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 );
               }
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  spacing: 8,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.monetization_on, color: theme.colorScheme.surface,),
+                    Text(
+                      "Loading",
+                      style: TextStyle(
+                        color: theme.colorScheme.surface,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
               );
             }
             )
