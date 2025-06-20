@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:dart_rss/dart_rss.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final client = http.Client();
 
@@ -80,39 +79,7 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
     final theme = Theme.of(context);
 
     if (_isLoading) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            textAlign: TextAlign.left,
-            "Latest from your school",
-            style: TextStyle(
-              fontSize: 18,
-            ),
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 144,
-            width: double.infinity,
-            child: CarouselView(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              backgroundColor: theme.colorScheme.primaryContainer,
-              itemSnapping: true,
-              shrinkExtent: 330,
-              itemExtent: 330,
-              children: [
-                Container(),
-                Container(),
-                Container(),
-                Container(),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-        ],
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_error != null) {
@@ -155,6 +122,4 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
       ],
     );
   }
-
-  Future<void> _launchUrl(Uri url) async {}
 }
