@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:studyswap/pages/notifications_page.dart';
 import 'package:studyswap/misc/resources.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
@@ -8,6 +9,9 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final db = FirebaseFirestore.instance;
+    final currentUser = FirebaseAuth.instance.currentUser!;
+
     return AppBar(
         automaticallyImplyLeading: false,
         title: Image.asset(
@@ -17,6 +21,44 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
           filterQuality: FilterQuality.high,
         ),
         actions: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(64.0),
+              color: theme.colorScheme.onSurface,
+            ),
+            child: StreamBuilder(
+            stream: db.collection("Users").doc(currentUser.email).snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final coins = snapshot.data!.get("coins");
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    spacing: 8,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.monetization_on, color: theme.colorScheme.surface,),
+                      Text(
+                        "$coins",
+                        style: TextStyle(
+                          color: theme.colorScheme.surface,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+
+                    ],
+                  ),
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            )
+          ),
           IconButton(
             icon: const Icon(Icons.notifications),
             color: theme.colorScheme.onSurface,

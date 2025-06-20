@@ -21,6 +21,7 @@ class Auth {
         'username': email.split('@')[0],
         'aboutme' : "Hey there!",
         'stars': 0.0,
+        'coins': 0,
       });
 
       // Send verification email
