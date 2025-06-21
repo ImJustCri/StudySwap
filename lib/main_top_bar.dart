@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:studyswap/coins_page.dart';
 import 'package:studyswap/misc/resources.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
@@ -32,24 +33,26 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
               if (snapshot.hasData) {
                 final coins = snapshot.data!.get("coins");
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    spacing: 8,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.monetization_on, color: theme.colorScheme.surface,),
-                      Text(
-                        "$coins",
-                        style: TextStyle(
-                          color: theme.colorScheme.surface,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                      ),
-
-                    ],
+                return TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CoinsPage("$coins")));
+                  },
+                  icon: Icon(
+                    Icons.monetization_on,
+                    color: theme.colorScheme.surface,
+                    size: 24,
+                  ),
+                  label: Text(
+                    "$coins",
+                    style: TextStyle(
+                      color: theme.colorScheme.surface,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                  ),
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
                   ),
                 );
               }
