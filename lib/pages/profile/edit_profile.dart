@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +25,7 @@ class _EditProfileState extends State<EditProfile> {
     } catch (e) {
       return null;
     }
+    return null;
   }
   
 
@@ -95,8 +95,9 @@ class _EditProfileState extends State<EditProfile> {
                     if(nameT.length<20){
                       try{
                        FirebaseFirestore.instance.collection('Users').doc(email).update({
-                      'username': nameT,
-                      'aboutme': _bioController.text,
+                         // Removes spaces and sets every letter to lowercase
+                        'username': nameT.split(" ").join(".").toLowerCase(),
+                        'aboutme': _bioController.text,
                       });
                       showDialog(context: context,
                        builder: (context)=> AlertDialog(
