@@ -24,8 +24,8 @@ class Auth {
         'school': email.split('@')[1],
         'aboutme' : "Hey there!",
         'stars': 0.0,
-        'coins': 0,
-        'color': math.Random().nextDouble() * 0xFFFFFF,
+        'coins': 20,
+        'color': (math.Random().nextDouble() * 0xFFFFFF).toInt(),
       });
 
       // Send verification email
