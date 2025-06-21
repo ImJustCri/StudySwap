@@ -201,12 +201,14 @@ class ProfilePage extends StatelessWidget {
                           const Tabs(),
                           SizedBox(
                             height: 400,
-                            child: const TabBarView(
+                            child: TabBarView(
                               children: [
-                                Notes(),
-                                Books(),
-                                Tutoring(),
-                                Reviews(),
+                                const Notes(),
+                                const Books(),
+                                const Tutoring(),
+                                SingleChildScrollView(
+                                  child: Reviews(stars: userData['stars']),
+                                ),
                               ],
                             ),
                           ),
