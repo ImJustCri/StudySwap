@@ -106,7 +106,7 @@ class BottomNavBar extends StatelessWidget {
                     height: 24,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: baseColor,
+                      color: baseColor.withValues(alpha: 1),
                     ),
                     child: Text(
                       displayLetter,
