@@ -169,8 +169,17 @@ class _RegisterPageState extends State<RegisterPage> {
       					),
    				 	);
     					return;
-  					}
-  				Navigator.pushNamed(context, '/mail-verification');
+  					}else{
+              showDialog(context: context,
+               builder: (context)=> AlertDialog(
+                title: const Text("Registration Successful"),
+                content: Text("A verification email has been sent to your address. Check your inbox and confirm your email before loggin in."),
+                actions: [
+                  TextButton(onPressed: ()=> Navigator.pushReplacementNamed(context, '/login'), child: const Text("OK"))
+                ],
+               )
+               );
+            }
 				} : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.primary,

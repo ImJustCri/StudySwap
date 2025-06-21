@@ -17,12 +17,11 @@ class BottomNavBar extends StatelessWidget {
     final theme = Theme.of(context);
     final currentUser = FirebaseAuth.instance.currentUser!;
     final db = FirebaseFirestore.instance;
-
     return StreamBuilder<DocumentSnapshot>(
       stream: db.collection("Users").doc(currentUser.email).snapshots(),
       builder: (context, snapshot) {
         String displayLetter = "S";
-        Color baseColor = Colors.red;
+        Color baseColor = Colors.black;
 
         if (snapshot.hasData && snapshot.data != null) {
           final data = snapshot.data!.data() as Map<String, dynamic>?;
@@ -37,7 +36,7 @@ class BottomNavBar extends StatelessWidget {
             }
           }
         }
-
+        
         return NavigationBarTheme(
           data: NavigationBarThemeData(
             labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((Set<WidgetState> states) {

@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -8,9 +11,23 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  // Controllers for text fields
+  final email = FirebaseAuth.instance.currentUser?.email;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+
+  Future<Map<String, dynamic>?> findUserProfile() async {
+    try {
+      final doc = await FirebaseFirestore.instance.collection('Users').doc(email).get();
+      final data = doc.data()!;
+      final username=data['username'];
+      final bio=data['aboutme'];
+      _nameController.text=username;
+      _bioController.text=bio;
+    } catch (e) {
+      return null;
+    }
+  }
+  
 
   @override
   void dispose() {
@@ -22,6 +39,7 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    findUserProfile();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +57,7 @@ class _EditProfileState extends State<EditProfile> {
               },
               child: CircleAvatar(
                 radius: 50,
-                backgroundColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+                backgroundColor: theme.colorScheme.primary.withAlpha(25),
                 child: Icon(
                   Icons.camera_alt_outlined,
                   size: 40,
@@ -72,7 +90,46 @@ class _EditProfileState extends State<EditProfile> {
               height: 56,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async{
+                  final nameT = _nameController.text;
+                    if(nameT.length<20){
+                      try{
+                       FirebaseFirestore.instance.collection('Users').doc(email).update({
+                      'username': nameT,
+                      'aboutme': _bioController.text,
+                      });
+                      showDialog(context: context,
+                       builder: (context)=> AlertDialog(
+                        title: const Text("Profile updated"),
+                        content: Text("Your profile has been updated successfully"),
+                        actions: [
+                          TextButton(onPressed: ()=>Navigator.pushReplacementNamed(context, '/homescreen'), child: const Text("Back to home"))
+                        ],
+                       )
+                       );
+                      } on FirebaseAuthException catch(ex){
+                        showDialog(context: context,
+                         builder: (context)=>AlertDialog(
+                          title: const Text("Error"),
+                          content: Text("Something went wrong. Please try again later"),
+                          actions: [
+                            TextButton(onPressed: ()=>Navigator.pop(context), child: const Text("OK"))
+                          ],
+                         )
+                        );
+                      }
+                      }else{
+                      showDialog(context: context, 
+                      builder: (context)=>AlertDialog(
+                        title: const Text("Error"),
+                        content: Text("The username cannot exceed 20 characters."),
+                        actions: [
+                          TextButton(onPressed: ()=> Navigator.pop(context), child: const Text("OK"))
+                        ],
+                      )
+                      );
+                  }             
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: theme.colorScheme.primary,
                   foregroundColor: theme.colorScheme.onPrimary,

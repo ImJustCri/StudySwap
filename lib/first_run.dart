@@ -8,13 +8,9 @@ class LandingPage extends StatelessWidget {
   Future<bool> _checkFirstRun() => IsFirstRun.isFirstRun();
 
   Future<String> _getInitialRoute() async {
-    // Check first run
-    final isFirstRun = await _checkFirstRun();
-    if (isFirstRun) return '/onboarding';
-
     // Check authentication
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return '/login';
+    if (user == null) return '/onboarding';
 
     // If authenticated, go to home
     return '/homescreen';
