@@ -92,6 +92,7 @@ class _EditProfileState extends State<EditProfile> {
               child: ElevatedButton(
                 onPressed: () async{
                   final nameT = _nameController.text;
+                  if(nameT.isNotEmpty){
                     if(nameT.length<20){
                       try{
                        FirebaseFirestore.instance.collection('Users').doc(email).update({
@@ -129,7 +130,18 @@ class _EditProfileState extends State<EditProfile> {
                         ],
                       )
                       );
-                  }             
+                  }      
+                  }else{
+                    showDialog(context: context,
+                     builder: (context)=>AlertDialog(
+                      title: const Text("Error"),
+                      content: Text("A username is required to save the changes."),
+                      actions: [
+                        TextButton(onPressed: ()=> Navigator.pop(context), child: const Text("OK"))
+                      ],
+                     )
+                     );
+                  }    
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: theme.colorScheme.primary,
