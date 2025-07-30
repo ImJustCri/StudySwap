@@ -15,19 +15,6 @@ class Auth {
         password: password,
       );
 
-      // Update collection "Users" to add new entry
-      await db
-          .collection("Users")
-          .doc(userCredential.user!.email)
-          .set({
-        'username': email.split('@')[0],
-        'school': email.split('@')[1],
-        'aboutme' : "Hey there!",
-        'stars': 0.0,
-        'coins': 20,
-        'color': (math.Random().nextDouble() * 0xFFFFFF).toInt(),
-      });
-
       // Send verification email
       await userCredential.user?.sendEmailVerification();
       return null;
@@ -46,6 +33,24 @@ class Auth {
         await auth.signOut();
         return "Verify your email before logging in";
       }
+
+      final uid = userCredential.user!.uid;
+
+      // Update collection "Users" to add new entry only when the email is verified
+      await db
+          .collection("Users")
+          .doc(uid)
+          .set({
+        'username': email.split('@')[0],
+        'school': email.split('@')[1],
+        'aboutme' : "Hey there!",
+        'stars': 0.0,
+        'coins': 20,
+        'color': (math.Random().nextDouble() * 0xFFFFFF).toInt(),
+        'reviews-reference': 0,
+        'email': userCredential.user!.email,
+      });
+
       return null;
     } on FirebaseAuthException catch (ex) {
       return ex.message;
