@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../main_top_bar.dart';
 import 'home_page_content.dart';
@@ -17,17 +18,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  final currentUser = FirebaseAuth.instance.currentUser!.email;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
-  static const List<Widget> _pages = <Widget>[
-    HomePageContent(),
-    SearchPage(),
-    ExchangePage(),
-    ProfilePage(hasAppBar: false,),
+
+  // Fixed: Convert to getter to access instance members
+  List<Widget> get _pages => [
+    const HomePageContent(),
+    const SearchPage(),
+    const ExchangePage(),
+    ProfilePage(isMine: true, user: currentUser), // Now accesses instance variable
   ];
 
   @override
