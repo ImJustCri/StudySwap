@@ -1,99 +1,85 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:studyswap/providers/data_provider.dart';
 
-class About extends StatefulWidget {
-  final Map<String, dynamic> userData;
-  const About({super.key, required this.userData});
-  @override
-  State<About> createState() => _AboutState();
-}
+class About extends ConsumerWidget {
+  final String? user;
+  const About({super.key, required this.user});
 
-class _AboutState extends State<About> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final currentUser = FirebaseAuth.instance.currentUser!;
-    final db = FirebaseFirestore.instance;
 
-    return StreamBuilder<DocumentSnapshot>(
-      stream: db.collection("Users").doc(currentUser.email).snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: Text('User ID is null')),
+      );
+    }
+
+    final userDataAsync = ref.watch(dataProvider);
+
+    return userDataAsync.when(
+      data: (data) {
+        if (data == null) {
           return Scaffold(
             appBar: AppBar(),
-            body: Center(child: Text('Error: ${snapshot.error}')),
+            body: const Center(child: Text('No user data found')),
           );
         }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            appBar: AppBar(),
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
+        final username = data['username'] ?? 'Unknown';
+        final about = data['aboutme'] ?? 'No about info';
+        final school = data['school'] ?? 'No school info';
 
-        if (snapshot.hasData && snapshot.data != null) {
-          final data = snapshot.data!.data() as Map<String, dynamic>?;
-
-          if (data == null) {
-            return Scaffold(
-              appBar: AppBar(),
-              body: const Center(child: Text('No user data found')),
-            );
-          }
-
-          final username = data['username'] ?? widget.userData['username'] ?? 'Unknown';
-          final about = data['aboutme'] ?? widget.userData['aboutme'] ?? 'No about info';
-          final school = data['school'] ?? widget.userData['school'] ?? 'No about info';
-
-          return Scaffold(
-            appBar: AppBar(),
-            body: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  Text(
-                    "About $username",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    about,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    spacing: 16,
-                    children: [
-                      Icon(Icons.school),
-                      Text(
-                        school,
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        }
-
-        // fallback UI if no data
         return Scaffold(
           appBar: AppBar(),
-          body: const Center(child: CircularProgressIndicator()),
+          body: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 16),
+                Text(
+                  "About $username",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  about,
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Icon(Icons.school, color: theme.colorScheme.onSurface),
+                    const SizedBox(width: 8),
+                    Text(
+                      school,
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
         );
       },
+      loading: () => Scaffold(
+        appBar: AppBar(),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Scaffold(
+        appBar: AppBar(),
+        body: Center(child: Text('Error: $error')),
+      ),
     );
   }
 }

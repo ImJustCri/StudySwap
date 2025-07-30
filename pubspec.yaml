@@ -44,6 +44,7 @@ dependencies:
   url_launcher: ^6.3.1
   is_first_run: ^1.0.0
   cloud_firestore: ^4.17.5
+  flutter_riverpod: ^3.0.0-dev.16
 
 dev_dependencies:
   flutter_test:
