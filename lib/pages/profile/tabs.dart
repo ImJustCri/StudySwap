@@ -16,7 +16,7 @@ class Tabs extends StatelessWidget {
         unselectedLabelColor: theme.colorScheme.secondary,
         indicator: UnderlineTabIndicator(
           borderSide: BorderSide(
-            color: theme.colorScheme.secondary,
+            color: theme.colorScheme.onSurface,
             width: 2.0,
           ),
           borderRadius: BorderRadius.circular(8),
@@ -32,7 +32,7 @@ class Tabs extends StatelessWidget {
         ),
         overlayColor: WidgetStateProperty.resolveWith<Color?>(
               (Set<WidgetState> states) {
-            return theme.colorScheme.secondaryFixedDim;
+            return theme.colorScheme.surface;
           },
         ),
         tabs: const [

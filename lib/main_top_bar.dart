@@ -16,9 +16,17 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(64.0),
-          color: theme.colorScheme.onSurface,
+          color: theme.colorScheme.onPrimaryContainer,
         ),
         child: TextButton.icon(
+          style: TextButton.styleFrom(
+            minimumSize: Size(40, 36),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(64.0),
+            ),
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -42,73 +50,74 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
       );
     }
 
+    AppBar _buildAppBar(String coins) => AppBar(
+      automaticallyImplyLeading: false,
+      leadingWidth: 120,
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 12.0),
+        child: Center(child: coinsButton(coins)),
+      ),
+      title: null,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.notifications),
+          color: theme.colorScheme.onPrimaryContainer,
+          onPressed: () {
+            Navigator.pushNamed(context, '/notifications');
+          },
+        ),
+        PopupMenuButton<String>(
+          icon: Icon(Icons.more_vert, color: theme.colorScheme.onPrimaryContainer),
+          onSelected: (value) {
+            if (value == 'settings') {
+              Navigator.pushNamed(context, '/settings');
+            } else if (value == 'about-app') {
+              Navigator.pushNamed(context, '/about-app');
+            }
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          offset: Offset(0, 48),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+            PopupMenuItem<String>(
+              value: 'settings',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.settings, color: Theme.of(context).iconTheme.color),
+                    SizedBox(width: 8),
+                    Text('Settings'),
+                  ],
+                ),
+              ),
+            ),
+            PopupMenuItem<String>(
+              value: 'about-app',
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Icon(Icons.info, color: Theme.of(context).iconTheme.color),
+                    SizedBox(width: 8),
+                    Text('About the app'),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+      backgroundColor: theme.colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      toolbarHeight: 64,
+    );
+
     return dataAsync.when(
-      data: (data) => AppBar(
-        automaticallyImplyLeading: false,
-        title: Image.asset(
-          R.logo,
-          height: 32,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.high,
-        ),
-        actions: [
-          coinsButton(data?["coins"]?.toString() ?? "0"),
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            color: theme.colorScheme.onSurface,
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifications');
-            },
-          ),
-        ],
-        backgroundColor: theme.colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 64,
-      ),
-      error: (_, __) => AppBar(
-        automaticallyImplyLeading: false,
-        title: Image.asset(
-          R.logo,
-          height: 32,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.high,
-        ),
-        actions: [
-          coinsButton("--"),
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            color: theme.colorScheme.onSurface,
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifications');
-            },
-          ),
-        ],
-        backgroundColor: theme.colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 64,
-      ),
-      loading: () => AppBar(
-        automaticallyImplyLeading: false,
-        title: Image.asset(
-          R.logo,
-          height: 32,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.high,
-        ),
-        actions: [
-          coinsButton("..."),
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            color: theme.colorScheme.onSurface,
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifications');
-            },
-          ),
-        ],
-        backgroundColor: theme.colorScheme.surface,
-        surfaceTintColor: Colors.transparent,
-        toolbarHeight: 64,
-      ),
+      data: (data) => _buildAppBar(data?["coins"]?.toString() ?? "0"),
+      loading: () => _buildAppBar("..."),
+      error: (_, __) => _buildAppBar("--"),
     );
   }
 

@@ -106,13 +106,13 @@ class ProfilePage extends ConsumerWidget {
                                 width: 55,
                                 height: 32,
                                 decoration: BoxDecoration(
-                                  color: theme.colorScheme.onSurface,
+                                  color: theme.colorScheme.onPrimaryContainer,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Icon(Icons.star, size: 16, color: theme.colorScheme.surface),
+                                    Icon(Icons.star, size: 16, color: theme.colorScheme.primaryContainer),
                                     const SizedBox(width: 4),
                                     Text(
                                       "${userData['stars'] ?? 0}",

@@ -47,13 +47,13 @@ class Post extends StatelessWidget {
                   width: 64,
                   height: 24,
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.onPrimaryContainer,
                     borderRadius: BorderRadius.circular(12), // pill shape
                   ),
                   child: Center(
                     child: Text(
                       price.toString(),
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: theme.colorScheme.surface),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

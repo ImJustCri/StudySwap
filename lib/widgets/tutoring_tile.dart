@@ -42,7 +42,7 @@ class TutoringTile extends StatelessWidget {
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: isSelected
-                          ? theme.colorScheme.onPrimary
+                          ? theme.colorScheme.surface
                           : theme.textTheme.bodyMedium?.color?.withValues(alpha: .6),
                     ),
                   ),
@@ -57,7 +57,7 @@ class TutoringTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       decoration: BoxDecoration(
-        color: theme.colorScheme.secondaryFixed,
+        color: theme.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(16),
         // border: Border(
         //   bottom: BorderSide(

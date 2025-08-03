@@ -18,7 +18,7 @@ class ReviewsPanel extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.secondaryFixed,
+        color: theme.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(

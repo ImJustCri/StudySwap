@@ -20,7 +20,7 @@ class NotificationTile extends StatelessWidget {
 
     return Container(
       height: 80,
-      color: isUnread ? Colors.blue[50] : Colors.transparent,
+      color: isUnread ? theme.colorScheme.secondaryContainer : Colors.transparent,
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,7 +42,7 @@ class NotificationTile extends StatelessWidget {
                   subtitle,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[700],
+                    color: theme.colorScheme.onSecondaryContainer,
                   ),
                 ),
               ],
@@ -52,7 +52,7 @@ class NotificationTile extends StatelessWidget {
             date,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[700],
+              color: theme.colorScheme.onSecondaryContainer,
             ),
           ),
         ],

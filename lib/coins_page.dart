@@ -23,7 +23,7 @@ class CoinsPage extends StatelessWidget {
             // Coins display container
             Container(
               decoration: BoxDecoration(
-                color: theme.colorScheme.secondaryContainer,
+                color: theme.colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.all(24.0),

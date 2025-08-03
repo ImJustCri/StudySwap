@@ -16,6 +16,18 @@ class SearchPage extends StatelessWidget {
     "TPSIT",
   ];
 
+  final Map<String, IconData> subjectIcons = const {
+    "Information Technology": Icons.computer,
+    "Mathematics": Icons.calculate,
+    "Telecommunications": Icons.wifi,
+    "History": Icons.history_edu,
+    "Physical Education": Icons.sports_soccer,
+    "Italian Literature": Icons.menu_book,
+    "Systems and Networking": Icons.settings_input_component,
+    "English Language": Icons.language,
+    "TPSIT": Icons.code,
+  };
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -59,29 +71,45 @@ class SearchPage extends StatelessWidget {
               child: ListView.separated(
                 itemCount: subjects.length,
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) => Material(
-                  color: Colors.blue[50],
-                  borderRadius: BorderRadius.circular(16),
-                  child: InkWell(
+                itemBuilder: (context, index) {
+                  final subject = subjects[index];
+                  final icon = subjectIcons[subject] ?? Icons.book;
+
+                  return Material(
+                    color: theme.colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(16),
-                    onTap: () {
-                      // TODO: Naviga alla sezione corrispondente
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                      child: Center(
-                        child: Text(
-                          subjects[index],
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () {
+                        // TODO: Navigate to related section
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                        child: Row(
+                          children: [
+                            Icon(
+                              icon,
+                              color: theme.colorScheme.onPrimaryContainer,
+                              size: 24,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                subject,
+                                style: TextStyle(
+                                  color: theme.colorScheme.onPrimaryContainer,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ),
           ],
