@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Post extends StatelessWidget {
-  const Post({super.key});
+  final String title;
+  final String subject;
+  final int price;
+
+  const Post({super.key, required this.title, required this.subject, required this.price});
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +31,13 @@ class Post extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  "Le funzioni",
+                  title,
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  "Mathematics",
+                  subject,
                   style: TextStyle(fontSize: 14, color: theme.colorScheme.secondary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -48,7 +52,7 @@ class Post extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      "100",
+                      price.toString(),
                       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -62,5 +66,12 @@ class Post extends StatelessWidget {
       ),
     );
   }
-}
 
+  factory Post.fromMap(Map<String, dynamic> map) {
+    return Post(
+      title: map['title'] ?? 'No Title',
+      subject: map['subject'] ?? 'Unknown',
+      price: map['price'] ?? 0,
+    );
+  }
+}

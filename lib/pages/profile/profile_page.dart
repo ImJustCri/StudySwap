@@ -12,7 +12,7 @@ import 'tutoring.dart';
 
 class ProfilePage extends ConsumerWidget {
   final bool isMine;
-  final String? user; // expected to be UID
+  final User? user; // expected to be UID
 
   const ProfilePage({super.key, required this.isMine, required this.user});
 
@@ -49,193 +49,213 @@ class ProfilePage extends ConsumerWidget {
             appBar: !isMine ? AppBar() : null,
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              width: 64,
-                              height: 64,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color((userData["color"] ?? 0).toInt()).withAlpha(255),
-                              ),
-                              child: Text(
-                                (userData['username'] as String?)?.isNotEmpty == true
-                                    ? userData['username'][0].toUpperCase()
-                                    : '?',
-                                style: TextStyle(
-                                  color: theme.colorScheme.surface,
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  userData['username'] ?? "Unknown User",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                Text(
-                                  "@$userDomain",
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: 55,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.onSurface,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+
+                      // MAIN PROFILE INFO
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.star, size: 16, color: theme.colorScheme.surface),
-                              const SizedBox(width: 4),
-                              Text(
-                                "${userData['stars'] ?? 0}",
-                                style: TextStyle(
-                                  color: theme.colorScheme.surface,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
+                              Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.center,
+                                    width: 64,
+                                    height: 64,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color((userData["color"] ?? 0).toInt()).withAlpha(255),
+                                    ),
+                                    child: Text(
+                                      (userData['username'] as String?)?.isNotEmpty == true
+                                          ? userData['username'][0].toUpperCase()
+                                          : '?',
+                                      style: TextStyle(
+                                        color: theme.colorScheme.surface,
+                                        fontSize: 24,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        userData['username'] ?? "Unknown User",
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        "@$userDomain",
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: 55,
+                                height: 32,
+                                decoration: BoxDecoration(
+                                  color: theme.colorScheme.onSurface,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.star, size: 16, color: theme.colorScheme.surface),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      "${userData['stars'] ?? 0}",
+                                      style: TextStyle(
+                                        color: theme.colorScheme.surface,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-
-                    if (isMine)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextButton.icon(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/edit-profile');
-                              },
-                              style: TextButton.styleFrom(
-                                foregroundColor: theme.colorScheme.onSurface,
-                                backgroundColor: Colors.transparent,
-                                textStyle: theme.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 14,
-                                  color: theme.colorScheme.onSurface,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: theme.colorScheme.secondary,
-                                    width: 0.5,
+                          if (isMine)
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextButton.icon(
+                                    onPressed: () {
+                                      Navigator.pushNamed(context, '/edit-profile');
+                                    },
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: theme.colorScheme.onSurface,
+                                      backgroundColor: Colors.transparent,
+                                      textStyle: theme.textTheme.bodyMedium?.copyWith(
+                                        fontSize: 14,
+                                        color: theme.colorScheme.onSurface,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          color: theme.colorScheme.secondary,
+                                          width: 0.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    ),
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                    label: const Text("Edit profile"),
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
                                 ),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                              ),
-                              icon: Icon(
-                                Icons.edit,
-                                color: theme.colorScheme.onSurface,
-                              ),
-                              label: const Text("Edit profile"),
+                                const SizedBox(width: 8),
+                                TextButton.icon(
+                                  onPressed: () async {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text("Log out?"),
+                                        content: const Text(
+                                            "Your session will expire and you'll be sent back to the login page"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(context),
+                                            child: const Text("No"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              await FirebaseAuth.instance.signOut();
+                                              Navigator.pushReplacementNamed(context, '/login');
+                                            },
+                                            child: const Text("Yes"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: theme.colorScheme.onSurface,
+                                    backgroundColor: Colors.transparent,
+                                    textStyle: theme.textTheme.bodyMedium?.copyWith(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: theme.colorScheme.onSurface,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                        color: theme.colorScheme.secondary,
+                                        width: 0.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  ),
+                                  icon: Icon(
+                                    Icons.logout,
+                                    color: theme.colorScheme.onSurface,
+                                  ),
+                                  label: const Text("Log Out"),
+                                ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          TextButton.icon(
-                            onPressed: () async {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text("Log out?"),
-                                  content: const Text(
-                                      "Your session will expire and you'll be sent back to the login page"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text("No"),
-                                    ),
-                                    TextButton(
-                                      onPressed: () async {
-                                        await FirebaseAuth.instance.signOut();
-                                        Navigator.pushReplacementNamed(context, '/login');
-                                      },
-                                      child: const Text("Yes"),
-                                    ),
-                                  ],
-                                ),
-                              );
+                          const SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () {
+                              if (user != null) {
+                                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                  return About(user: user?.email);
+                                }));
+                              }
                             },
-                            style: TextButton.styleFrom(
-                              foregroundColor: theme.colorScheme.onSurface,
-                              backgroundColor: Colors.transparent,
-                              textStyle: theme.textTheme.bodyMedium?.copyWith(
+                            child: Text(
+                              userData["aboutme"] ?? "",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                              style: const TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: theme.colorScheme.onSurface,
                               ),
-                              shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: theme.colorScheme.secondary,
-                                  width: 0.5,
-                                ),
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             ),
-                            icon: Icon(
-                              Icons.logout,
-                              color: theme.colorScheme.onSurface,
-                            ),
-                            label: const Text("Log Out"),
                           ),
                         ],
                       ),
+                    ),
 
+                    // TABS
                     const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () {
-                        if (user != null) {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) {
-                            return About(user: user);
-                          }));
-                        }
-                      },
-                      child: Text(
-                        userData["aboutme"] ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: const TextStyle(
-                          fontSize: 14,
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: theme.colorScheme.secondary,
+                            width: 0.25,
+                          ),
                         ),
                       ),
+                      child: const Tabs(),
                     ),
-                    const SizedBox(height: 16),
-                    const Tabs(),
                     SizedBox(
                       height: 400,
                       child: TabBarView(
                         children: [
-                          const Notes(),
-                          const Books(),
-                          const Tutoring(),
+                          Notes(user!.uid),
+                          Books(userId: user!.uid),
+                          Tutoring(userId: user!.uid),
                           SingleChildScrollView(
                             child: Reviews(
                               stars: userData['stars'] ?? 0,
-                              profile: user!,
+                              profile: "",
                               isMine: isMine,
                             ),
                           ),
