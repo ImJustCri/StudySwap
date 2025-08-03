@@ -4,6 +4,9 @@ import 'package:studyswap/pages/onboarding/onboarding_page.dart';
 import 'package:studyswap/pages/profile/about.dart';
 import 'package:studyswap/pages/profile/edit_profile.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
+import 'package:studyswap/pages/upload/books.dart';
+import 'package:studyswap/pages/upload/notes.dart';
+import 'package:studyswap/pages/upload/tutoring.dart';
 import 'home/home_page.dart';
 import 'package:studyswap/pages/login.dart';
 import 'package:studyswap/pages/register.dart';
@@ -37,6 +40,9 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/edit-profile': (context) => const EditProfile(),
+        '/notes-upload': (context) => const NotesUploadPage(),
+        '/books-upload': (context) => const BooksUploadPage(),
+        '/tutoring-upload': (context) => const TutoringUploadPage(),
       },
       home: LandingPage(),
     );
