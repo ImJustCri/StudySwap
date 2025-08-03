@@ -28,10 +28,10 @@ class SearchPage extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SearchResults()),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const SearchResults()),
+                // );
               },
               child: AbsorbPointer(
                 child: TextField(
