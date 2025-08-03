@@ -20,8 +20,9 @@ class BottomNavBar extends ConsumerWidget {
     // Use data or fallback empty/default
     final data = dataAsync.value;
 
-    final String displayLetter = data?["username"][0] ?? "U";
-    final Color baseColor = Color(data?["color"]);
+    final String displayLetter = data?["username"][0].toUpperCase() ?? "U";
+    final int colorValue = data?["color"] ?? 0xFF000000;
+    final Color baseColor = Color(colorValue);
 
     return NavigationBarTheme(
       data: NavigationBarThemeData(
