@@ -1,16 +1,13 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutAppPage extends StatelessWidget {
   const AboutAppPage({Key? key}) : super(key: key);
 
-  void _launchUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      // Handle error if URL can't be launched
-      debugPrint('Could not launch $url');
+  Future<void> _launchURL() async {
+    final Uri url = Uri.parse('https://studyswap.it');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw 'Could not launch $url';
     }
   }
 
@@ -20,44 +17,64 @@ class AboutAppPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About App'),
-        centerTitle: true,
+        centerTitle: false,
+        title: const Text(
+          'About App',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Logo in the center
             Center(
               child: Image.asset(
-                'assets/logo.png', // Place your logo asset here
-                width: 120,
-                height: 120,
+                'assets/logo.png',
+                width: 192,
+                height: 192,
               ),
             ),
             const SizedBox(height: 24),
-
-            // Description with clickable links (no explicit style)
-            RichText(
+            const Text(
+              'Hello!',
               textAlign: TextAlign.center,
-              text: TextSpan(
-                children: [
-                  const TextSpan(
-                    text: 'Welcome to the App! This app is designed to simplify your workflow and keep you productive. For more info, visit our ',
-                  ),
-                  TextSpan(
-                    text: 'website',
-                    recognizer: TapGestureRecognizer()..onTap = () => _launchUrl('https://example.com'),
-                  ),
-                  const TextSpan(text: ' or check out our '),
-                  TextSpan(
-                    text: 'GitHub repository',
-                    recognizer: TapGestureRecognizer()..onTap = () => _launchUrl('https://github.com/example'),
-                  ),
-                  const TextSpan(text: ' for the code.'),
-                ],
+              style: TextStyle(fontSize: 24),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'v. yet to be released',
+              style: TextStyle(
+                fontSize: 12,
+                color: theme.textTheme.bodySmall?.color ?? Colors.grey,
               ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            TextButton.icon(
+              onPressed: _launchURL,
+              style: TextButton.styleFrom(
+                foregroundColor: theme.colorScheme.onSurface,
+                backgroundColor: Colors.transparent,
+                textStyle: theme.textTheme.bodyMedium?.copyWith(
+                  fontSize: 14,
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w500,
+                ),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: theme.colorScheme.secondary,
+                    width: 0.5,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              ),
+              icon: Icon(
+                Icons.link,
+                color: theme.colorScheme.onSurface,
+              ),
+              label: const Text('Official Website'),
             ),
           ],
         ),
