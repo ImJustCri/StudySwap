@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Every book in the database
 final booksProvider = StreamProvider<List<Map<String, dynamic>>>((ref) {
   var collectionRef = FirebaseFirestore.instance.collection('Books');
 
@@ -11,6 +12,7 @@ final booksProvider = StreamProvider<List<Map<String, dynamic>>>((ref) {
   );
 });
 
+// Books from a certain user
 final userBooksProvider = StreamProvider.family<List<Map<String, dynamic>>, String>((ref, userId) {
   var collectionRef = FirebaseFirestore.instance.collection('Books');
 
