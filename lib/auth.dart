@@ -49,6 +49,7 @@ class Auth {
         'color': (math.Random().nextDouble() * 0xFFFFFF).toInt(),
         'reviews-reference': 0,
         'email': userCredential.user!.email,
+        'darkmode': false,
       });
 
       return null;
