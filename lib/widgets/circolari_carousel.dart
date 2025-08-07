@@ -55,6 +55,7 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
   Future<void> _fetchRssFeed() async {
     try {
       final response = await client.get(Uri.parse('https://${emailDomain!}/circolare/rss/'));
+      if (!mounted) return;
       if (response.statusCode == 200) {
         final rssFeed = RssFeed.parse(response.body);
         setState(() {
@@ -80,12 +81,20 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
     final theme = Theme.of(context);
 
     if (_isLoading) {
+      final placeholderItems = List.generate(
+        3,
+            (index) => CircolareContent(
+          date: "",
+          title: "",
+        ),
+      );
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            textAlign: TextAlign.left,
             "Latest from your school",
+            textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 18,
             ),
@@ -95,6 +104,7 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
             height: 144,
             width: double.infinity,
             child: CarouselView(
+              onTap: (_) {},
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -102,12 +112,7 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
               itemSnapping: true,
               shrinkExtent: 330,
               itemExtent: 330,
-              children: [
-                Container(),
-                Container(),
-                Container(),
-                Container(),
-              ],
+              children: placeholderItems,
             ),
           ),
           const SizedBox(height: 24),
@@ -119,12 +124,22 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
       return Center(child: Text(_error!));
     }
 
+    final itemWidgets = _items.map((item) {
+      final title = item.title ?? 'No title';
+      final date = readableDate(item.pubDate) ?? 'No date';
+
+      return CircolareContent(
+        date: date,
+        title: title,
+      );
+    }).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          textAlign: TextAlign.left,
           "Latest from your school",
+          textAlign: TextAlign.left,
           style: TextStyle(
             fontSize: 18,
           ),
@@ -134,6 +149,24 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
           height: 144,
           width: double.infinity,
           child: CarouselView(
+            onTap: (int index) async {
+              final selectedItem = _items[index];
+              final link = selectedItem.link ?? "";
+
+              if (link.isEmpty) {
+                return;
+              }
+
+              final uri = Uri.parse(link);
+
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Could not launch URL')),
+                );
+              }
+            },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -141,20 +174,11 @@ class _CircolariCarouselState extends State<CircolariCarousel> {
             itemSnapping: true,
             shrinkExtent: 330,
             itemExtent: 330,
-            children: _items.map((item) {
-              final title = item.title ?? 'No title';
-              final date = readableDate(item.pubDate) ?? 'No date';
-              return CircolareContent(
-                date: date,
-                title: title,
-              );
-            }).toList(),
+            children: itemWidgets,
           ),
         ),
         const SizedBox(height: 24),
       ],
     );
   }
-
-  Future<void> _launchUrl(Uri url) async {}
 }
