@@ -13,7 +13,7 @@ class Tutoring extends ConsumerWidget {
     final tutoringAsyncValue = ref.watch(userTutoringProvider(userId));
 
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0),
+      padding: const EdgeInsets.all(24.0),
       child: tutoringAsyncValue.when(
         data: (tutoringList) {
           if (tutoringList.isEmpty) {
@@ -21,6 +21,8 @@ class Tutoring extends ConsumerWidget {
           }
 
           return ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             itemCount: tutoringList.length,
             itemBuilder: (context, index) {
               final tutoring = tutoringList[index];

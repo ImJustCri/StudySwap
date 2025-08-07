@@ -12,11 +12,10 @@ class Books extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userBooksAsyncValue = ref.watch(userBooksProvider(userId));
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 24),
           const Text(
             "Latest uploads",
             style: TextStyle(
@@ -24,32 +23,28 @@ class Books extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 8),
-          SizedBox(
-            height: 244,
-            child: userBooksAsyncValue.when(
-              data: (notesList) {
-                if (notesList.isEmpty) {
-                  return const Center(child: Text('No books uploaded.'));
-                }
-                final posts = notesList.map((noteData) {
-                  return Post.fromMap(noteData);
-                }).toList();
+          userBooksAsyncValue.when(
+            data: (booksList) {
+              if (booksList.isEmpty) {
+                return const Center(child: Text('No books uploaded.'));
+              }
+              final posts = booksList.map((bookData) => Post.fromMap(bookData)).toList();
 
-                return ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) => InkWell(
-                    onTap: () {
-                      // TODO
-                    },
-                    child: posts[index],
-                  ),
-                  separatorBuilder: (context, index) => const SizedBox(width: 16),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(child: Text('Error: $error')),
-            ),
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.7,
+                ),
+                itemCount: posts.length,
+                itemBuilder: (context, index) => posts[index],
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Center(child: Text('Error: $error')),
           ),
         ],
       ),
