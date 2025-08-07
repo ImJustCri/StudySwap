@@ -15,6 +15,7 @@ class TutoringUploadPage extends ConsumerStatefulWidget {
 class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   String? _selectedSubject;
   final Set<int> _selectedClasses = {};
@@ -22,12 +23,14 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   @override
   void dispose() {
     _subjectController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       final subject = _selectedSubject ?? _subjectController.text.trim();
+      final description = _descriptionController.text.trim();
 
       if (_selectedClasses.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -40,7 +43,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
       final classesBoolList =
       List<bool>.generate(5, (index) => _selectedClasses.contains(index + 1));
 
-      await _uploadTutoring(subject: subject, classes: classesBoolList);
+      await _uploadTutoring(subject: subject, classes: classesBoolList, description: description);
 
       // Clear form & exit
       _formKey.currentState!.reset();
@@ -61,7 +64,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "Upload Tutoring",
+          "Upload Tutoring Offer",
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
         ),
         leading: const BackButton(),
@@ -120,6 +123,28 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                     const SizedBox(height: 4),
                     const Text(
                       'Select or type the subject area for the tutoring (e.g., Mathematics, History).',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      maxLines: null,
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.book),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Add a brief description of the tutoring session',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 24),
@@ -195,6 +220,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
 
   Future<void> _uploadTutoring({
     required String subject,
+    required String description,
     required List<bool> classes,
   }) async {
     try {
@@ -204,6 +230,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         'subject': subject,
         'classes': classes,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
+        'description': description,
         'createdAt': FieldValue.serverTimestamp(),
       });
 

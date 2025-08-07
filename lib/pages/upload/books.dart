@@ -20,6 +20,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
   final TextEditingController _subjectController = TextEditingController();
   final TextEditingController _isbnController = TextEditingController();
   final TextEditingController _yearController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   String? _selectedSubject;
 
@@ -40,6 +41,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
       final cost = int.parse(_costController.text.trim());
       final isbn = _isbnController.text.trim();
       final year = int.parse(_yearController.text.trim());
+      final description = _descriptionController.text.trim();
 
       await _uploadNote(
         title: title,
@@ -47,6 +49,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         cost: cost,
         isbn: isbn,
         year: year,
+        description: description,
       );
 
       _formKey.currentState!.reset();
@@ -150,7 +153,27 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 16),
-
+                    TextFormField(
+                      maxLines: null,
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.book),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Add a brief description of the book you are selling',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
                     TextFormField(
                       controller: _costController,
                       keyboardType: TextInputType.number,
@@ -260,6 +283,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
   Future<void> _uploadNote({
     required String title,
     required String subject,
+    required String description,
     required int cost,
     required String isbn,
     required int year,
@@ -269,6 +293,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
       await notesCollection.add({
         'title': title,
         'subject': subject,
+        'description': description,
         'price': cost,
         'isbn': isbn,
         'year': year,

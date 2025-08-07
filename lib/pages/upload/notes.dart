@@ -18,6 +18,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _costController = TextEditingController();
   final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   String? _selectedSubject;
 
@@ -26,6 +27,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     _titleController.dispose();
     _costController.dispose();
     _subjectController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -34,11 +36,13 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
       final title = _titleController.text.trim();
       final subject = _selectedSubject ?? _subjectController.text.trim();
       final cost = int.parse(_costController.text.trim());
+      final description = _descriptionController.text.trim();
 
       await _uploadNote(
         title: title,
         subject: subject,
         cost: cost,
+        description: description,
       );
 
       // After upload, clear the form and exit
@@ -140,6 +144,28 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       'Select or type the subject related to your notes (e.g., Mathematics, History).',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
+
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      maxLines: null,
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.book),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Add a brief description of the notes',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
                     const SizedBox(height: 16),
 
                     TextFormField(
@@ -204,6 +230,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     required String title,
     required String subject,
     required int cost,
+    required String description,
   }) async {
     try {
       final notesCollection = FirebaseFirestore.instance.collection('Notes');
@@ -213,6 +240,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         'subject': subject,
         'price': cost,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
+        'description': description,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
