@@ -17,7 +17,7 @@ class About extends ConsumerWidget {
       );
     }
 
-    final userDataAsync = ref.watch(dataProvider);
+    final userDataAsync = ref.watch(dataProvider(user!));
 
     return userDataAsync.when(
       data: (data) {

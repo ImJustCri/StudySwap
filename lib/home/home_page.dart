@@ -23,7 +23,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _handleRefresh() async {
     await Future.delayed(Duration(seconds: 1));
-
     setState(() {
     // TODO
     });
@@ -46,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     const SearchPage(),
     const ExchangePage(),
-    ProfilePage(isMine: true, user: currentUser),
+    ProfilePage(isMine: true, userId: currentUser!.uid),
   ];
 
   @override

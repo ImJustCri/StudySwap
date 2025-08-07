@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/coins_page.dart';
@@ -9,8 +10,9 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = FirebaseAuth.instance.currentUser;
     final theme = Theme.of(context);
-    final dataAsync = ref.watch(dataProvider);
+    final dataAsync = ref.watch(dataProvider(currentUser!.uid));
 
     Widget coinsButton(String coins) {
       return Container(
