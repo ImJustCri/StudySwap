@@ -50,6 +50,7 @@ class Auth {
         'reviews-reference': 0,
         'email': userCredential.user!.email,
         'darkmode': false,
+        'favorite_subjects': [],
       });
 
       return null;
