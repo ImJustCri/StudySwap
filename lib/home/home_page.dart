@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: const TopBar(),
       body: _pages[_selectedIndex],
-      floatingActionButton: _selectedIndex == 0 ? ExpandableFabMenu() : null,
+      floatingActionButton: _selectedIndex == 0 || _selectedIndex == 2 ? ExpandableFabMenu() : null,
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
