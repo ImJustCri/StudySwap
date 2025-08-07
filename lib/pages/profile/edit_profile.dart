@@ -2,22 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-final userProvider = StreamProvider<User?>((ref) {
-  return FirebaseAuth.instance.authStateChanges();
-});
-
-final dataProvider = StreamProvider<Map<String, dynamic>?>((ref) {
-  final userStream = ref.watch(userProvider);
-  var currentUser = userStream.value;
-
-  if (currentUser != null) {
-    var docRef = FirebaseFirestore.instance.collection('Users').doc(currentUser.uid);
-    return docRef.snapshots().map((doc) => doc.data());
-  } else {
-    return const Stream.empty();
-  }
-});
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
@@ -27,9 +12,11 @@ class EditProfile extends ConsumerStatefulWidget {
 }
 
 class _EditProfileState extends ConsumerState<EditProfile> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _bioController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _bioController = TextEditingController();
   Future<void>? _profileFuture;
+
+  Color _selectedColor = Colors.blue;
 
   @override
   void initState() {
@@ -38,7 +25,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   }
 
   Future<void> _loadUserProfile() async {
-    final userDataAsync = ref.read(dataProvider);
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
@@ -48,10 +34,15 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         final data = doc.data()!;
         _nameController.text = data['username']?.toString() ?? '';
         _bioController.text = data['aboutme']?.toString() ?? '';
+
+        final int? colorInt = data['color'] as int?;
+        if (colorInt != null) {
+          setState(() {
+            _selectedColor = Color(0xFF000000 | colorInt);
+          });
+        }
       }
-    } catch (e) {
-      // Optionally handle error
-    }
+    } catch (_) {}
   }
 
   Future<void> _saveProfile() async {
@@ -70,12 +61,15 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     }
 
     try {
+      final int rgb = _selectedColor.value & 0x00FFFFFF;
+
       await FirebaseFirestore.instance.collection('Users').doc(uid).update({
         'username': nameT.split(" ").join(".").toLowerCase(),
         'aboutme': _bioController.text.trim(),
+        'color': rgb,
       });
       _showSuccessDialog();
-    } catch (e) {
+    } catch (_) {
       _showErrorDialog("Something went wrong. Please try again later.");
     }
   }
@@ -83,15 +77,10 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (c) => AlertDialog(
         title: const Text("Error"),
         content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("OK"),
-          )
-        ],
+        actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text("OK"))],
       ),
     );
   }
@@ -100,14 +89,42 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
+      builder: (c) => AlertDialog(
         title: const Text("Profile updated"),
         content: const Text("Your profile has been updated successfully"),
         actions: [
           TextButton(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, '/homescreen'),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/homescreen'),
             child: const Text("Back to home"),
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<void> _pickColor() async {
+    Color pickedColor = _selectedColor;
+
+    await showDialog(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: const Text('Pick a color'),
+        content: SingleChildScrollView(
+          child: BlockPicker(
+            pickerColor: _selectedColor,
+            onColorChanged: (color) => pickedColor = color,
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(c), child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(c);
+              setState(() {
+                _selectedColor = pickedColor;
+              });
+            },
+            child: const Text('Select'),
           )
         ],
       ),
@@ -139,16 +156,16 @@ class _EditProfileState extends ConsumerState<EditProfile> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      // TODO: Implement profile picture change
-                    },
+                    onTap: _pickColor,
                     child: CircleAvatar(
                       radius: 50,
-                      backgroundColor: theme.colorScheme.primary.withAlpha(25),
+                      backgroundColor: _selectedColor,
                       child: Icon(
-                        Icons.camera_alt_outlined,
+                        Icons.color_lens_outlined,
                         size: 40,
-                        color: theme.colorScheme.primary,
+                        color: ThemeData.estimateBrightnessForColor(_selectedColor) == Brightness.dark
+                            ? Colors.white
+                            : Colors.black,
                       ),
                     ),
                   ),
@@ -176,7 +193,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                     height: 56,
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: _saveProfile,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.primary,
                         foregroundColor: theme.colorScheme.onPrimary,
@@ -187,7 +203,11 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Save changes'),
+                      onPressed: _saveProfile,
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 14.0),
+                        child: Text('Save changes', style: TextStyle(fontSize: 16)),
+                      ),
                     ),
                   ),
                 ],
