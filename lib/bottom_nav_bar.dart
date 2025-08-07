@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/data_provider.dart';
@@ -14,7 +15,8 @@ class BottomNavBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dataAsync = ref.watch(dataProvider);
+    final currentUser = FirebaseAuth.instance.currentUser;
+    final dataAsync = ref.watch(dataProvider(currentUser!.uid));
     final theme = Theme.of(context);
 
     // Use data or fallback empty/default
@@ -23,6 +25,9 @@ class BottomNavBar extends ConsumerWidget {
     final String displayLetter = data?["username"][0].toUpperCase() ?? "U";
     final int colorValue = data?["color"] ?? 0xFF000000;
     final Color baseColor = Color(colorValue);
+    final profileTextColor = ThemeData.estimateBrightnessForColor(baseColor) == Brightness.dark
+        ? Colors.white
+        : Colors.black;
 
     return NavigationBarTheme(
       data: NavigationBarThemeData(
@@ -57,7 +62,7 @@ class BottomNavBar extends ConsumerWidget {
           destinations: <NavigationDestination>[
             const NavigationDestination(
               icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home),
+              selectedIcon: Icon(Icons.home_rounded),
               label: 'Home',
             ),
             const NavigationDestination(
@@ -82,7 +87,7 @@ class BottomNavBar extends ConsumerWidget {
                 child: Text(
                   displayLetter,
                   style: TextStyle(
-                    color: theme.colorScheme.surface,
+                    color: profileTextColor.withValues(alpha: .5),
                     fontSize: 10,
                   ),
                 ),
@@ -98,7 +103,7 @@ class BottomNavBar extends ConsumerWidget {
                 child: Text(
                   displayLetter,
                   style: TextStyle(
-                    color: theme.colorScheme.surface,
+                    color: profileTextColor,
                     fontSize: 10,
                   ),
                 ),
