@@ -22,7 +22,7 @@ class BottomNavBar extends ConsumerWidget {
     // Use data or fallback empty/default
     final data = dataAsync.value;
 
-    final String imageUrl = data?["image_url"] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png";
+    final String imageUrl = data?["image"] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png";
 
     return NavigationBarTheme(
       data: NavigationBarThemeData(
