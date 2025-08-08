@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/pages/content/posts_detail_page.dart';
 
@@ -57,34 +58,26 @@ class Post extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: imageUrl.isNotEmpty && imageUrl != "Empty"
-                          ? Image.network(
-                        compressedImageUrl,
+                          ? CachedNetworkImage(
+                        imageUrl: compressedImageUrl,
                         width: 200,
                         height: 148,
                         fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                                  : null,
+                        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                          child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Container(
+                          color: Theme.of(context).colorScheme.secondaryContainer,
+                          child: Center(
+                            child: Icon(
+                              Icons.broken_image,
+                              size: 48,
+                              color: Theme.of(context).colorScheme.onSecondaryContainer,
                             ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Theme.of(context).colorScheme.secondaryContainer,
-                            child: Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                size: 48,
-                                color: Theme.of(context).colorScheme.onSecondaryContainer,
-                              ),
-                            ),
-                          );
-                        },
+                          ),
+                        ),
                       )
                           : Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,

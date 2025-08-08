@@ -1,10 +1,13 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:image/image.dart' as img;
+
 
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
@@ -54,10 +57,28 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     final pickedXFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedXFile == null) return;
 
+    // Read picked image bytes
+    final bytes = await pickedXFile.readAsBytes();
+
+    // Decode image
+    img.Image? originalImage = img.decodeImage(bytes);
+    if (originalImage == null) return;
+
+    // Resize image to 64x64
+    img.Image resizedImage = img.copyResize(originalImage, width: 64, height: 64);
+
+    // Convert resized image back to bytes in PNG format
+    final resizedBytes = img.encodePng(resizedImage);
+
+    // Save resized image as temp file
+    final tempDir = Directory.systemTemp;
+    final resizedFile = await File('${tempDir.path}/resized_profile.png').writeAsBytes(resizedBytes);
+
     setState(() {
-      _selectedImageFile = File(pickedXFile.path);
+      _selectedImageFile = resizedFile;
     });
   }
+
 
   Future<String> _uploadImage(File file, String uid) async {
     final storage = Supabase.instance.client.storage.from('pfp');
@@ -154,21 +175,22 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   }
 
   Widget _buildProfileImage() {
-    final displayImage = _selectedImageFile != null
-        ? FileImage(_selectedImageFile!)
-        : (_currentImageUrl != null && _currentImageUrl!.isNotEmpty
-        ? NetworkImage(_currentImageUrl!)
-        : null);
+    ImageProvider<Object>? displayImage;
+
+    if (_selectedImageFile != null) {
+      displayImage = FileImage(_selectedImageFile!);
+    } else if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
+      displayImage = CachedNetworkImageProvider(_currentImageUrl!);
+    }
 
     return GestureDetector(
       onTap: _pickImage,
       child: CircleAvatar(
-        radius: 50,
+        radius: 48,
         backgroundColor: Colors.transparent,
-        backgroundImage: displayImage as ImageProvider<Object>?,
+        backgroundImage: displayImage,
         child: displayImage == null
-            ? const Icon(Icons.camera_alt_outlined,
-            size: 40, color: Colors.grey)
+            ? const Icon(Icons.camera_alt_outlined, size: 40, color: Colors.grey)
             : null,
       ),
     );

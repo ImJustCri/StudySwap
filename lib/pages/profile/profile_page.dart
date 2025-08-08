@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,7 +70,9 @@ class ProfilePage extends ConsumerWidget {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
-                                      image: NetworkImage(userData['image'] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png"),
+                                      image: CachedNetworkImageProvider(
+                                        userData['image'] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png",
+                                      ),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
