@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/first_run.dart';
 import 'package:studyswap/pages/about_app.dart';
@@ -30,9 +31,16 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
-    setOptimalDisplayMode();
     super.initState();
+    initialize();
   }
+
+  Future<void> initialize() async {
+    await setOptimalDisplayMode();
+    FlutterNativeSplash.remove();
+  }
+
+
 
   Future<void> setOptimalDisplayMode() async {
     final List<DisplayMode> supported = await FlutterDisplayMode.supported;
