@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
@@ -16,7 +18,11 @@ class _EditProfileState extends ConsumerState<EditProfile> {
   final _bioController = TextEditingController();
   Future<void>? _profileFuture;
 
-  Color _selectedColor = Colors.blue;
+  File? _selectedImageFile;
+  String? _currentImageUrl;
+
+  final _defaultImageUrl =
+      "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png";
 
   @override
   void initState() {
@@ -29,47 +35,79 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     if (uid == null) return;
 
     try {
-      final doc = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      final doc =
+      await FirebaseFirestore.instance.collection('Users').doc(uid).get();
       if (doc.exists) {
         final data = doc.data()!;
         _nameController.text = data['username']?.toString() ?? '';
         _bioController.text = data['aboutme']?.toString() ?? '';
-
-        final int? colorInt = data['color'] as int?;
-        if (colorInt != null) {
-          setState(() {
-            _selectedColor = Color(0xFF000000 | colorInt);
-          });
-        }
+        _currentImageUrl = data['image']?.toString();
       }
+    } catch (e) {
+      debugPrint("Error loading profile: $e");
+    }
+    setState(() {});
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedXFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedXFile == null) return;
+
+    setState(() {
+      _selectedImageFile = File(pickedXFile.path);
+    });
+  }
+
+  Future<String> _uploadImage(File file, String uid) async {
+    final storage = Supabase.instance.client.storage.from('pfp');
+
+    try {
+      await storage.remove([uid]);
     } catch (_) {}
+
+    await storage.upload(uid, file);
+    return storage.getPublicUrl(uid);
   }
 
   Future<void> _saveProfile() async {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
-    final nameT = _nameController.text.trim();
-    if (nameT.isEmpty) {
+    final name = _nameController.text.trim();
+    final bio = _bioController.text.trim();
+
+    if (name.isEmpty) {
       _showErrorDialog("A username is required to save changes.");
       return;
     }
 
-    if (nameT.length > 20) {
+    if (name.length > 20) {
       _showErrorDialog("Username cannot exceed 20 characters.");
       return;
     }
 
-    try {
-      final int rgb = _selectedColor.value & 0x00FFFFFF;
+    String imageUrlToSave = _currentImageUrl ?? _defaultImageUrl;
 
+    try {
+      if (_selectedImageFile != null) {
+        // Upload new image to Supabase
+        imageUrlToSave = await _uploadImage(_selectedImageFile!, uid);
+        setState(() {
+          _currentImageUrl = imageUrlToSave;
+        });
+      }
+
+      // Save profile info to Firestore
       await FirebaseFirestore.instance.collection('Users').doc(uid).update({
-        'username': nameT.split(" ").join(".").toLowerCase(),
-        'aboutme': _bioController.text.trim(),
-        'color': rgb,
+        'username': name.replaceAll(" ", ".").toLowerCase(),
+        'aboutme': bio,
+        'image': imageUrlToSave,
       });
+
       _showSuccessDialog();
-    } catch (_) {
+    } catch (e) {
+      debugPrint("Error saving profile: $e");
       _showErrorDialog("Something went wrong. Please try again later.");
     }
   }
@@ -80,7 +118,12 @@ class _EditProfileState extends ConsumerState<EditProfile> {
       builder: (c) => AlertDialog(
         title: const Text("Error"),
         content: Text(message),
-        actions: [TextButton(onPressed: () => Navigator.pop(c), child: const Text("OK"))],
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c),
+            child: const Text("OK"),
+          ),
+        ],
       ),
     );
   }
@@ -90,41 +133,13 @@ class _EditProfileState extends ConsumerState<EditProfile> {
       context: context,
       barrierDismissible: false,
       builder: (c) => AlertDialog(
-        title: const Text("Profile updated"),
-        content: const Text("Your profile has been updated successfully"),
+        title: const Text("Profile Updated"),
+        content: const Text("Your profile has been updated successfully."),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, '/homescreen'),
-            child: const Text("Back to home"),
-          )
-        ],
-      ),
-    );
-  }
-
-  Future<void> _pickColor() async {
-    Color pickedColor = _selectedColor;
-
-    await showDialog(
-      context: context,
-      builder: (c) => AlertDialog(
-        title: const Text('Pick a color'),
-        content: SingleChildScrollView(
-          child: BlockPicker(
-            pickerColor: _selectedColor,
-            onColorChanged: (color) => pickedColor = color,
-          ),
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(c), child: const Text('Cancel')),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(c);
-              setState(() {
-                _selectedColor = pickedColor;
-              });
-            },
-            child: const Text('Select'),
+            onPressed: () =>
+                Navigator.pushReplacementNamed(context, '/homescreen'),
+            child: const Text("Back to Home"),
           )
         ],
       ),
@@ -138,37 +153,46 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     super.dispose();
   }
 
+  Widget _buildProfileImage() {
+    final displayImage = _selectedImageFile != null
+        ? FileImage(_selectedImageFile!)
+        : (_currentImageUrl != null && _currentImageUrl!.isNotEmpty
+        ? NetworkImage(_currentImageUrl!)
+        : null);
+
+    return GestureDetector(
+      onTap: _pickImage,
+      child: CircleAvatar(
+        radius: 50,
+        backgroundColor: Colors.transparent,
+        backgroundImage: displayImage as ImageProvider<Object>?,
+        child: displayImage == null
+            ? const Icon(Icons.camera_alt_outlined,
+            size: 40, color: Colors.grey)
+            : null,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit profile")),
+      appBar: AppBar(title: const Text("Edit Profile")),
       body: FutureBuilder(
         future: _profileFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
           return Padding(
             padding: const EdgeInsets.all(24.0),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  GestureDetector(
-                    onTap: _pickColor,
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundColor: _selectedColor,
-                      child: Icon(
-                        Icons.color_lens_outlined,
-                        size: 40,
-                        color: ThemeData.estimateBrightnessForColor(_selectedColor) == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
-                      ),
-                    ),
-                  ),
+                  _buildProfileImage(),
                   const SizedBox(height: 24),
                   TextField(
                     controller: _nameController,
@@ -190,8 +214,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
-                    height: 56,
                     width: double.infinity,
+                    height: 56,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: theme.colorScheme.primary,
@@ -206,7 +230,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                       onPressed: _saveProfile,
                       child: const Padding(
                         padding: EdgeInsets.symmetric(vertical: 14.0),
-                        child: Text('Save changes', style: TextStyle(fontSize: 16)),
+                        child:
+                        Text('Save Changes', style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ),

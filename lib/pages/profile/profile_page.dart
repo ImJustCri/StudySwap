@@ -41,11 +41,6 @@ class ProfilePage extends ConsumerWidget {
         final String userEmail = userData['email'] as String? ?? "";
         final userDomain = userEmail.contains('@') ? userEmail.split('@')[1] : "";
 
-        final circleColor = Color((userData["color"] ?? 0).toInt()).withAlpha(255);
-        final textColor = ThemeData.estimateBrightnessForColor(circleColor) == Brightness.dark
-            ? Colors.white
-            : Colors.black;
-
         return DefaultTabController(
           length: 4,
           child: Scaffold(
@@ -73,15 +68,9 @@ class ProfilePage extends ConsumerWidget {
                                   height: 64,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: circleColor,
-                                  ),
-                                  child: Text(
-                                    (userData['username'] as String?)?.isNotEmpty == true
-                                        ? userData['username'][0].toUpperCase()
-                                        : '?',
-                                    style: TextStyle(
-                                      color: textColor,
-                                      fontSize: 24,
+                                    image: DecorationImage(
+                                      image: NetworkImage(userData['image'] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png"),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
@@ -222,7 +211,7 @@ class ProfilePage extends ConsumerWidget {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return About(user: userData["email"]);
+                              return About(user: userId);
                             }));
                           },
                           child: Text(

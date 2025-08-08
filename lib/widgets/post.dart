@@ -6,6 +6,7 @@ class Post extends StatelessWidget {
   final String title;
   final String subject;
   final String description;
+  final String imageUrl;
   final int price;
 
   const Post({
@@ -15,11 +16,13 @@ class Post extends StatelessWidget {
     required this.subject,
     required this.price,
     required this.description,
+    required this.imageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final compressedImageUrl = "$imageUrl?quality=10";
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
@@ -33,6 +36,7 @@ class Post extends StatelessWidget {
               subject: subject,
               price: price,
               description: description,
+              imageUrl: imageUrl,
             ),
           ),
         );
@@ -47,12 +51,50 @@ class Post extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 200,
                     height: 148,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
+                      child: imageUrl.isNotEmpty && imageUrl != "Empty"
+                          ? Image.network(
+                        compressedImageUrl,
+                        width: 200,
+                        height: 148,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Theme.of(context).colorScheme.secondaryContainer,
+                            child: Center(
+                              child: Icon(
+                                Icons.broken_image,
+                                size: 48,
+                                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                          : Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Center(
+                          child: Icon(
+                            Icons.note,
+                            size: 48,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -105,6 +147,7 @@ class Post extends StatelessWidget {
       subject: map['subject'] ?? 'Unknown',
       price: map['price'] ?? 0,
       description: map['description'] ?? "No description",
+      imageUrl: map["image_url"] ?? "Empty",
     );
   }
 }

@@ -8,6 +8,7 @@ class PostDetailsPage extends StatefulWidget {
   final String userId;
   final int price;
   final String description;
+  final String imageUrl;
 
   const PostDetailsPage({
     super.key,
@@ -16,6 +17,7 @@ class PostDetailsPage extends StatefulWidget {
     required this.price,
     required this.userId,
     required this.description,
+    required this.imageUrl,
   });
 
   @override
@@ -74,7 +76,40 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
             Container(
               height: 296,
               width: double.infinity,
-              color: theme.colorScheme.onSurface,
+              color: theme.colorScheme.secondaryContainer,
+              child: widget.imageUrl.isNotEmpty
+                  ? Image.network(
+                widget.imageUrl,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: 296,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 80,
+                      color: theme.colorScheme.onSecondaryContainer,
+                    ),
+                  );
+                },
+              )
+                  : Center(
+                child: Icon(
+                  Icons.note,
+                  size: 80,
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(24.0),
@@ -122,7 +157,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               color: theme.colorScheme.secondaryContainer,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4), // optional padding
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             child: Text(
                               "@${school!}",
                               style: TextStyle(

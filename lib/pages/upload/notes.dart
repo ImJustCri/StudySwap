@@ -1,9 +1,12 @@
+import 'dart:io';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:uuid/uuid.dart';
 import '../../providers/subjects_providers.dart';
+import '../../widgets/thumbnail_picker.dart';
 
 class NotesUploadPage extends ConsumerStatefulWidget {
   const NotesUploadPage({super.key});
@@ -21,6 +24,8 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
   final TextEditingController _descriptionController = TextEditingController();
 
   String? _selectedSubject;
+
+  File? _selectedImage;
 
   @override
   void dispose() {
@@ -45,14 +50,16 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         description: description,
       );
 
-      // After upload, clear the form and exit
+      // After upload, clear the form and reset
       _formKey.currentState!.reset();
       setState(() {
         _selectedSubject = null;
+        _selectedImage = null;
       });
       _titleController.clear();
       _costController.clear();
       _subjectController.clear();
+      _descriptionController.clear();
       Navigator.pop(context);
     }
   }
@@ -72,14 +79,23 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         backgroundColor: theme.colorScheme.surface,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ThumbnailPicker(
+              initialImage: _selectedImage,
+              onImagePicked: (file) {
+                setState(() {
+                  _selectedImage = file;
+                });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Form(
+                key: _formKey,
+                child: Column(
                   children: [
                     TextFormField(
                       controller: _titleController,
@@ -96,9 +112,12 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the topic of your notes',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter the topic of your notes',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -140,9 +159,12 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Select or type the subject related to your notes (e.g., Mathematics, History).',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Select or type the subject related to your notes (e.g., Mathematics, History).',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
 
                     const SizedBox(height: 16),
@@ -162,9 +184,12 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Add a brief description of the notes',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Add a brief description of the notes',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -190,37 +215,40 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the price you want to charge for this note (must be greater than zero).',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter the price you want to charge for this note (must be greater than zero).',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
+                          textStyle: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: _submitForm,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text('Submit', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  onPressed: _submitForm,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text('Submit', style: TextStyle(fontSize: 16)),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -235,6 +263,22 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     try {
       final notesCollection = FirebaseFirestore.instance.collection('Notes');
 
+      if (_selectedImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select an image before uploading')),
+        );
+        return;
+      }
+      final imageUid = Uuid().v4();
+
+      await Supabase.instance.client.storage
+          .from('thumbnails')
+          .upload(imageUid, _selectedImage!);
+
+      final imageUrl = Supabase.instance.client.storage
+          .from('thumbnails')
+          .getPublicUrl(imageUid);
+
       await notesCollection.add({
         'title': title,
         'subject': subject,
@@ -242,6 +286,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'description': description,
         'createdAt': FieldValue.serverTimestamp(),
+        'image_url': imageUrl,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

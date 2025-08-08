@@ -1,9 +1,13 @@
+import 'dart:io';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../providers/subjects_providers.dart';
+import '../../widgets/thumbnail_picker.dart';
+
 
 class BooksUploadPage extends ConsumerStatefulWidget {
   const BooksUploadPage({super.key});
@@ -24,6 +28,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
   String? _selectedSubject;
 
+  File? _selectedImage;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -31,6 +37,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
     _subjectController.dispose();
     _isbnController.dispose();
     _yearController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -50,17 +57,20 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         isbn: isbn,
         year: year,
         description: description,
+        // You can also upload _selectedImage to Firebase Storage here if desired
       );
 
       _formKey.currentState!.reset();
       setState(() {
         _selectedSubject = null;
+        _selectedImage = null;
       });
       _titleController.clear();
       _costController.clear();
       _subjectController.clear();
       _isbnController.clear();
       _yearController.clear();
+      _descriptionController.clear();
       Navigator.pop(context);
     }
   }
@@ -80,15 +90,24 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         backgroundColor: theme.colorScheme.surface,
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ThumbnailPicker(
+              initialImage: _selectedImage,
+              onImagePicked: (file) {
+                setState(() {
+                  _selectedImage = file;
+                });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
                   children: [
+
                     TextFormField(
                       controller: _titleController,
                       decoration: const InputDecoration(
@@ -104,9 +123,12 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the book title as it appears on the cover or title page.',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter the book title as it appears on the cover or title page.',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -148,11 +170,15 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Select or type the subject area of the book (e.g., Mathematics, History).',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Select or type the subject area of the book (e.g., Mathematics, History).',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
+
                     TextFormField(
                       maxLines: null,
                       controller: _descriptionController,
@@ -169,11 +195,15 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Add a brief description of the book you are selling',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Add a brief description of the book you are selling',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
+
                     TextFormField(
                       controller: _costController,
                       keyboardType: TextInputType.number,
@@ -196,9 +226,12 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the price you want to charge for this book (must be greater than zero).',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter the price you want to charge for this book (must be greater than zero).',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -217,9 +250,12 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the ISBN number found on the back cover or copyright page.',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter the ISBN number found on the back cover or copyright page.',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -244,37 +280,40 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the year this book was published, usually found on the copyright page.',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Enter the year this book was published, usually found on the copyright page.',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
                     ),
                     const SizedBox(height: 16),
+
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.primary,
+                          foregroundColor: theme.colorScheme.onPrimary,
+                          textStyle: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: _submitForm,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          child: Text('Submit', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  onPressed: _submitForm,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text('Submit', style: TextStyle(fontSize: 16)),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -289,8 +328,26 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
     required int year,
   }) async {
     try {
-      final notesCollection = FirebaseFirestore.instance.collection('Books');
-      await notesCollection.add({
+      final booksCollection = FirebaseFirestore.instance.collection('Books');
+
+      if (_selectedImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select an image before uploading')),
+        );
+        return;
+      }
+
+      final imageUid = Uuid().v4();
+
+      await Supabase.instance.client.storage
+          .from('thumbnails')
+          .upload(imageUid, _selectedImage!);
+
+      final imageUrl = Supabase.instance.client.storage
+          .from('thumbnails')
+          .getPublicUrl(imageUid);
+
+      await booksCollection.add({
         'title': title,
         'subject': subject,
         'description': description,
@@ -299,7 +356,9 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         'year': year,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'createdAt': FieldValue.serverTimestamp(),
+        'image_url': imageUrl,  // Save image URL here
       });
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Book uploaded successfully!')),
       );

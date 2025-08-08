@@ -22,12 +22,7 @@ class BottomNavBar extends ConsumerWidget {
     // Use data or fallback empty/default
     final data = dataAsync.value;
 
-    final String displayLetter = data?["username"][0].toUpperCase() ?? "U";
-    final int colorValue = data?["color"] ?? 0xFF000000;
-    final Color baseColor = Color(colorValue);
-    final profileTextColor = ThemeData.estimateBrightnessForColor(baseColor) == Brightness.dark
-        ? Colors.white
-        : Colors.black;
+    final String imageUrl = data?["image_url"] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png";
 
     return NavigationBarTheme(
       data: NavigationBarThemeData(
@@ -82,13 +77,13 @@ class BottomNavBar extends ConsumerWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: baseColor.withAlpha(128), // 0.5 alpha
-                ),
-                child: Text(
-                  displayLetter,
-                  style: TextStyle(
-                    color: profileTextColor.withValues(alpha: .5),
-                    fontSize: 10,
+                  image: DecorationImage(
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover,
+                    colorFilter: ColorFilter.mode(
+                      Colors.black.withValues(alpha: .5),
+                      BlendMode.dstATop,
+                    ),
                   ),
                 ),
               ),
@@ -98,13 +93,9 @@ class BottomNavBar extends ConsumerWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: baseColor.withAlpha(255), // 1.0 alpha
-                ),
-                child: Text(
-                  displayLetter,
-                  style: TextStyle(
-                    color: profileTextColor,
-                    fontSize: 10,
+                  image: DecorationImage(
+                    image: NetworkImage(imageUrl),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

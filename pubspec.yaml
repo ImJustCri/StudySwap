@@ -46,7 +46,9 @@ dependencies:
   flutter_speed_dial: ^7.0.0
   flutter_displaymode: ^0.6.0
   flutter_launcher_icons: ^0.14.4
-
+  supabase_flutter: ^2.0.0
+  image_picker: ^1.1.2
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

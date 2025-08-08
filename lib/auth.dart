@@ -46,7 +46,7 @@ class Auth {
         'aboutme' : "Hey there!",
         'stars': 0.0,
         'coins': 20,
-        'color': (math.Random().nextDouble() * 0xFFFFFF).toInt(),
+        'image': "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png",
         'reviews-reference': 0,
         'email': userCredential.user!.email,
         'darkmode': false,
