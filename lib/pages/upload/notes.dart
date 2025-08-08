@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
+import '../../compression/posts_compression.dart';
 import '../../providers/subjects_providers.dart';
 import '../../widgets/thumbnail_picker.dart';
 
@@ -271,9 +272,11 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
       }
       final imageUid = Uuid().v4();
 
+      final compressedImageFile = await PostsCompressor.compressImage(_selectedImage!);
+
       await Supabase.instance.client.storage
           .from('thumbnails')
-          .upload(imageUid, _selectedImage!);
+          .upload(imageUid, compressedImageFile);
 
       final imageUrl = Supabase.instance.client.storage
           .from('thumbnails')
