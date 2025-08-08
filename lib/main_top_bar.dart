@@ -52,7 +52,7 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
       );
     }
 
-    AppBar _buildAppBar(String coins) => AppBar(
+    AppBar buildAppBar(String coins) => AppBar(
       automaticallyImplyLeading: false,
       leadingWidth: 120,
       leading: Padding(
@@ -117,9 +117,9 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
     );
 
     return dataAsync.when(
-      data: (data) => _buildAppBar(data?["coins"]?.toString() ?? "0"),
-      loading: () => _buildAppBar("..."),
-      error: (_, __) => _buildAppBar("--"),
+      data: (data) => buildAppBar(data?["coins"]?.toString() ?? "0"),
+      loading: () => buildAppBar("..."),
+      error: (_, __) => buildAppBar("--"),
     );
   }
 
