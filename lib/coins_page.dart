@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CoinsPage extends StatelessWidget {
   final String coins;
@@ -29,11 +30,13 @@ class CoinsPage extends StatelessWidget {
               padding: const EdgeInsets.all(24.0),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.monetization_on,
-                    size: 48,
+                  SvgPicture.asset(
+                    'assets/coin_icon.svg',
+                    colorFilter: ColorFilter.mode(theme.colorScheme.onSurface, BlendMode.srcIn),
+                    width: 48,
+                    height: 48,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 16),
                   Text(
                     coins,
                     style: const TextStyle(
@@ -49,7 +52,7 @@ class CoinsPage extends StatelessWidget {
 
             // Title
             Text(
-              "How to earn more money?",
+              "How to earn more coins?",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

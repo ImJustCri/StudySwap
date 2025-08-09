@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:studyswap/coins_page.dart';
 import 'package:studyswap/misc/resources.dart';
 import 'package:studyswap/providers/data_provider.dart';
@@ -35,10 +36,11 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
               MaterialPageRoute(builder: (context) => CoinsPage(coins)),
             );
           },
-          icon: Icon(
-            Icons.monetization_on,
-            color: theme.colorScheme.surface,
-            size: 24,
+          icon: SvgPicture.asset(
+            'assets/coin_icon.svg',
+            colorFilter: ColorFilter.mode(theme.colorScheme.surface, BlendMode.srcIn),
+            width: 24,
+            height: 24,
           ),
           label: Text(
             coins,

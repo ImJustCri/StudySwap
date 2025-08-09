@@ -53,6 +53,7 @@ dependencies:
   flutter_cache_manager: ^3.4.1
   image: ^4.5.4
   flutter_native_splash: ^2.4.6
+  flutter_svg: ^2.2.0
 
 dev_dependencies:
   flutter_test:
