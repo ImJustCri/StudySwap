@@ -166,17 +166,26 @@ class ProfilePage extends ConsumerWidget {
                                         title: const Text("Log out?"),
                                         content: const Text("Your session will expire and you'll be sent back to the login page"),
                                         actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(context),
-                                            child: const Text("No"),
-                                          ),
-                                          TextButton(
-                                            onPressed: () async {
-                                              await FirebaseAuth.instance.signOut();
-                                              Navigator.pushReplacementNamed(context, '/login');
-                                            },
-                                            child: const Text("Yes"),
-                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextButton(
+                                                  onPressed: () => Navigator.pop(context),
+                                                  child: const Text("No"),
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Expanded(
+                                                child: TextButton(
+                                                  onPressed: () async {
+                                                    await FirebaseAuth.instance.signOut();
+                                                    Navigator.pushReplacementNamed(context, '/login');
+                                                  },
+                                                  child: const Text("Yes"),
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         ],
                                       ),
                                     );

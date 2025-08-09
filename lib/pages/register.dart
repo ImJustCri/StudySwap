@@ -123,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
       				context: context,
       				builder: (context) => AlertDialog(
         			title: const Text("Invalid email"),
-        			content: const Text("You can register only with an institutional email"),
+        			content: const Text("You can register only with an institutional email ending in .edu.it"),
         				actions: [
           				TextButton(
             				onPressed: () => Navigator.pop(context),
@@ -181,16 +181,6 @@ class _RegisterPageState extends State<RegisterPage> {
                );
             }
 				} : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            textStyle: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
                           child: const Text('Register'),
                         ),
                       ),

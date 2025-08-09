@@ -157,10 +157,16 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         title: const Text("Profile Updated"),
         content: const Text("Your profile has been updated successfully."),
         actions: [
-          TextButton(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, '/homescreen'),
-            child: const Text("Back to Home"),
+          Row(
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: () =>
+                      Navigator.pushReplacementNamed(context, '/homescreen'),
+                  child: const Text("Back to Home"),
+                ),
+              ),
+            ],
           )
         ],
       ),

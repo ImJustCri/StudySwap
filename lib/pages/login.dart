@@ -88,7 +88,7 @@ class LoginPage extends StatelessWidget {
                             }
                             }else{
                               showDialog(
-                                context: context, 
+                                context: context,
                                 builder: (context) => AlertDialog(
                                   title: const Text("Error"),
                                   content: Text("Enter a valid email o password before continuing"),
@@ -100,16 +100,6 @@ class LoginPage extends StatelessWidget {
                                 );
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            textStyle: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
                           child: const Text('Log In'),
                         ),
                       ),
