@@ -191,24 +191,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
-                    foregroundColor: theme.colorScheme.onPrimary,
-                    textStyle: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
                   onPressed: _submitForm,
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14.0),
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
+                  child: Text('Submit', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],

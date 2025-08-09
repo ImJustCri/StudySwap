@@ -124,7 +124,6 @@ class CircolariCarousel extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 18,
                 color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(height: 8),

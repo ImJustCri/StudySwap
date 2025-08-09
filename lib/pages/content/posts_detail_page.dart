@@ -193,21 +193,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            foregroundColor: theme.colorScheme.onPrimary,
-                            textStyle: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
                           onPressed: () {},
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 14.0),
-                            child: Text('Buy this note', style: TextStyle(fontSize: 16)),
-                          ),
+                          child: Text('Buy this note', style: TextStyle(fontSize: 16)),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -219,7 +206,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                             fontWeight: FontWeight.bold,
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(16),
                             side: BorderSide(
                               color: theme.colorScheme.primary,
                               width: 2,
@@ -229,7 +216,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                         ),
                         onPressed: () {},
                         child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14.0),
+                          padding: EdgeInsets.symmetric(horizontal: 24.0),
                           child: Text('Contact owner', style: TextStyle(fontSize: 16)),
                         ),
                       ),
@@ -257,26 +244,103 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 16),
-                  Divider(),
-                  SizedBox(height: 16),
-                  const Text(
-                    "Description",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+                  if (widget.year != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Year of Publication",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(width: 24),
+                        Flexible(
+                          child: Text(
+                            "${widget.year}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
-                    widget.description,
-                    style: const TextStyle(
-                      fontSize: 14,
+                  if (widget.isbn != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "ISBN",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const SizedBox(width: 24),
+                          Flexible(
+                            child: Text(
+                              widget.isbn!,
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16),
-                  Divider(),
-                  SizedBox(height: 16),
+
+                  // Description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Divider(),
+                        SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Description",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: toggleExpand,
+                              child: Text(isExpanded ? 'View Less' : 'View All'),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        AnimatedCrossFade(
+                          firstChild: Text(
+                            widget.description,
+                            style: const TextStyle(fontSize: 14),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          secondChild: Text(
+                            widget.description,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          crossFadeState: isExpanded
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                          duration: const Duration(milliseconds: 300),
+                        ),
+                        SizedBox(height: 16),
+                        Divider(),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),

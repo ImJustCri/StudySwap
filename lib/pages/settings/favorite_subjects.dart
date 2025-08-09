@@ -36,7 +36,6 @@ class _FavoriteSubjectsSettingsPageState
   void initState() {
     super.initState();
 
-    // Manually read the current value once
     final initialUserData = ref.read(userDataProvider);
     if (initialUserData is AsyncData<Map?> && _initialFavoriteSubjects.isEmpty) {
       final userData = initialUserData.value;
@@ -50,7 +49,7 @@ class _FavoriteSubjectsSettingsPageState
       }
     }
 
-    // Still listen for future updates
+
     _subscription = ref.listenManual<AsyncValue<Map?>>(
       userDataProvider,
           (previous, next) {
@@ -73,10 +72,9 @@ class _FavoriteSubjectsSettingsPageState
 
   @override
   void dispose() {
-    _subscription.close(); // Correct way to clean up
+    _subscription.close();
     super.dispose();
   }
-
 
   void _updateFavoriteSubjects(Set<String> newFavorites) {
     final changed = newFavorites.length != _initialFavoriteSubjects.length ||
@@ -112,6 +110,63 @@ class _FavoriteSubjectsSettingsPageState
     }
   }
 
+  Widget _buildSubjectAutocomplete(List<String> subjects) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return const Iterable<String>.empty();
+        }
+        final query = textEditingValue.text.toLowerCase();
+        return subjects.where(
+              (subject) =>
+          subject.toLowerCase().contains(query) &&
+              !_favoriteSubjects.contains(subject),
+        );
+      },
+      onSelected: (String selectedSubject) {
+        final newFavorites = Set<String>.from(_favoriteSubjects)..add(selectedSubject);
+        _updateFavoriteSubjects(newFavorites);
+      },
+      fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+        return TextField(
+          controller: controller,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            labelText: 'Search and add subjects',
+            prefixIcon: const Icon(Icons.search),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+            filled: true,
+            fillColor: Theme.of(context).colorScheme.surface,
+          ),
+          onEditingComplete: onEditingComplete,
+        );
+
+      },
+      optionsViewBuilder: (context, onSelected, options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: SizedBox(
+              height: 200,
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: options.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final option = options.elementAt(index);
+                  return ListTile(
+                    title: Text(option),
+                    onTap: () => onSelected(option),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final userDataAsync = ref.watch(userDataProvider);
@@ -140,8 +195,7 @@ class _FavoriteSubjectsSettingsPageState
                       label: Text(subject),
                       deleteIcon: const Icon(Icons.close),
                       onDeleted: () {
-                        final newFavorites =
-                        Set<String>.from(_favoriteSubjects);
+                        final newFavorites = Set<String>.from(_favoriteSubjects);
                         newFavorites.remove(subject);
                         _updateFavoriteSubjects(newFavorites);
                       },
@@ -152,71 +206,24 @@ class _FavoriteSubjectsSettingsPageState
                 const Divider(),
                 const SizedBox(height: 10),
                 const Text(
-                  'Add More Subjects:',
+                  'Add Subjects:',
                   style: TextStyle(fontSize: 16),
                 ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: subjects.length,
-                    itemBuilder: (context, index) {
-                      final subject = subjects[index];
-                      final isSelected = _favoriteSubjects.contains(subject);
-
-                      return ListTile(
-                        title: Text(subject),
-                        trailing: isSelected
-                            ? const Icon(Icons.check, color: Colors.green)
-                            : IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            final newFavorites =
-                            Set<String>.from(_favoriteSubjects);
-                            newFavorites.add(subject);
-                            _updateFavoriteSubjects(newFavorites);
-                          },
-                        ),
-                        onTap: () {
-                          final newFavorites =
-                          Set<String>.from(_favoriteSubjects);
-                          if (isSelected) {
-                            newFavorites.remove(subject);
-                          } else {
-                            newFavorites.add(subject);
-                          }
-                          _updateFavoriteSubjects(newFavorites);
-                        },
-                      );
-                    },
-                  ),
-                ),
-                if (_hasChanges)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24),
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          foregroundColor: theme.colorScheme.onPrimary,
-                          textStyle: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        onPressed: _savePreferences,
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          child: Text(
-                            'Save Preferences',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
+                const SizedBox(height: 24),
+                _buildSubjectAutocomplete(subjects),
+                if (_hasChanges) ...[
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _savePreferences,
+                      child: Text(
+                        'Save Preferences',
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
+                ],
               ],
             ),
           );

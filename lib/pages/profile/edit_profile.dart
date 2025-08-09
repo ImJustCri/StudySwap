@@ -211,54 +211,50 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
           return Padding(
             padding: const EdgeInsets.all(24.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildProfileImage(),
-                  const SizedBox(height: 24),
-                  TextField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter your new username',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _bioController,
-                    decoration: const InputDecoration(
-                      labelText: 'Bio',
-                      border: OutlineInputBorder(),
-                      hintText: 'Tell us about yourself',
-                    ),
-                    maxLines: 3,
-                  ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.colorScheme.primary,
-                        foregroundColor: theme.colorScheme.onPrimary,
-                        textStyle: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+            child: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildProfileImage(),
+                        const SizedBox(height: 24),
+                        TextField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Username',
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter your new username',
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                        const SizedBox(height: 16),
+                        TextField(
+                          controller: _bioController,
+                          decoration: const InputDecoration(
+                            labelText: 'Bio',
+                            border: OutlineInputBorder(),
+                            hintText: 'Tell us about yourself',
+                          ),
+                          maxLines: 3,
                         ),
-                      ),
-                      onPressed: _saveProfile,
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14.0),
-                        child:
-                        Text('Save Changes', style: TextStyle(fontSize: 16)),
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+
+                // Button fixed at the bottom
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _saveProfile,
+                    child: const Text(
+                      'Save Changes',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
             ),
           );
         },
