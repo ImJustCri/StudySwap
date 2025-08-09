@@ -29,32 +29,25 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
+  bool splashRemoved = false;
+
   @override
   void initState() {
     super.initState();
-    initialize();
+    setOptimalDisplayMode();
   }
-
-  Future<void> initialize() async {
-    await setOptimalDisplayMode();
-    FlutterNativeSplash.remove();
-  }
-
-
 
   Future<void> setOptimalDisplayMode() async {
     final List<DisplayMode> supported = await FlutterDisplayMode.supported;
     final DisplayMode active = await FlutterDisplayMode.active;
 
     final List<DisplayMode> sameResolution = supported.where(
-            (DisplayMode m) => m.width == active.width
-            && m.height == active.height).toList()..sort(
-            (DisplayMode a, DisplayMode b) =>
-            b.refreshRate.compareTo(a.refreshRate));
+          (DisplayMode m) => m.width == active.width && m.height == active.height,
+    ).toList()
+      ..sort((a, b) => b.refreshRate.compareTo(a.refreshRate));
 
-    final DisplayMode mostOptimalMode = sameResolution.isNotEmpty
-        ? sameResolution.first
-        : active;
+    final DisplayMode mostOptimalMode =
+    sameResolution.isNotEmpty ? sameResolution.first : active;
 
     await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
   }
@@ -62,19 +55,30 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final darkModeAsync = ref.watch(darkModeProvider);
-
     ThemeMode themeMode = ThemeMode.light;
 
     darkModeAsync.when(
       data: (darkmode) {
         if (darkmode != null) {
           themeMode = darkmode ? ThemeMode.dark : ThemeMode.light;
+
+          if (!splashRemoved) {
+            FlutterNativeSplash.remove();
+            splashRemoved = true;
+          }
+        } else {
+          themeMode = ThemeMode.light;
         }
       },
       loading: () {
         themeMode = ThemeMode.light;
       },
       error: (_, __) {
+        if (!splashRemoved) {
+          FlutterNativeSplash.remove();
+          splashRemoved = true;
+        }
+
         themeMode = ThemeMode.light;
       },
     );
@@ -105,3 +109,4 @@ class _MyAppState extends ConsumerState<MyApp> {
     );
   }
 }
+
