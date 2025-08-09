@@ -35,23 +35,27 @@ class Auth {
       }
 
       final uid = userCredential.user!.uid;
+      final userDocRef = db.collection("Users").doc(uid);
+      final userDoc = await userDocRef.get();
 
       // Update collection "Users" to add new entry only when the email is verified
-      await db
-          .collection("Users")
-          .doc(uid)
-          .set({
-        'username': email.split('@')[0],
-        'school': email.split('@')[1],
-        'aboutme' : "Hey there!",
-        'stars': 0.0,
-        'coins': 20,
-        'image': "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png",
-        'reviews-reference': 0,
-        'email': userCredential.user!.email,
-        'darkmode': false,
-        'favorite_subjects': [],
-      });
+      // And only when the user hasn't been created yet
+
+      if (!userDoc.exists) {
+        await userDocRef
+            .set({
+          'username': email.split('@')[0],
+          'school': email.split('@')[1],
+          'aboutme' : "Hey there!",
+          'stars': 0.0,
+          'coins': 20,
+          'image': "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png",
+          'reviews-reference': 0,
+          'email': userCredential.user!.email,
+          'darkmode': false,
+          'favorite_subjects': [],
+        });
+      }
 
       return null;
     } on FirebaseAuthException catch (ex) {
