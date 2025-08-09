@@ -31,6 +31,8 @@ class Tutoring extends ConsumerWidget {
                 key: ValueKey(index),
                 title: tutoring['subject'] ?? 'No title',
                 isYearSelected: tutoring['classes'].cast<bool>(),
+                description: tutoring['description'] ?? "No description",
+                userId: userId,
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 16),

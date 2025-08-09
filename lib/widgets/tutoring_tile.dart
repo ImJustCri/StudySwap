@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../pages/content/tutoring_detail_page.dart';
+
 class TutoringTile extends StatelessWidget {
   final String title;
   final List<bool> isYearSelected;
+  final String description;
+  final String userId;
 
   const TutoringTile({
     super.key,
     required this.title,
     required this.isYearSelected,
+    required this.description,
+    required this.userId,
   });
 
   @override
@@ -43,7 +49,7 @@ class TutoringTile extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                       color: isSelected
                           ? theme.colorScheme.surface
-                          : theme.textTheme.bodyMedium?.color?.withValues(alpha: .6),
+                          : theme.textTheme.bodyMedium?.color?.withAlpha(153), // ~60%
                     ),
                   ),
                 ),
@@ -54,28 +60,38 @@ class TutoringTile extends StatelessWidget {
       );
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(16),
-        // border: Border(
-        //   bottom: BorderSide(
-        //     color: theme.colorScheme.secondary,
-        //     width: .25,
-        //   ),
-        // ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+    return InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TutoringDetailPage(
+              subject: title,
+              description: description,
+              classes: isYearSelected,
+              userId: userId,
+            ),
           ),
-          const SizedBox(height: 16),
-          buildYearChips(),
-        ],
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.primaryContainer,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 16),
+            buildYearChips(),
+          ],
+        ),
       ),
     );
   }
