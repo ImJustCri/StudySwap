@@ -20,7 +20,29 @@ final List<String> subjects = const [
   "Chemistry",
   "Biology",
   "Earth Sciences",
+  "Geography",
+  "Astronomy",
+  "Philosophy",
+  "Sociology",
+  "Political Science",
+  "French Language",
+  "Spanish Language",
+  "German Language",
+  "Chinese Language",
+  "Art History",
+  "Music",
+  "Drama",
+  "Technology",
+  "Environmental Science",
+  "Ethics",
+  "Citizenship and Constitution",
+  "Psychology",
+  "Graphic Design",
+  "Latin",
+  "Ancient Greek",
+  "Social Studies",
 ];
+
 
 final subjectsProvider = Provider<List<String>>((ref) {
   return subjects;
