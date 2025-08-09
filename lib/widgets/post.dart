@@ -10,6 +10,11 @@ class Post extends StatelessWidget {
   final String imageUrl;
   final int price;
 
+  // Optional fields for books
+  final String? isbn;
+  final int? year;
+  final String? currency;
+
   const Post({
     super.key,
     required this.userId,
@@ -18,6 +23,11 @@ class Post extends StatelessWidget {
     required this.price,
     required this.description,
     required this.imageUrl,
+
+    // Optional fields for books
+    this.isbn,
+    this.year,
+    this.currency,
   });
 
   @override
@@ -38,6 +48,9 @@ class Post extends StatelessWidget {
               price: price,
               description: description,
               imageUrl: imageUrl,
+              isbn: isbn,
+              year: year,
+              currency: currency,
             ),
           ),
         );
@@ -69,18 +82,18 @@ class Post extends StatelessWidget {
                           ),
                         ),
                         errorWidget: (context, url, error) => Container(
-                          color: Theme.of(context).colorScheme.secondaryContainer,
+                          color: theme.colorScheme.secondaryContainer,
                           child: Center(
                             child: Icon(
                               Icons.broken_image,
                               size: 48,
-                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              color: theme.colorScheme.onSecondaryContainer,
                             ),
                           ),
                         ),
                       )
                           : Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: theme.colorScheme.secondaryContainer,
                         child: Center(
                           child: Icon(
                             Icons.note,
@@ -113,7 +126,8 @@ class Post extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        price.toString(),
+                        // Add currency (Euro by default) if a book is uploaded
+                        '$price${currency ?? ''}',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -132,16 +146,20 @@ class Post extends StatelessWidget {
       ),
     );
   }
-  
+
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
       userId: map['user_id'] ?? 'Unknown user',
       title: map['title'] ?? 'No Title',
       subject: map['subject'] ?? 'Unknown',
       price: map['price'] ?? 0,
-      description: map['description'] ?? "No description",
-      imageUrl: map["image_url"] ?? "Empty",
+      description: map['description'] ?? 'No description',
+      imageUrl: map['image_url'] ?? 'Empty',
+      isbn: map['isbn'], // nullable
+      year: map['year'], // nullable
+      currency: map['currency'],
     );
   }
 }
+
 

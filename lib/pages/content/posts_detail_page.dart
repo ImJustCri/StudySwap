@@ -10,6 +10,11 @@ class PostDetailsPage extends StatefulWidget {
   final String description;
   final String imageUrl;
 
+  // Optional fields for books
+  final String? isbn;
+  final int? year;
+  final String? currency;
+
   const PostDetailsPage({
     super.key,
     required this.title,
@@ -18,6 +23,11 @@ class PostDetailsPage extends StatefulWidget {
     required this.userId,
     required this.description,
     required this.imageUrl,
+
+    // Optional fields for books
+    this.isbn,
+    this.year,
+    this.currency,
   });
 
   @override
@@ -28,6 +38,13 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   String? username;
   String? school;
   bool isLoading = true;
+  bool isExpanded = false;
+
+  void toggleExpand() {
+    setState(() {
+      isExpanded = !isExpanded;
+    });
+  }
 
   @override
   void initState() {
@@ -179,7 +196,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        '${widget.price}',
+                        // Add currency (Euro by default) if a book is uploaded
+                        '${widget.price}${widget.currency ?? ''}',
                         style: TextStyle(
                           color: theme.colorScheme.surface,
                           fontWeight: FontWeight.w700,
