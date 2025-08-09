@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -11,7 +12,6 @@ import 'package:studyswap/pages/settings/settings_page.dart';
 import 'package:studyswap/pages/upload/books.dart';
 import 'package:studyswap/pages/upload/notes.dart';
 import 'package:studyswap/pages/upload/tutoring.dart';
-import 'package:studyswap/providers/subjects_providers.dart';
 import 'package:studyswap/providers/theme_provider.dart';
 import 'app_theme.dart';
 import 'home/home_page.dart';
@@ -55,19 +55,25 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final darkModeAsync = ref.watch(darkModeProvider);
+    final user = FirebaseAuth.instance.currentUser;
     ThemeMode themeMode = ThemeMode.light;
 
     darkModeAsync.when(
       data: (darkmode) {
-        if (darkmode != null) {
-          themeMode = darkmode ? ThemeMode.dark : ThemeMode.light;
+        if (user != null) {
+          if (darkmode != null) {
+            themeMode = darkmode ? ThemeMode.dark : ThemeMode.light;
 
-          if (!splashRemoved) {
-            FlutterNativeSplash.remove();
-            splashRemoved = true;
+            if (!splashRemoved) {
+              FlutterNativeSplash.remove();
+              splashRemoved = true;
+            }
+          } else {
+            themeMode = ThemeMode.light;
           }
-        } else {
-          themeMode = ThemeMode.light;
+        }
+        else {
+          FlutterNativeSplash.remove();
         }
       },
       loading: () {
