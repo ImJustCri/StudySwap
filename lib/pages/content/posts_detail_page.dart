@@ -204,41 +204,43 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                     ),
                   )
                       : Row(
-                        children: [
-                          GestureDetector(
-                                              onTap: () {
+                    children: [
+                      GestureDetector(
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(isMine: false, userId: widget.userId),
+                              builder: (context) =>
+                                  ProfilePage(userId: widget.userId),
                             ),
                           );
-                                              },
-                                              child: Text(
+                        },
+                        child: Text(
                           username!,
                           style: const TextStyle(
                             fontSize: 18,
                             decoration: TextDecoration.underline,
                           ),
-                                              ),
-                                            ),
-                          const SizedBox(width: 8),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.secondaryContainer,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            child: Text(
-                              "@${school!}",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: theme.colorScheme.onSecondaryContainer,
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
+                      const SizedBox(width: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.secondaryContainer,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        child: Text(
+                          "@${school!}",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: theme.colorScheme.onSecondaryContainer,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                   const SizedBox(height: 16),
                   IntrinsicWidth(
                     child: Container(

@@ -12,24 +12,28 @@ import 'reviews.dart';
 import 'tutoring.dart';
 
 class ProfilePage extends ConsumerWidget {
-  final bool isMine;
   final String userId;
+  final bool fromNavigation;
 
-  const ProfilePage({super.key, required this.isMine, required this.userId});
+  const ProfilePage({
+    super.key,
+    required this.userId,
+    this.fromNavigation = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(userProvider).value;
+    final userDataAsync = ref.watch(dataProvider(userId));
+
     final theme = Theme.of(context);
+    final bool isMine = currentUser!.uid == userId ? true : false;
 
     if (userId.isEmpty) {
       return const Scaffold(
         body: Center(child: Text("User ID is empty")),
       );
     }
-
-    final currentUser = ref.watch(userProvider).value;
-
-    final userDataAsync = ref.watch(dataProvider(userId));
 
     return userDataAsync.when(
       data: (userData) {
@@ -45,7 +49,7 @@ class ProfilePage extends ConsumerWidget {
         return DefaultTabController(
           length: 4,
           child: Scaffold(
-            appBar: !isMine ? AppBar() : null,
+            appBar: !fromNavigation ? AppBar() : null,
             body: Padding(
               padding: const EdgeInsets.only(top: 24.0),
               child: Column(

@@ -56,7 +56,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       ),
       const SearchPage(),
       const ExchangePage(),
-      ProfilePage(isMine: true, userId: currentUser!.uid),
+      ProfilePage(userId: currentUser!.uid, fromNavigation: true,),
     ];
   }
 
