@@ -412,6 +412,12 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                         ),
                         SizedBox(height: 16),
                         Divider(),
+                        SizedBox(height: 16),
+                        MoreFromUser(
+                          isBook: widget.isbn != null ? true : false,
+                          userId: widget.userId,
+                          username: username,
+                        ),
                       ],
                     ),
                   )
