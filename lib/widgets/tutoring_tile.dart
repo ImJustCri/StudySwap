@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../pages/content/tutoring_detail_page.dart';
+import '../providers/user_provider.dart';
 
-class TutoringTile extends StatelessWidget {
+class TutoringTile extends ConsumerWidget {
   final String title;
   final List<bool> isYearSelected;
   final String description;
   final String userId;
+  final String tutoringId;
 
   const TutoringTile({
     super.key,
@@ -14,13 +16,15 @@ class TutoringTile extends StatelessWidget {
     required this.isYearSelected,
     required this.description,
     required this.userId,
+    required this.tutoringId,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-
     final List<String> ordinalYears = ['1st', '2nd', '3rd', '4th', '5th'];
+    final currentUser = ref.watch(userProvider).value;
+    final isOfUser = currentUser != null && currentUser.uid == userId;
 
     Widget buildYearChips() {
       return Row(
@@ -71,6 +75,8 @@ class TutoringTile extends StatelessWidget {
               description: description,
               classes: isYearSelected,
               userId: userId,
+              isOfUser: isOfUser,
+              tutoringId: tutoringId,
             ),
           ),
         );

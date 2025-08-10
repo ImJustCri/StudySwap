@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
+import 'package:studyswap/providers/books_provider.dart';
+import 'package:studyswap/providers/notes_provider.dart';
+import '../edit/edit_books_details.dart';
+import '../edit/edit_notes_details.dart';
+import 'more_from_user.dart';
 
-class PostDetailsPage extends StatefulWidget {
+class PostDetailsPage extends ConsumerStatefulWidget {
   final String title;
   final String subject;
   final String userId;
+  final String id;
   final int price;
   final String description;
   final String imageUrl;
+  final bool isOfUser;
 
   // Optional fields for books
   final String? isbn;
@@ -23,6 +31,8 @@ class PostDetailsPage extends StatefulWidget {
     required this.userId,
     required this.description,
     required this.imageUrl,
+    required this.isOfUser,
+    required this.id,
 
     // Optional fields for books
     this.isbn,
@@ -31,10 +41,10 @@ class PostDetailsPage extends StatefulWidget {
   });
 
   @override
-  State<PostDetailsPage> createState() => _PostDetailsPageState();
+  ConsumerState<PostDetailsPage> createState() => _PostDetailsPageState();
 }
 
-class _PostDetailsPageState extends State<PostDetailsPage> {
+class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
   String? username;
   String? school;
   bool isLoading = true;
@@ -83,9 +93,53 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final notesAsyncValue = ref.watch(userNotesProvider(widget.userId));
+    final booksAsyncValue = ref.watch(userBooksProvider(widget.userId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Details')),
+      appBar: AppBar(
+        title: const Text('Details'),
+        actions: [
+          if (widget.isOfUser)
+            IconButton(
+              onPressed: () {
+                widget.isbn == null
+                    ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditNotesPage(
+                      noteId: widget.id,
+                      title: widget.title,
+                      subject: widget.subject,
+                      userId: widget.userId,
+                      price: widget.price,
+                      description: widget.description,
+                      imageUrl: widget.imageUrl,
+                    ),
+                  ),
+                )
+                    : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditBooksPage(
+                      bookId: widget.id,
+                      title: widget.title,
+                      subject: widget.subject,
+                      userId: widget.userId,
+                      price: widget.price,
+                      description: widget.description,
+                      imageUrl: widget.imageUrl,
+                      isbn: widget.isbn,
+                      year: widget.year,
+                      currency: widget.currency,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.edit),
+            )
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,8 +195,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  isLoading ?
-                  Text(
+                  isLoading
+                      ? Text(
                     "....",
                     style: TextStyle(
                       fontSize: 18,
@@ -212,7 +266,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {},
-                          child: Text('Buy this note', style: TextStyle(fontSize: 16)),
+                          child: Text('Buy this note',
+                              style: TextStyle(fontSize: 16)),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -235,7 +290,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                         onPressed: () {},
                         child: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 24.0),
-                          child: Text('Contact owner', style: TextStyle(fontSize: 16)),
+                          child:
+                          Text('Contact owner', style: TextStyle(fontSize: 16)),
                         ),
                       ),
                     ],
@@ -263,30 +319,30 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                     ],
                   ),
                   if (widget.year != null)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Year of Publication",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(width: 24),
-                        Flexible(
-                          child: Text(
-                            "${widget.year}",
-                            style: const TextStyle(
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Year of Publication",
+                            style: TextStyle(
                               fontSize: 18,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 24),
+                          Flexible(
+                            child: Text(
+                              "${widget.year}",
+                              style: const TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   if (widget.isbn != null)
                     Padding(
                       padding: const EdgeInsets.only(top: 16.0),

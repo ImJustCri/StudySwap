@@ -1,23 +1,28 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/content/posts_detail_page.dart';
 
-class Post extends StatelessWidget {
+import '../providers/user_provider.dart';
+
+class Post extends ConsumerWidget {
   final String userId;
   final String title;
   final String subject;
   final String description;
   final String imageUrl;
   final int price;
+  final String id;
 
   // Optional fields for books
   final String? isbn;
   final int? year;
   final String? currency;
 
-  const Post({
+  const Post( {
     super.key,
     required this.userId,
+    required this.id,
     required this.title,
     required this.subject,
     required this.price,
@@ -31,9 +36,11 @@ class Post extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final compressedImageUrl = "$imageUrl?quality=10";
+    final currentUser = ref.watch(userProvider).value;
+final isOfUser = currentUser != null && currentUser.uid == userId;
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
@@ -42,6 +49,7 @@ class Post extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => PostDetailsPage(
+              id: id,
               userId: userId,
               title: title,
               subject: subject,
@@ -51,6 +59,7 @@ class Post extends StatelessWidget {
               isbn: isbn,
               year: year,
               currency: currency,
+              isOfUser: isOfUser,
             ),
           ),
         );
@@ -150,6 +159,7 @@ class Post extends StatelessWidget {
   factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
       userId: map['user_id'] ?? 'Unknown user',
+      id: map["id"] ?? "",
       title: map['title'] ?? 'No Title',
       subject: map['subject'] ?? 'Unknown',
       price: map['price'] ?? 0,

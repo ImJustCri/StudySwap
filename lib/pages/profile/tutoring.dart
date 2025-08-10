@@ -28,11 +28,13 @@ class Tutoring extends ConsumerWidget {
               final tutoring = tutoringList[index];
 
               return TutoringTile(
-                key: ValueKey(index),
                 title: tutoring['subject'] ?? 'No title',
-                isYearSelected: tutoring['classes'].cast<bool>(),
+                isYearSelected: (tutoring['classes'] as List<dynamic>?)
+                    ?.cast<bool>() ??
+                    [],
                 description: tutoring['description'] ?? "No description",
                 userId: userId,
+                tutoringId: tutoring['id'] ?? "",
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 16),

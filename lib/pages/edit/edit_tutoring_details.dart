@@ -1,0 +1,263 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../providers/subjects_providers.dart';
+
+class EditTutoringDetails extends ConsumerStatefulWidget {
+  final String tutoringId;
+  final String subject;
+  final String description;
+  final List<bool> classes;
+  final String userId;
+
+  const EditTutoringDetails({
+    super.key,
+    required this.tutoringId,
+    required this.subject,
+    required this.description,
+    required this.classes,
+    required this.userId,
+  });
+
+  @override
+  ConsumerState<EditTutoringDetails> createState() => _TutoringUploadPageState();
+}
+
+class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  String? _selectedSubject;
+  final Set<int> _selectedClasses = {};
+
+  @override
+  void initState() {
+    super.initState();
+
+    _subjectController.text = widget.subject;
+    _selectedSubject = widget.subject.isNotEmpty ? widget.subject : null;
+    _descriptionController.text = widget.description;
+
+
+    for (int i = 0; i < widget.classes.length; i++) {
+      if (widget.classes[i]) {
+        _selectedClasses.add(i + 1);
+      }
+    }
+  }
+
+
+  @override
+  void dispose() {
+    _subjectController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  void _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      final subject = _selectedSubject ?? _subjectController.text.trim();
+      final description = _descriptionController.text.trim();
+
+      if (_selectedClasses.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select at least one class')),
+        );
+        return;
+      }
+
+      // Convert selected classes to bool list of length 5
+      final classesBoolList =
+      List<bool>.generate(5, (index) => _selectedClasses.contains(index + 1));
+
+      await _updateTutoring(subject: subject, classes: classesBoolList, description: description);
+
+      // Clear form & exit
+      _formKey.currentState!.reset();
+      setState(() {
+        _selectedSubject = null;
+        _selectedClasses.clear();
+        _subjectController.clear();
+      });
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final subjects = ref.watch(subjectsProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Edit Tutoring Offer",
+          style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
+        ),
+        leading: const BackButton(),
+        backgroundColor: theme.colorScheme.surface,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  children: [
+                    // Subject Autocomplete
+                    Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        }
+                        return subjects.where((subject) =>
+                            subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                      },
+                      onSelected: (selection) {
+                        setState(() {
+                          _selectedSubject = selection;
+                          _subjectController.text = selection;
+                        });
+                      },
+                      fieldViewBuilder:
+                          (context, controller, focusNode, onEditingComplete) {
+                        controller.text = widget.subject;
+                        _subjectController.value = controller.value;
+
+                        return TextFormField(
+                          controller: controller,
+                          enabled: false,
+                          focusNode: focusNode,
+                          decoration: const InputDecoration(
+                            labelText: 'Subject',
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.category),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please enter a subject';
+                            }
+                            if (!subjects.contains(value.trim())) {
+                              return 'Please select a valid subject from the list';
+                            }
+                            return null;
+                          },
+                          onEditingComplete: onEditingComplete,
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'You cannot edit the subject of a tutoring offer.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      maxLines: null,
+                      controller: _descriptionController,
+                      decoration: const InputDecoration(
+                        labelText: 'Description',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.book),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter a description';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Edit the description of the tutoring session',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Class selection chips
+                    Text(
+                      "Select Classes",
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Select one or more classes you are offering tutoring for (e.g., Class 1 to Class 5).',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      children: List.generate(5, (index) {
+                        final classNumber = index + 1;
+                        final isSelected = _selectedClasses.contains(classNumber);
+
+                        return FilterChip(
+                          label: Text('Class $classNumber'),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedClasses.add(classNumber);
+                              } else {
+                                _selectedClasses.remove(classNumber);
+                              }
+                            });
+                          },
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _submitForm,
+                  child: Text('Submit', style: TextStyle(fontSize: 16)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _updateTutoring({
+    required String subject,
+    required String description,
+    required List<bool> classes,
+  }) async {
+    try {
+      final tutoringDoc = FirebaseFirestore.instance
+          .collection('Tutoring')
+          .doc(widget.tutoringId);
+
+      await tutoringDoc.update({
+        'classes': classes,
+        'user_id': FirebaseAuth.instance.currentUser?.uid,
+        'description': description,
+        'latest_update': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tutoring updated successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update tutoring: $e')),
+      );
+    }
+  }
+}

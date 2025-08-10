@@ -2,18 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 
+import '../edit/edit_tutoring_details.dart';
+
 class TutoringDetailPage extends StatefulWidget {
+  final String tutoringId;
   final String subject;
   final String description;
   final List<bool> classes;
   final String userId;
+  final bool isOfUser;
 
   const TutoringDetailPage({
     super.key,
+    required this.tutoringId,
     required this.subject,
     required this.description,
     required this.classes,
     required this.userId,
+    required this.isOfUser,
   });
 
   @override
@@ -70,9 +76,61 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final List<String> ordinalYears = ['1st', '2nd', '3rd', '4th', '5th'];
+    final isOfUser = widget.isOfUser; // Use passed value, no ref here
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Details')),
+      appBar: AppBar(
+        title: const Text('Details'),
+        actions: [
+          if (isOfUser)
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EditTutoringDetails(
+                      subject: widget.subject,
+                      description: widget.description,
+                      classes: widget.classes,
+                      userId: widget.userId,
+                      tutoringId: widget.tutoringId,
+                    )),
+                );
+              },
+              icon: const Icon(Icons.edit),
+            ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Confirm Delete'),
+                    content: const Text('Are you sure you want to delete this post?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: const Text('No'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                        child: const Text('Yes'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(
+              Icons.delete_rounded,
+              color: Colors.redAccent,
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,8 +148,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  isLoading ?
-                  Text(
+                  isLoading
+                      ? Text(
                     "....",
                     style: TextStyle(
                       fontSize: 18,
@@ -105,12 +163,13 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfilePage(isMine: false, userId: widget.userId),
+                              builder: (context) =>
+                                  ProfilePage(userId: widget.userId),
                             ),
                           );
                         },
                         child: Text(
-                          username!,
+                          username ?? '',
                           style: const TextStyle(
                             fontSize: 18,
                             decoration: TextDecoration.underline,
@@ -123,9 +182,10 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                           color: theme.colorScheme.secondaryContainer,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         child: Text(
-                          "@${school!}",
+                          "@${school ?? ''}",
                           style: TextStyle(
                             fontSize: 12,
                             color: theme.colorScheme.onSecondaryContainer,
@@ -134,27 +194,6 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                       )
                     ],
                   ),
-                  // const SizedBox(height: 16),
-                  // IntrinsicWidth(
-                  //   child: Container(
-                  //     height: 24,
-                  //     padding: const EdgeInsets.symmetric(horizontal: 24),
-                  //     decoration: BoxDecoration(
-                  //       color: theme.colorScheme.onSurface,
-                  //       borderRadius: BorderRadius.circular(12),
-                  //     ),
-                  //     alignment: Alignment.center,
-                  //     child: Text(
-                  //       // Add currency (Euro by default) if a book is uploaded
-                  //       'Undefined',
-                  //       style: TextStyle(
-                  //         color: theme.colorScheme.surface,
-                  //         fontWeight: FontWeight.w700,
-                  //         fontSize: 14,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(height: 24),
                   Row(
                     children: [
@@ -170,9 +209,12 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                               right: index != 4 ? 8.0 : 0,
                             ),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
-                                color: isSelected ? theme.colorScheme.secondary : Colors.transparent,
+                                color: isSelected
+                                    ? theme.colorScheme.secondary
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -182,7 +224,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                                   fontWeight: FontWeight.w500,
                                   color: isSelected
                                       ? theme.colorScheme.surface
-                                      : theme.textTheme.bodyMedium?.color?.withAlpha(153), // ~60%
+                                      : theme.textTheme.bodyMedium?.color
+                                      ?.withAlpha(153), // ~60%
                                 ),
                               ),
                             ),
@@ -199,7 +242,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.surface,
                             foregroundColor: theme.colorScheme.primary,
-                            textStyle: theme.textTheme.titleMedium?.copyWith(
+                            textStyle:
+                            theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                             shape: RoundedRectangleBorder(
@@ -211,29 +255,25 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             ),
                             elevation: 0,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            // handle contact owner
+                          },
                           child: const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 24.0),
-                            child: Text('Contact owner', style: TextStyle(fontSize: 16)),
+                            child:
+                            Text('Contact owner', style: TextStyle(fontSize: 16)),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  // const SizedBox(height: 32),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //   ],
-                  // ),
-                  // Description
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Divider(),
-                        SizedBox(height: 8),
+                        const Divider(),
+                        const SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -250,7 +290,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         AnimatedCrossFade(
                           firstChild: Text(
                             widget.description,
@@ -267,8 +307,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                               : CrossFadeState.showFirst,
                           duration: const Duration(milliseconds: 300),
                         ),
-                        SizedBox(height: 16),
-                        Divider(),
+                        const SizedBox(height: 16),
+                        const Divider(),
                       ],
                     ),
                   )

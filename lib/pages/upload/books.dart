@@ -337,7 +337,9 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
           .from('thumbnails')
           .getPublicUrl(imageUid);
 
-      await booksCollection.add({
+      final newDocRef = booksCollection.doc();
+
+      await newDocRef.update({
         'title': title,
         'subject': subject,
         'description': description,
@@ -347,7 +349,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'createdAt': FieldValue.serverTimestamp(),
         'image_url': imageUrl,
-        'currency': "€"
+        'currency': "€",
+        'id': newDocRef.id,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

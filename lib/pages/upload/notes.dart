@@ -269,7 +269,9 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
           .from('thumbnails')
           .getPublicUrl(imageUid);
 
-      await notesCollection.add({
+      final newDocRef = notesCollection.doc();
+
+      await newDocRef.set({
         'title': title,
         'subject': subject,
         'price': cost,
@@ -277,6 +279,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         'description': description,
         'createdAt': FieldValue.serverTimestamp(),
         'image_url': imageUrl,
+        'id': newDocRef.id,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
