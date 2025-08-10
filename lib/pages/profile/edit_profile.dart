@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image/image.dart' as img;
 
-
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
 
@@ -57,38 +56,39 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     final pickedXFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedXFile == null) return;
 
-    // Read picked image bytes
     final bytes = await pickedXFile.readAsBytes();
-
-    // Decode image
     img.Image? originalImage = img.decodeImage(bytes);
     if (originalImage == null) return;
 
-    // Resize image to 64x64
-    img.Image resizedImage = img.copyResize(originalImage, width: 64, height: 64);
-
-    // Convert resized image back to bytes in PNG format
+    img.Image resizedImage = img.copyResize(originalImage, width: 128, height: 128);
     final resizedBytes = img.encodePng(resizedImage);
 
-    // Save resized image as temp file
     final tempDir = Directory.systemTemp;
-    final resizedFile = await File('${tempDir.path}/resized_profile.png').writeAsBytes(resizedBytes);
+
+    // This is to avoid reusing the same temp file so flutter won't the old image due to caching
+    final uniquePath = '${tempDir.path}/resized_profile_${DateTime.now().millisecondsSinceEpoch}.png';
+
+    final resizedFile = await File(uniquePath).writeAsBytes(resizedBytes);
 
     setState(() {
       _selectedImageFile = resizedFile;
     });
   }
 
-
   Future<String> _uploadImage(File file, String uid) async {
     final storage = Supabase.instance.client.storage.from('pfp');
+    final filePath = '$uid/pfp';
 
-    try {
-      await storage.remove([uid]);
-    } catch (_) {}
+    await storage.upload(
+      filePath,
+      file,
+      fileOptions: const FileOptions(upsert: true),
+    );
 
-    await storage.upload(uid, file);
-    return storage.getPublicUrl(uid);
+    final url = storage.getPublicUrl(filePath);
+
+    // Append timestamp query parameter to bust cache and show updated image immediately
+    return '$url?updated=${DateTime.now().millisecondsSinceEpoch}';
   }
 
   Future<void> _saveProfile() async {
@@ -112,7 +112,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
     try {
       if (_selectedImageFile != null) {
-        // Upload new image to Supabase
+        // Upload new image to Supabase and get cache-busted URL
         imageUrlToSave = await _uploadImage(_selectedImageFile!, uid);
         setState(() {
           _currentImageUrl = imageUrlToSave;
@@ -180,25 +180,52 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     super.dispose();
   }
 
-  Widget _buildProfileImage() {
-    ImageProvider<Object>? displayImage;
+  Widget _buildProfileImage(ThemeData theme) {
+    final existingImage = (_currentImageUrl != null && _currentImageUrl!.isNotEmpty)
+        ? CachedNetworkImageProvider(_currentImageUrl!)
+        : null;
 
-    if (_selectedImageFile != null) {
-      displayImage = FileImage(_selectedImageFile!);
-    } else if (_currentImageUrl != null && _currentImageUrl!.isNotEmpty) {
-      displayImage = CachedNetworkImageProvider(_currentImageUrl!);
+    final newImage = _selectedImageFile != null ? FileImage(_selectedImageFile!) : null;
+
+    Widget avatarContent;
+
+    if (newImage == null) {
+      avatarContent = CircleAvatar(
+        radius: 48,
+        backgroundColor: Colors.transparent,
+        backgroundImage: existingImage,
+        child: existingImage == null
+            ? const Icon(Icons.camera_alt_outlined, size: 40, color: Colors.grey)
+            : null,
+      );
+    } else {
+      avatarContent = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 48,
+            backgroundColor: Colors.transparent,
+            backgroundImage: existingImage,
+            child: existingImage == null
+                ? const Icon(Icons.person_outline, size: 40, color: Colors.grey)
+                : null,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Icon(Icons.arrow_forward_rounded, size: 36, color: theme.colorScheme.primary),
+          ),
+          CircleAvatar(
+            radius: 48,
+            backgroundColor: Colors.transparent,
+            backgroundImage: newImage,
+          ),
+        ],
+      );
     }
 
     return GestureDetector(
-      onTap: _pickImage,
-      child: CircleAvatar(
-        radius: 48,
-        backgroundColor: Colors.transparent,
-        backgroundImage: displayImage,
-        child: displayImage == null
-            ? const Icon(Icons.camera_alt_outlined, size: 40, color: Colors.grey)
-            : null,
-      ),
+      onTap: _pickImage,  // Call your image picker on tap
+      child: avatarContent,
     );
   }
 
@@ -223,7 +250,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        _buildProfileImage(),
+                        _buildProfileImage(theme),
                         const SizedBox(height: 24),
                         TextField(
                           controller: _nameController,
@@ -248,7 +275,6 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   ),
                 ),
 
-                // Button fixed at the bottom
                 SizedBox(
                   width: double.infinity,
                   height: 56,
