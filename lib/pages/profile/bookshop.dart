@@ -30,17 +30,22 @@ class Books extends ConsumerWidget {
               }
               final posts = booksList.map((bookData) => Post.fromMap(bookData)).toList();
 
-              return GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.7,
-                ),
-                itemCount: posts.length,
-                itemBuilder: (context, index) => posts[index],
+              // Calculate the width for each item to create 2 columns,
+              // accounting for padding and spacing (16 between items)
+              final double screenWidth = MediaQuery.of(context).size.width;
+              final double horizontalPadding = 24 * 2; // left + right padding
+              final double spacingBetweenItems = 16;
+              final double itemWidth = (screenWidth - horizontalPadding - spacingBetweenItems) / 2;
+
+              return Wrap(
+                spacing: spacingBetweenItems,
+                runSpacing: 16,
+                children: posts.map((post) {
+                  return SizedBox(
+                    width: itemWidth,
+                    child: post,
+                  );
+                }).toList(),
               );
             },
             loading: () => const Center(child: CircularProgressIndicator()),

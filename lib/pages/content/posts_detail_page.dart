@@ -244,15 +244,13 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                   const SizedBox(height: 16),
                   IntrinsicWidth(
                     child: Container(
-                      height: 24,
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.onSurface,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(50),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        // Add currency (Euro by default) if a book is uploaded
                         '${widget.price}${widget.currency ?? ''}',
                         style: TextStyle(
                           color: theme.colorScheme.surface,
@@ -263,17 +261,20 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Buy this note',
-                              style: TextStyle(fontSize: 16)),
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.shopping_cart_rounded),
+                        onPressed: () {},
+                        label: const Text(
+                          'Buy this note',
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      ElevatedButton(
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.messenger_outline_rounded),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: theme.colorScheme.surface,
                           foregroundColor: theme.colorScheme.primary,
@@ -290,10 +291,9 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                           elevation: 0,
                         ),
                         onPressed: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24.0),
-                          child:
-                          Text('Contact owner', style: TextStyle(fontSize: 16)),
+                        label: Text(
+                          'Contact owner',
+                          style: TextStyle(fontSize: 16),
                         ),
                       ),
                     ],

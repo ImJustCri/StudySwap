@@ -16,38 +16,48 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
     final dataAsync = ref.watch(dataProvider(currentUser!.uid));
 
     Widget coinsButton(String coins) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(64.0),
-          color: theme.colorScheme.onPrimaryContainer,
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 180,
         ),
-        child: TextButton.icon(
-          style: TextButton.styleFrom(
-            minimumSize: Size(40, 36),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(64.0),
-            ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(64.0),
+            color: theme.colorScheme.onPrimaryContainer,
           ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CoinsPage(coins)),
-            );
-          },
-          icon: SvgPicture.asset(
-            'assets/coin_icon.svg',
-            colorFilter: ColorFilter.mode(theme.colorScheme.surface, BlendMode.srcIn),
-            width: 24,
-            height: 24,
-          ),
-          label: Text(
-            coins,
-            style: TextStyle(
-              color: theme.colorScheme.surface,
-              fontWeight: FontWeight.w700,
-              fontSize: 16,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(64.0),
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CoinsPage(coins)),
+                );
+              },
+              icon: SvgPicture.asset(
+                'assets/coin_icon.svg',
+                colorFilter: ColorFilter.mode(theme.colorScheme.surface, BlendMode.srcIn),
+                width: 24,
+                height: 24,
+              ),
+              label: Text(
+                coins,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  color: theme.colorScheme.surface,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
             ),
           ),
         ),

@@ -19,16 +19,16 @@ class NotificationTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      height: 80,
       color: isUnread ? theme.colorScheme.secondaryContainer : Colors.transparent,
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,
@@ -36,24 +36,33 @@ class NotificationTile extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 2),
+                const SizedBox(height: 4),
                 Text(
                   subtitle,
                   style: TextStyle(
                     fontSize: 14,
                     color: theme.colorScheme.onSecondaryContainer,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
           ),
+
+          const SizedBox(width: 16),
           Text(
             date,
             style: TextStyle(
               fontSize: 14,
               color: theme.colorScheme.onSecondaryContainer,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.right,
           ),
         ],
       ),

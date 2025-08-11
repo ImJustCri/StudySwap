@@ -79,35 +79,37 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
             ),
 
             const SizedBox(height: 8),
-            SizedBox(
-              height: 244,
-              child: booksAsyncValue.when(
-                data: (bookList) {
-                  final filteredBooks = selectedSubject == null
-                      ? bookList
-                      : bookList.where(
-                        (book) => book['subject'] == selectedSubject,
-                  ).toList();
 
-                  if (filteredBooks.isEmpty) {
-                    return const Center(child: Text('No books available for this subject.'));
-                  }
+            booksAsyncValue.when(
+              data: (bookList) {
+                final filteredBooks = selectedSubject == null
+                    ? bookList
+                    : bookList.where(
+                      (book) => book['subject'] == selectedSubject,
+                ).toList();
 
-                  final fetchedPosts = filteredBooks.map((noteData) => Post.fromMap(noteData)).toList();
+                if (filteredBooks.isEmpty) {
+                  return const Center(child: Text('No books available for this subject.'));
+                }
 
-                  return ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: fetchedPosts.length,
-                    padding: const EdgeInsets.only(right: 24),
-                    separatorBuilder: (_, __) => const SizedBox(width: 16),
-                    itemBuilder: (context, index) {
-                      return fetchedPosts[index];
-                    },
-                  );
-                },
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (error, _) => Center(child: Text('Error loading books: $error')),
-              ),
+                final fetchedPosts = filteredBooks.map((noteData) => Post.fromMap(noteData)).toList();
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.only(right: 24),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: fetchedPosts.map((post) {
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: post,
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, _) => Center(child: Text('Error loading books: $error')),
             ),
           ],
         ),

@@ -40,37 +40,31 @@ class LatestNotesSection extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 8),
-        SizedBox(
-          height: 244,
-          child: lastNotesAsyncValue.when(
-            data: (notesList) {
-              if (notesList.isEmpty) {
-                return const Center(child: Text('No notes available.'));
-              }
+        lastNotesAsyncValue.when(
+          data: (notesList) {
+            if (notesList.isEmpty) {
+              return const Center(child: Text('No notes available.'));
+            }
 
-              final lastNotesPosts =
-              notesList.map((noteData) => Post.fromMap(noteData)).toList();
+            final lastNotesPosts =
+            notesList.map((noteData) => Post.fromMap(noteData)).toList();
 
-              return ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(right: 24.0),
-                itemCount: lastNotesPosts.length,
-                itemBuilder: (context, index) {
-                  final post = lastNotesPosts[index];
-                  return InkWell(
-                    onTap: () {
-                      // Add tap logic if needed
-                    },
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(right: 24.0),
+              child: Row(
+                children: lastNotesPosts.map((post) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
                     child: post,
                   );
-                },
-                separatorBuilder: (context, index) => const SizedBox(width: 16),
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) =>
-                Center(child: Text('Error loading notes: $error')),
-          ),
+                }).toList(),
+              ),
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) =>
+              Center(child: Text('Error loading notes: $error')),
         ),
       ],
     );

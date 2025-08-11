@@ -70,7 +70,6 @@ final isOfUser = currentUser != null && currentUser.uid == userId;
           children: [
             SizedBox(
               width: 200,
-              height: 244,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -126,27 +125,26 @@ final isOfUser = currentUser != null && currentUser.uid == userId;
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 16),
-                  Container(
-                    width: 64,
-                    height: 24,
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.onPrimaryContainer,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
+                  IntrinsicWidth(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.onSurface,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      alignment: Alignment.center,
                       child: Text(
                         // Add currency (Euro by default) if a book is uploaded
                         '$price${currency ?? ''}',
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
                           color: theme.colorScheme.surface,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),

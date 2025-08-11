@@ -101,13 +101,13 @@ class ProfilePage extends ConsumerWidget {
                               ],
                             ),
                             Container(
-                              width: 55,
-                              height: 32,
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                               decoration: BoxDecoration(
                                 color: theme.colorScheme.onPrimaryContainer,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Icon(Icons.star, size: 16, color: theme.colorScheme.primaryContainer),

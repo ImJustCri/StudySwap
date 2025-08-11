@@ -30,24 +30,20 @@ class Notes extends ConsumerWidget {
               }
               final posts = notesList.map((noteData) => Post.fromMap(noteData)).toList();
 
-              return GridView(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.7,
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                children: posts.map((post) => InkWell(
-                  child: post,
-                )).toList(),
+              return Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: posts.map((post) {
+                  return SizedBox(
+                    width: (MediaQuery.of(context).size.width - 24 * 2 /* padding */ - 16 /* spacing */) / 2,
+                    child: post,
+                  );
+                }).toList(),
               );
             },
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, stack) => Center(child: Text('Error: $error')),
           ),
-
         ],
       ),
     );

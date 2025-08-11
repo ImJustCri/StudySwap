@@ -28,19 +28,19 @@ class TutoringTile extends ConsumerWidget {
 
     Widget buildYearChips() {
       return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text("Year:"),
           const SizedBox(width: 8),
-          Row(
-            children: List.generate(5, (index) {
-              final isSelected = isYearSelected[index];
-              final yearText = ordinalYears[index];
+          Expanded(
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: List.generate(5, (index) {
+                final isSelected = isYearSelected[index];
+                final yearText = ordinalYears[index];
 
-              return Padding(
-                padding: EdgeInsets.only(
-                  right: index != 4 ? 8.0 : 0,
-                ),
-                child: Container(
+                return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
                     color: isSelected ? theme.colorScheme.secondary : Colors.transparent,
@@ -56,9 +56,9 @@ class TutoringTile extends ConsumerWidget {
                           : theme.textTheme.bodyMedium?.color?.withAlpha(153), // ~60%
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ],
       );

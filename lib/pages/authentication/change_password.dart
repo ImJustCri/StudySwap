@@ -84,7 +84,8 @@ class _ChangePasswordState extends State<ChangePassword> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // You can remove or change this to true for better keyboard handling.
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -97,157 +98,170 @@ class _ChangePasswordState extends State<ChangePassword> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Change your password",
-                  style: theme.textTheme.headlineLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                  ),
-                  textAlign: TextAlign.left,
-                ),
-                const SizedBox(height: 104),
-                TextField(
-                  controller: oldPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Insert old password',
-                    prefixIcon: Icon(Icons.lock_outline),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: newPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Insert new password',
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  controller: confirmPasswordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Confirm new password',
-                    prefixIcon: Icon(Icons.lock),
-                  ),
-                ),
-                const SizedBox(height: 24),
-
-                // Password requirements
-                Text(
-                  "Password Requirements:",
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _buildGuidelineItem("At least 9 characters", hasMinLength),
-                _buildGuidelineItem("Contains uppercase and lowercase letters", hasUpperCase),
-                _buildGuidelineItem("Includes numbers", hasNumber),
-                _buildGuidelineItem("Includes special characters (e.g. !@#\$&*)", hasSpecialChar),
-              ],
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height - kToolbarHeight - 48,
             ),
-
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () async {
-                  final oldPassword = oldPasswordController.text.trim();
-                  final newPassword = newPasswordController.text.trim();
-                  final confirmPassword = confirmPasswordController.text.trim();
-
-                  if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: const Text("Please fill all password fields"),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK")),
-                        ],
+            child: IntrinsicHeight(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Change your password",
+                        style: theme.textTheme.headlineLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                        ),
+                        textAlign: TextAlign.left,
                       ),
-                    );
-                    return;
-                  }
-
-                  if (newPassword != confirmPassword) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text("Error"),
-                        content: const Text("New password and confirm password do not match"),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK")),
-                        ],
+                      const SizedBox(height: 104),
+                      TextField(
+                        controller: oldPasswordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Insert old password',
+                          prefixIcon: Icon(Icons.lock_outline),
+                        ),
                       ),
-                    );
-                    return;
-                  }
-
-                  if (!isValidPassword(newPassword)) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text("Weak Password"),
-                        content: const Text("Password must follow all the requirements"),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK")),
-                        ],
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: newPasswordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Insert new password',
+                          prefixIcon: Icon(Icons.lock),
+                        ),
                       ),
-                    );
-                    return;
-                  }
-
-                  try {
-                    await auth.changePassword(oldPassword, newPassword);
-                    Navigator.pop(context);
-                  } catch (e) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text("Old password is incorrect"),
-                        content: const Text(
-                            "If you do not remember your password, log out and click 'Forgot your password?'"),
-                        actions: [
-                          TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: const Text("OK")),
-                        ],
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: confirmPasswordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Confirm new password',
+                          prefixIcon: Icon(Icons.lock),
+                        ),
                       ),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: theme.colorScheme.primary,
-                  foregroundColor: theme.colorScheme.onPrimary,
-                  textStyle: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                      const SizedBox(height: 24),
+
+                      // Password requirements
+                      Text(
+                        "Password Requirements:",
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      _buildGuidelineItem("At least 9 characters", hasMinLength),
+                      _buildGuidelineItem("Contains uppercase and lowercase letters", hasUpperCase),
+                      _buildGuidelineItem("Includes numbers", hasNumber),
+                      _buildGuidelineItem("Includes special characters (e.g. !@#\$&*)", hasSpecialChar),
+                    ],
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final oldPassword = oldPasswordController.text.trim();
+                        final newPassword = newPasswordController.text.trim();
+                        final confirmPassword = confirmPasswordController.text.trim();
+
+                        if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Error"),
+                              content: const Text("Please fill all password fields"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (newPassword != confirmPassword) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Error"),
+                              content: const Text("New password and confirm password do not match"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (!isValidPassword(newPassword)) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Weak Password"),
+                              content: const Text("Password must follow all the requirements"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                          return;
+                        }
+
+                        try {
+                          await auth.changePassword(oldPassword, newPassword);
+                          Navigator.pop(context);
+                        } catch (e) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text("Old password is incorrect"),
+                              content: const Text(
+                                  "If you do not remember your password, log out and click 'Forgot your password?'"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text("OK"),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.primary,
+                        foregroundColor: theme.colorScheme.onPrimary,
+                        textStyle: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text('Change password'),
+                    ),
                   ),
-                ),
-                child: const Text('Change password'),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

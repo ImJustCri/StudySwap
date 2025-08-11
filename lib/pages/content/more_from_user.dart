@@ -30,13 +30,18 @@ class MoreFromUser extends ConsumerWidget {
 
       final fetchedPosts = fiveItems.map((item) => Post.fromMap(item)).toList();
 
-      return ListView.separated(
+      return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        itemCount: fetchedPosts.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 16),
-        itemBuilder: (context, index) {
-          return fetchedPosts[index];
-        },
+        padding: const EdgeInsets.only(right: 24),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: fetchedPosts.map((post) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: post,
+            );
+          }).toList(),
+        ),
       );
     }
 
@@ -51,21 +56,16 @@ class MoreFromUser extends ConsumerWidget {
           ),
         ),
         const SizedBox(height: 16),
-        SizedBox(
-          height: 244,
-          child: isBook
-              ? booksAsyncValue.when(
-            data: (bookList) =>
-                buildListFromData(bookList, 'No books available.', 'Error loading books.'),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) => Center(child: Text('Error loading books: $error')),
-          )
-              : notesAsyncValue.when(
-            data: (noteList) =>
-                buildListFromData(noteList, 'No notes available.', 'Error loading notes.'),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, _) => Center(child: Text('Error loading notes: $error')),
-          ),
+        isBook
+            ? booksAsyncValue.when(
+          data: (bookList) => buildListFromData(bookList, 'No books available.', 'Error loading books.'),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(child: Text('Error loading books: $error')),
+        )
+            : notesAsyncValue.when(
+          data: (noteList) => buildListFromData(noteList, 'No notes available.', 'Error loading notes.'),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, _) => Center(child: Text('Error loading notes: $error')),
         ),
       ],
     );

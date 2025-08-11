@@ -16,63 +16,58 @@ class SuggestedNotesSection extends ConsumerWidget {
     if (favorites.isEmpty) {
       return Padding(
         padding: const EdgeInsets.only(right: 24.0),
-        child: SizedBox(
+        child: Container(
           width: double.infinity,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              gradient: LinearGradient(
-                colors: [
-                  theme.colorScheme.primaryContainer,
-                  theme.colorScheme.tertiaryFixedDim.withAlpha(80),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomLeft,
-              ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            gradient: LinearGradient(
+              colors: [
+                theme.colorScheme.primaryContainer,
+                theme.colorScheme.tertiaryFixedDim.withAlpha(80),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomLeft,
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.auto_awesome,
-                        color: theme.colorScheme.onPrimaryContainer,
-                        size: 24,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.auto_awesome,
+                      color: theme.colorScheme.onPrimaryContainer,
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        "Want personalized suggestions?",
+                        style: theme.textTheme.titleMedium,
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          "Want personalized suggestions?",
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Choose your favorite subjects in the settings to get customized recommendations.",
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton.icon(
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Choose your favorite subjects in the settings to get customized recommendations.",
+                  style: theme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
                     onPressed: () {
                       Navigator.pushNamed(context, "/favorite-subjects");
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: theme.colorScheme.onSurface,
                       backgroundColor: Colors.transparent,
-                      textStyle: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      textStyle: theme.textTheme.bodyMedium,
                       side: BorderSide(
                         color: theme.colorScheme.secondary,
                         width: 0.5,
@@ -80,8 +75,7 @@ class SuggestedNotesSection extends ConsumerWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     ),
                     icon: Icon(
                       Icons.settings,
@@ -89,8 +83,8 @@ class SuggestedNotesSection extends ConsumerWidget {
                     ),
                     label: const Text("Go to settings"),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -104,26 +98,33 @@ class SuggestedNotesSection extends ConsumerWidget {
             .toList();
 
         if (suggestedPostsData.isEmpty) {
-          return SizedBox(height: 192, child: const SizedBox.shrink());
+          return const SizedBox.shrink();
         }
 
         final suggestedPosts =
         suggestedPostsData.map((note) => Post.fromMap(note)).toList();
 
         return SizedBox(
-          height: 250.0,
+          height: 260,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(right: 24.0),
+            padding: const EdgeInsets.only(right: 24.0, left: 16.0),
             physics: const ClampingScrollPhysics(),
             itemCount: suggestedPosts.length,
             itemBuilder: (context, index) {
               final post = suggestedPosts[index];
-              return InkWell(
-                onTap: () {
-                  // Add navigation or tap handling logic if needed
-                },
-                child: post,
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: Container(
+                    constraints: const BoxConstraints(
+                      minWidth: 200,
+                      maxWidth: 320,
+                    ),
+                    child: post,
+                  ),
+                ),
               );
             },
             separatorBuilder: (context, index) => const SizedBox(width: 16),
