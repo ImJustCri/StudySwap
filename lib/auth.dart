@@ -63,13 +63,46 @@ class Auth {
     }
   }
 
-  Future<String?> resetPassword(String email) async {
+  Future<void> resetPassword(String email) async {
     try {
       // Call to recover the password
       await auth.sendPasswordResetEmail(email: email);
-      return null;
-    } on FirebaseAuthException catch (ex) {
-      return ex.message;
-    }
+    } on FirebaseAuthException catch (ex) {}
+  }
+
+
+  Future<void> deleteAccount() async{
+    try{
+      User? userCredential=FirebaseAuth.instance.currentUser;
+      if(userCredential!=null){
+        // Call to delete the content in Users
+        await FirebaseFirestore.instance.collection('Users').doc(userCredential.uid).delete();
+        // Call to delete the account
+        await userCredential.delete();
+      }
+    }on FirebaseAuthException catch (ex) {}
+  }
+
+  Future<void> changePassword(String password) async{
+    try{
+      User? userCredential= FirebaseAuth.instance.currentUser;
+      if(userCredential!=null){
+        // Call to modify the password
+        await userCredential.updatePassword(password);
+      }
+    } on FirebaseAuthException catch(ex){}
+  }
+
+  // method is incomplete
+  Future<void> changeEmail(String email) async{
+    try{
+      User? userCredential= FirebaseAuth.instance.currentUser;
+      if(userCredential!=null){
+        // Call to modify the email
+        await userCredential.updateEmail(email); 
+
+      }
+    }on FirebaseAuthException catch(ex){}
   }
 }
+

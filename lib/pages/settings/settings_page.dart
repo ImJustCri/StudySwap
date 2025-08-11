@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/theme_provider.dart';
+import 'package:studyswap/auth.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   void _showDeleteAccountDialog(BuildContext context) {
+    final auth = Auth();
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -20,10 +22,12 @@ class SettingsPage extends ConsumerWidget {
           ),
           TextButton(
             onPressed: () {
+              auth.deleteAccount();
               Navigator.of(ctx).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Account deleted')),
               );
+              Navigator.pushReplacementNamed(context, '/onboarding');
               // Here you would add actual account deletion logic.
             },
             child: const Text(
