@@ -1,7 +1,6 @@
-import 'dart:math' as math;
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class Auth {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -67,9 +66,34 @@ class Auth {
     try {
       // Call to recover the password
       await auth.sendPasswordResetEmail(email: email);
-    } on FirebaseAuthException catch (ex) {}
+    } on FirebaseAuthException catch (ex) {
+      debugPrint('Exception in deleteAccount: $ex');
+    }
   }
 
+  Future<void> changePassword(String oldPassword, String newPassword) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null && user.email != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: oldPassword,
+        );
+
+        // Reauthenticate user (Check if oldPassword == actual user password)
+        await user.reauthenticateWithCredential(credential);
+
+        // After successful reauthentication, update password
+        await user.updatePassword(newPassword);
+      }
+    } on FirebaseAuthException catch (ex) {
+      debugPrint('Exception in changePassword: $ex');
+      rethrow;
+    }
+  }
+
+  /// Account deletion
 
   Future<void> deleteAccount() async{
     try{
@@ -79,30 +103,39 @@ class Auth {
         await FirebaseFirestore.instance.collection('Users').doc(userCredential.uid).delete();
         // Call to delete the account
         await userCredential.delete();
+
+        // Call to delete the user's uploads
+        final firestore = FirebaseFirestore.instance;
+
+        await deleteUploads(userCredential, firestore.collection("Notes"));
+        await deleteUploads(userCredential, firestore.collection("Books"));
+        await deleteUploads(userCredential, firestore.collection("Tutoring"));
       }
-    }on FirebaseAuthException catch (ex) {}
+    }on FirebaseAuthException catch (ex) {
+      debugPrint('Exception in deleteAccount: $ex');
+    }
   }
 
-  Future<void> changePassword(String password) async{
-    try{
-      User? userCredential= FirebaseAuth.instance.currentUser;
-      if(userCredential!=null){
-        // Call to modify the password
-        await userCredential.updatePassword(password);
-      }
-    } on FirebaseAuthException catch(ex){}
-  }
+  Future<void> deleteUploads(User? currentUser, collectionRef) async {
+    try {
+      if (currentUser != null) {
+        // Query all uploads where 'user_id' equals current user's uid
+        final querySnapshot = await collectionRef.where('user_id', isEqualTo: currentUser.uid).get();
 
-  // method is incomplete
-  Future<void> changeEmail(String email) async{
-    try{
-      User? userCredential= FirebaseAuth.instance.currentUser;
-      if(userCredential!=null){
-        // Call to modify the email
-        await userCredential.updateEmail(email); 
+        // Create a batch
+        final batch = FirebaseFirestore.instance.batch();
 
+        // Add each upload's deletion to the batch
+        for (final doc in querySnapshot.docs) {
+          batch.delete(doc.reference);
+        }
+
+        // Commit the batch to delete all uploads at once
+        await batch.commit();
       }
-    }on FirebaseAuthException catch(ex){}
+    } on FirebaseAuthException catch (ex) {
+      debugPrint('Exception in deleteAccount: $ex');
+    }
   }
 }
 
