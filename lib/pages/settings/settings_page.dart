@@ -103,19 +103,19 @@ class SettingsPage extends ConsumerWidget {
 
               _sectionLabel(context, 'ACCOUNT'),
 
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                leading: const Icon(Icons.email),
-                title: const Text('Change Email'),
-                subtitle: const Text('Update your email address'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Change Email tapped')),
-                  );
-                },
-              ),
-              const Divider(height: 1),
+              // ListTile(
+              //   contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              //   leading: const Icon(Icons.email),
+              //   title: const Text('Change Email'),
+              //   subtitle: const Text('Update your email address'),
+              //   trailing: const Icon(Icons.arrow_forward_ios),
+              //   onTap: () {
+              //     ScaffoldMessenger.of(context).showSnackBar(
+              //       const SnackBar(content: Text('Change Email tapped')),
+              //     );
+              //   },
+              // ),
+              // const Divider(height: 1),
 
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -124,9 +124,7 @@ class SettingsPage extends ConsumerWidget {
                 subtitle: const Text('Update your password'),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Change Password tapped')),
-                  );
+                  Navigator.pushNamed(context, '/change-password');
                 },
               ),
 
