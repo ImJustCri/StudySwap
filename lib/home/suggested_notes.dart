@@ -17,7 +17,6 @@ class SuggestedNotesSection extends ConsumerWidget {
       return Padding(
         padding: const EdgeInsets.only(right: 24.0),
         child: SizedBox(
-          height: 192,
           width: double.infinity,
           child: Container(
             decoration: BoxDecoration(
@@ -32,7 +31,7 @@ class SuggestedNotesSection extends ConsumerWidget {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
