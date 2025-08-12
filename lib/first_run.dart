@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:is_first_run/is_first_run.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:studyswap/home/home_page.dart';
 import 'package:studyswap/misc/resources.dart';
+import 'package:studyswap/pages/onboarding/onboarding_page.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -33,7 +35,14 @@ class LandingPage extends StatelessWidget {
           );
         } else {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacementNamed(snapshot.data!);
+            Navigator.of(context).pushReplacement(
+              PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                (snapshot.data == '/onboarding') ? OnboardingPage() : MyHomePage(title: "StudySwap"),
+                transitionDuration: Duration.zero,
+                reverseTransitionDuration: Duration.zero,
+              ),
+            );
           });
 
           return Container(
