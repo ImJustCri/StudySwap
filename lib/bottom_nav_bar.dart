@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +24,7 @@ class BottomNavBar extends ConsumerWidget {
     final data = dataAsync.value;
 
     final String imageUrl = data?["image"] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png";
+    final pfp = CachedNetworkImageProvider(imageUrl);
 
     return NavigationBarTheme(
       data: NavigationBarThemeData(
@@ -78,7 +80,7 @@ class BottomNavBar extends ConsumerWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: NetworkImage(imageUrl),
+                    image: pfp,
                     fit: BoxFit.cover,
                     colorFilter: ColorFilter.mode(
                       Colors.black.withValues(alpha: .5),
@@ -94,7 +96,7 @@ class BottomNavBar extends ConsumerWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: NetworkImage(imageUrl),
+                    image: pfp,
                     fit: BoxFit.cover,
                   ),
                 ),
