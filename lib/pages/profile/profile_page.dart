@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/data_provider.dart';
 import 'package:studyswap/providers/user_provider.dart';
+import '../../widgets/reviews/review_average_calculator.dart';
 import 'about.dart';
 import 'tabs.dart';
 import 'bookshop.dart';
@@ -11,7 +12,7 @@ import 'notes.dart';
 import 'reviews.dart';
 import 'tutoring.dart';
 
-class ProfilePage extends ConsumerWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   final String userId;
   final bool fromNavigation;
 
@@ -22,14 +23,45 @@ class ProfilePage extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final currentUser = ref.watch(userProvider).value;
-    final userDataAsync = ref.watch(dataProvider(userId));
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
+}
 
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  double? averageStars;
+  bool isLoading = true;
+  String? error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAverageStars();
+  }
+
+  Future<void> _loadAverageStars() async {
+    try {
+      final calculator = ReviewsAverageCalculator(userId: widget.userId);
+      final avg = await calculator.calculateAverage();
+      setState(() {
+        averageStars = avg;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        error = e.toString();
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final bool isMine = currentUser!.uid == userId ? true : false;
+    final currentUser = ref.watch(userProvider).value;
+    final userDataAsync = ref.watch(dataProvider(widget.userId));
 
-    if (userId.isEmpty) {
+    final bool isMine = currentUser?.uid == widget.userId;
+
+    if (widget.userId.isEmpty) {
       return const Scaffold(
         body: Center(child: Text("User ID is empty")),
       );
@@ -49,7 +81,7 @@ class ProfilePage extends ConsumerWidget {
         return DefaultTabController(
           length: 4,
           child: Scaffold(
-            appBar: !fromNavigation ? AppBar() : null,
+            appBar: !widget.fromNavigation ? AppBar() : null,
             body: Padding(
               padding: const EdgeInsets.only(top: 24.0),
               child: Column(
@@ -57,8 +89,6 @@ class ProfilePage extends ConsumerWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-
-                    // MAIN PROFILE INFO
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -75,7 +105,8 @@ class ProfilePage extends ConsumerWidget {
                                     shape: BoxShape.circle,
                                     image: DecorationImage(
                                       image: CachedNetworkImageProvider(
-                                        userData['image'] ?? "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png",
+                                        userData['image'] ??
+                                            "https://mrskvszubvnunoowjeth.supabase.co/storage/v1/object/public/pfp/default.png",
                                       ),
                                       fit: BoxFit.cover,
                                     ),
@@ -112,14 +143,33 @@ class ProfilePage extends ConsumerWidget {
                                 children: [
                                   Icon(Icons.star, size: 16, color: theme.colorScheme.primaryContainer),
                                   const SizedBox(width: 4),
-                                  Text(
-                                    "${userData['stars'] ?? 0}",
-                                    style: TextStyle(
-                                      color: theme.colorScheme.surface,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
+                                  if (isLoading)
+                                    SizedBox(
+                                      width: 14,
+                                      height: 14,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: theme.colorScheme.primaryContainer,
+                                      ),
+                                    )
+                                  else if (error != null)
+                                    Text(
+                                      "0",
+                                      style: TextStyle(
+                                        color: theme.colorScheme.surface,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    )
+                                  else
+                                    Text(
+                                      averageStars != null ? averageStars!.toStringAsFixed(1) : "0",
+                                      style: TextStyle(
+                                        color: theme.colorScheme.surface,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -227,7 +277,7 @@ class ProfilePage extends ConsumerWidget {
                         GestureDetector(
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return About(user: userId);
+                              return About(user: widget.userId);
                             }));
                           },
                           child: Text(
@@ -259,13 +309,13 @@ class ProfilePage extends ConsumerWidget {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        SingleChildScrollView(child: Notes(userId)),
-                        SingleChildScrollView(child: Books(userId: userId)),
-                        SingleChildScrollView(child: Tutoring(userId: userId)),
+                        SingleChildScrollView(child: Notes(widget.userId)),
+                        SingleChildScrollView(child: Books(userId: widget.userId)),
+                        SingleChildScrollView(child: Tutoring(userId: widget.userId)),
                         SingleChildScrollView(
                           child: Reviews(
-                            stars: (userData['stars']?.toDouble()) ?? 0,
-                            profile: "",
+                            stars: averageStars ?? 0,
+                            userId: widget.userId,
                             isMine: isMine,
                           ),
                         ),

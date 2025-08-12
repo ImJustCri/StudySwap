@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
-import 'package:studyswap/providers/books_provider.dart';
-import 'package:studyswap/providers/notes_provider.dart';
 import '../edit/edit_books_details.dart';
 import '../edit/edit_notes_details.dart';
 import 'more_from_user.dart';

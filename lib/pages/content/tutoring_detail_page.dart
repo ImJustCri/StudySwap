@@ -80,61 +80,68 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final List<String> ordinalYears = ['1st', '2nd', '3rd', '4th', '5th'];
-    final isOfUser = widget.isOfUser; // Use passed value, no ref here
+    final isOfUser = widget.isOfUser;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Details'),
         actions: [
           if (isOfUser)
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditTutoringDetails(
-                      subject: widget.subject,
-                      description: widget.description,
-                      classes: widget.classes,
-                      userId: widget.userId,
-                      tutoringId: widget.tutoringId,
-                      mode: widget.mode,
-                      hours: widget.hours,
-                    )),
-                );
-              },
-              icon: const Icon(Icons.edit),
-            ),
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Confirm Delete'),
-                    content: const Text('Are you sure you want to delete this post?'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(false);
-                        },
-                        child: const Text('No'),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditTutoringDetails(
+                          subject: widget.subject,
+                          description: widget.description,
+                          classes: widget.classes,
+                          userId: widget.userId,
+                          tutoringId: widget.tutoringId,
+                          mode: widget.mode,
+                          hours: widget.hours.toDouble(),
+                        ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(true);
-                        },
-                        child: const Text('Yes'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            icon: const Icon(
-              Icons.delete_rounded,
-              color: Colors.redAccent,
+                    );
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirm Delete'),
+                          content: const Text('Are you sure you want to delete this post?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete_rounded,
+                    color: Colors.redAccent,
+                  ),
+                ),
+              ],
             ),
-          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -248,8 +255,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.surface,
                             foregroundColor: theme.colorScheme.primary,
-                            textStyle:
-                            theme.textTheme.titleMedium?.copyWith(
+                            textStyle: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                             shape: RoundedRectangleBorder(
@@ -262,10 +268,11 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             elevation: 0,
                           ),
                           onPressed: () {
-                            // handle contact owner
+                            // TODO: handle contact owner
                           },
-                          icon: Icon(Icons.messenger_outline_rounded),
-                          label: Text('Contact owner', style: TextStyle(fontSize: 16)),
+                          icon: const Icon(Icons.messenger_outline_rounded),
+                          label: const Text('Contact owner',
+                              style: TextStyle(fontSize: 16)),
                         ),
                       ),
                     ],

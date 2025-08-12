@@ -46,7 +46,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
 
   void submit(String revieweeUsername) async {
     final db = FirebaseFirestore.instance;
-    final currentUser = FirebaseAuth.instance.currentUser!;
+    final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
     final reviewText = _reviewController.text.trim();
     if (_selectedRating == 0) {
@@ -62,26 +62,22 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
       return;
     }
 
-    // Fetch current user's username from Firestore
-    final currentUserDoc = await db.collection("Users").doc(currentUser.email).get();
-    final currentUserData = currentUserDoc.data();
-    final reviewerUsername = currentUserData != null && currentUserData.containsKey("username")
-        ? currentUserData["username"]
-        : currentUser.email;
+    final reviewerId = currentUser;
+
 
     final reviewData = {
-      "reviewerUsername": reviewerUsername,
+      "reviewerId": reviewerId,
       "revieweeUsername": revieweeUsername,
       "rating": _selectedRating,
       "review": reviewText,
-      "timestamp": FieldValue.serverTimestamp(),
+      "upload_time": FieldValue.serverTimestamp(),
     };
 
     await db
         .collection("Users")
         .doc(widget.profile)
         .collection("Reviews")
-        .doc(currentUser.email)
+        .doc(currentUser)
         .set(reviewData);
 
     Navigator.of(context).pop({

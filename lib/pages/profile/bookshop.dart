@@ -26,7 +26,21 @@ class Books extends ConsumerWidget {
           userBooksAsyncValue.when(
             data: (booksList) {
               if (booksList.isEmpty) {
-                return const Center(child: Text('No books uploaded.'));
+                return Padding(
+                  padding: const EdgeInsets.only(top: 64.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.no_sim_rounded,
+                          size: 48,
+                        ),
+                        SizedBox(height: 16),
+                        Text('No books uploaded.'),
+                      ],
+                    ),
+                  ),
+                );
               }
               final posts = booksList.map((bookData) => Post.fromMap(bookData)).toList();
 

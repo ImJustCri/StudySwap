@@ -17,7 +17,21 @@ class Tutoring extends ConsumerWidget {
       child: tutoringAsyncValue.when(
         data: (tutoringList) {
           if (tutoringList.isEmpty) {
-            return const Center(child: Text('No tutoring sessions available.'));
+            return Padding(
+              padding: const EdgeInsets.only(top: 64.0),
+              child: Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.no_sim_rounded,
+                      size: 48,
+                    ),
+                    SizedBox(height: 16),
+                    Text('No tutoring sessions available.'),
+                  ],
+                ),
+              ),
+            );
           }
 
           return ListView.separated(
