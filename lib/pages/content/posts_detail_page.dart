@@ -93,8 +93,6 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final notesAsyncValue = ref.watch(userNotesProvider(widget.userId));
-    final booksAsyncValue = ref.watch(userBooksProvider(widget.userId));
 
     return Scaffold(
       appBar: AppBar(
