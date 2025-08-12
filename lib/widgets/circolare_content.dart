@@ -33,8 +33,9 @@ class CircolareContent extends StatelessWidget {
             children: [
               Text(
                 date,
-                style: theme.textTheme.bodySmall?.copyWith(
+                style: TextStyle(
                   color: theme.colorScheme.secondary,
+                  fontSize: 12,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -45,8 +46,9 @@ class CircolareContent extends StatelessWidget {
               Flexible(
                 child: Text(
                   processedTitle,
-                  style: theme.textTheme.titleMedium?.copyWith(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
+                    fontSize: 18,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
