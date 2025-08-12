@@ -11,6 +11,8 @@ class EditTutoringDetails extends ConsumerStatefulWidget {
   final String description;
   final List<bool> classes;
   final String userId;
+  final String mode;
+  final num hours;
 
   const EditTutoringDetails({
     super.key,
@@ -19,6 +21,8 @@ class EditTutoringDetails extends ConsumerStatefulWidget {
     required this.description,
     required this.classes,
     required this.userId,
+    required this.mode,
+    required this.hours,
   });
 
   @override
@@ -29,8 +33,10 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _subjectController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _hoursController = TextEditingController();
 
   String? _selectedSubject;
+  String? _selectedMode;
   final Set<int> _selectedClasses = {};
 
   @override
@@ -41,6 +47,8 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
     _selectedSubject = widget.subject.isNotEmpty ? widget.subject : null;
     _descriptionController.text = widget.description;
 
+    _selectedMode = widget.mode;
+    _hoursController.text = widget.hours.toString();
 
     for (int i = 0; i < widget.classes.length; i++) {
       if (widget.classes[i]) {
@@ -49,11 +57,11 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
     }
   }
 
-
   @override
   void dispose() {
     _subjectController.dispose();
     _descriptionController.dispose();
+    _hoursController.dispose();
     super.dispose();
   }
 
@@ -69,17 +77,26 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
         return;
       }
 
-      // Convert selected classes to bool list of length 5
+      final mode = _selectedMode!;
+      final hours = double.parse(_hoursController.text.trim());
+
       final classesBoolList =
       List<bool>.generate(5, (index) => _selectedClasses.contains(index + 1));
 
-      await _updateTutoring(subject: subject, classes: classesBoolList, description: description);
+      await _updateTutoring(
+        subject: subject,
+        classes: classesBoolList,
+        description: description,
+        mode: mode,
+        hours: hours,
+      );
 
-      // Clear form & exit
       _formKey.currentState!.reset();
       setState(() {
         _selectedSubject = null;
         _selectedClasses.clear();
+        _selectedMode = null;
+        _hoursController.clear();
         _subjectController.clear();
       });
       Navigator.pop(context);
@@ -110,7 +127,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
               Expanded(
                 child: ListView(
                   children: [
-                    // Subject Autocomplete
+                    // Subject Autocomplete (disabled)
                     Autocomplete<String>(
                       optionsBuilder: (TextEditingValue textEditingValue) {
                         if (textEditingValue.text.isEmpty) {
@@ -125,8 +142,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                           _subjectController.text = selection;
                         });
                       },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
+                      fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
                         controller.text = widget.subject;
                         _subjectController.value = controller.value;
 
@@ -159,6 +175,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                     ),
 
                     const SizedBox(height: 16),
+                    // Description field
                     TextFormField(
                       maxLines: null,
                       controller: _descriptionController,
@@ -179,6 +196,66 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                       'Edit the description of the tutoring session',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
+
+                    // Mode dropdown
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        labelText: 'Mode',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.device_hub),
+                      ),
+                      value: _selectedMode,
+                      items: const [
+                        DropdownMenuItem(value: 'Digital', child: Text('Digital')),
+                        DropdownMenuItem(value: 'In real life', child: Text('In real life')),
+                        DropdownMenuItem(value: 'Both', child: Text('Both')),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedMode = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a mode';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Select whether tutoring will be digital, in real life, or both.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+
+                    // Hours per session
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _hoursController,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                        labelText: 'Hours per session',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.access_time),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter hours per session';
+                        }
+                        final parsed = double.tryParse(value);
+                        if (parsed == null || parsed <= 0) {
+                          return 'Please enter a valid positive number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Enter the duration of each session in hours.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+
                     const SizedBox(height: 24),
 
                     // Class selection chips
@@ -224,7 +301,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Submit', style: TextStyle(fontSize: 16)),
+                  child: const Text('Submit', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -238,6 +315,8 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
     required String subject,
     required String description,
     required List<bool> classes,
+    required String mode,
+    required double hours,
   }) async {
     try {
       final tutoringDoc = FirebaseFirestore.instance
@@ -248,6 +327,8 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
         'classes': classes,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'description': description,
+        'mode': mode,
+        'hours_per_session': hours,
         'latest_update': FieldValue.serverTimestamp(),
       });
 

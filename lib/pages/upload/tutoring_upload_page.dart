@@ -16,6 +16,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _subjectController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  String? _selectedMode;
+  final TextEditingController _hoursController = TextEditingController();
 
   String? _selectedSubject;
   final Set<int> _selectedClasses = {};
@@ -24,6 +26,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   void dispose() {
     _subjectController.dispose();
     _descriptionController.dispose();
+    _hoursController.dispose();
     super.dispose();
   }
 
@@ -31,6 +34,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
     if (_formKey.currentState!.validate()) {
       final subject = _selectedSubject ?? _subjectController.text.trim();
       final description = _descriptionController.text.trim();
+      final mode = _selectedMode!;
+      final hours = double.parse(_hoursController.text.trim());
 
       if (_selectedClasses.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -43,7 +48,13 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
       final classesBoolList =
       List<bool>.generate(5, (index) => _selectedClasses.contains(index + 1));
 
-      await _uploadTutoring(subject: subject, classes: classesBoolList, description: description);
+      await _uploadTutoring(
+        subject: subject,
+        classes: classesBoolList,
+        description: description,
+        mode: mode,
+        hours: hours,
+      );
 
       // Clear form & exit
       _formKey.currentState!.reset();
@@ -51,6 +62,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         _selectedSubject = null;
         _selectedClasses.clear();
         _subjectController.clear();
+        _selectedMode = null;
+        _hoursController.clear();
       });
       Navigator.pop(context);
     }
@@ -147,9 +160,66 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                       'Add a brief description of the tutoring session',
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
+
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _hoursController,
+                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      decoration: const InputDecoration(
+                        labelText: 'Hours per session',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.access_time),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter hours per session';
+                        }
+                        final parsed = double.tryParse(value);
+                        if (parsed == null || parsed <= 0) {
+                          return 'Please enter a valid positive number';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Enter the duration of each session in hours.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      decoration: const InputDecoration(
+                        labelText: 'Mode',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.device_hub),
+                      ),
+                      value: _selectedMode,
+                      items: const [
+                        DropdownMenuItem(value: 'Digital', child: Text('Digital')),
+                        DropdownMenuItem(value: 'In real life', child: Text('In real life')),
+                        DropdownMenuItem(value: 'Both', child: Text('Both')),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedMode = value;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select a mode';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Select whether tutoring will be digital, in real life, or both.',
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+
                     const SizedBox(height: 24),
 
-                    // Class selection chips
                     Text(
                       "Select Classes",
                       style: theme.textTheme.titleMedium?.copyWith(
@@ -184,17 +254,21 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                         );
                       }),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
+
+              // Submit Button fixed below the scrollable content
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _submitForm,
-                  child: Text('Submit', style: TextStyle(fontSize: 16)),
+                  child: const Text('Submit', style: TextStyle(fontSize: 16)),
                 ),
               ),
+
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -206,6 +280,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
     required String subject,
     required String description,
     required List<bool> classes,
+    required String mode,
+    required double hours,
   }) async {
     try {
       final tutoringCollection = FirebaseFirestore.instance.collection('Tutoring');
@@ -218,6 +294,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         'classes': classes,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'description': description,
+        'mode': mode,
+        'hours': hours,
         'createdAt': FieldValue.serverTimestamp(),
         'id': newDocRef.id,
       });
@@ -231,5 +309,4 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
       );
     }
   }
-
 }

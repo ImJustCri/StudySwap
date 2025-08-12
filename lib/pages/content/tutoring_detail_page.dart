@@ -10,6 +10,8 @@ class TutoringDetailPage extends StatefulWidget {
   final String description;
   final List<bool> classes;
   final String userId;
+  final num hours;
+  final String mode;
   final bool isOfUser;
 
   const TutoringDetailPage({
@@ -20,6 +22,8 @@ class TutoringDetailPage extends StatefulWidget {
     required this.classes,
     required this.userId,
     required this.isOfUser,
+    required this.hours,
+    required this.mode,
   });
 
   @override
@@ -93,6 +97,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                       classes: widget.classes,
                       userId: widget.userId,
                       tutoringId: widget.tutoringId,
+                      mode: widget.mode,
+                      hours: widget.hours,
                     )),
                 );
               },
@@ -238,7 +244,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                   Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
+                        child: ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.colorScheme.surface,
                             foregroundColor: theme.colorScheme.primary,
@@ -258,10 +264,51 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                           onPressed: () {
                             // handle contact owner
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 24.0),
-                            child:
-                            Text('Contact owner', style: TextStyle(fontSize: 16)),
+                          icon: Icon(Icons.messenger_outline_rounded),
+                          label: Text('Contact owner', style: TextStyle(fontSize: 16)),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Mode",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+                      Flexible(
+                        child: Text(
+                          widget.mode,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Hours per session",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+                      Flexible(
+                        child: Text(
+                          "${widget.hours}",
+                          style: const TextStyle(
+                            fontSize: 18,
                           ),
                         ),
                       ),

@@ -9,6 +9,8 @@ class TutoringTile extends ConsumerWidget {
   final String description;
   final String userId;
   final String tutoringId;
+  final num hours;
+  final String mode;
 
   const TutoringTile({
     super.key,
@@ -17,6 +19,8 @@ class TutoringTile extends ConsumerWidget {
     required this.description,
     required this.userId,
     required this.tutoringId,
+    required this.hours,
+    required this.mode,
   });
 
   @override
@@ -77,6 +81,8 @@ class TutoringTile extends ConsumerWidget {
               userId: userId,
               isOfUser: isOfUser,
               tutoringId: tutoringId,
+              hours: hours,
+              mode: mode,
             ),
           ),
         );
