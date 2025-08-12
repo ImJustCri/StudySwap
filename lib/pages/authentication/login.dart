@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
+import 'package:studyswap/notifications/notifications.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
