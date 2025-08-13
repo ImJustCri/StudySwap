@@ -23,6 +23,12 @@ class NotificationsPage extends StatelessWidget {
         "date": "April 15",
         "isUnread": false,
       },
+      {
+        "title": "Qualcuno ha comprato la tua nota",
+        "subtitle": "Utente ha comprato la tua nota, 30 crediti sono stati trasferiti sul tuo conto",
+        "date": "December 44",
+        "isUnread": false,
+      },
     ];
 
     return Scaffold(

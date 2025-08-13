@@ -10,6 +10,7 @@ class LoginPage extends StatelessWidget {
     final auth = Auth(); // Creates Auth Object
     final email=TextEditingController();
     final password=TextEditingController();
+    setupNotifications();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -85,6 +86,7 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 );
                             }else{
+                              Navigator.pop(context);
                               Navigator.pushReplacementNamed(context, '/homescreen');
                             }
                             }else{
