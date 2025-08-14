@@ -12,6 +12,17 @@ final booksProvider = StreamProvider<List<Map<String, dynamic>>>((ref) {
   );
 });
 
+// Latest 40 books
+final latestBooksProvider = StreamProvider<List<Map<String, dynamic>>>((ref) {
+  var collectionRef = FirebaseFirestore.instance.collection('Books');
+
+  return collectionRef.snapshots().map(
+        (querySnapshot) => querySnapshot.docs.map(
+          (doc) => doc.data(),
+    ).toList(),
+  );
+});
+
 // Books from a certain user
 final userBooksProvider = StreamProvider.family<List<Map<String, dynamic>>, String>((ref, userId) {
   var collectionRef = FirebaseFirestore.instance.collection('Books');
