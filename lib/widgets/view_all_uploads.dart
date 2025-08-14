@@ -3,14 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/post.dart';
 
 class ViewAllUploadsPage extends ConsumerWidget {
-  final StreamProvider<List<Map<String, dynamic>>> notesProvider;
+  final StreamProvider<List<Map<String, dynamic>>> provider;
   final String type;
 
-  const ViewAllUploadsPage(this.type, {super.key, required this.notesProvider});
+  const ViewAllUploadsPage(this.type, {super.key, required this.provider});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notesAsyncValue = ref.watch(notesProvider);
+    final notesAsyncValue = ref.watch(provider);
 
     return Scaffold(
       appBar: AppBar(

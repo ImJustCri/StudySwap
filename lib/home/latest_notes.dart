@@ -41,7 +41,7 @@ class LatestNotesSection extends ConsumerWidget {
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (_) =>
-                          ViewAllUploadsPage(notesProvider: notesProvider, "Notes"),
+                          ViewAllUploadsPage(provider: notesProvider, "Notes"),
                     ),
                   );
                 },
