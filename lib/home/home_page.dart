@@ -6,7 +6,7 @@ import '../pages/settings/favorite_subjects.dart';
 import '../providers/notes_provider.dart';
 import '../widgets/expandable_menu.dart';
 import 'home_page_content.dart';
-import 'package:studyswap/pages/search_page.dart';
+import 'package:studyswap/pages/search/search_page.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import 'package:studyswap/pages/exchange_page.dart';
 import '../bottom_nav_bar.dart';
