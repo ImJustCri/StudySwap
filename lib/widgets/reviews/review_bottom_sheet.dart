@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:studyswap/services/coins_manager.dart';
 
 class ReviewBottomSheet extends StatefulWidget {
   final int initialRating;
@@ -45,6 +46,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
   }
 
   void submit(String revieweeUsername) async {
+    final coinsManager = CoinsManager();
     final db = FirebaseFirestore.instance;
     final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
@@ -64,6 +66,35 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
 
     final reviewerId = currentUser;
 
+    // Reference to the review document in Firestore
+    final reviewDocRef = db
+        .collection("Users")
+        .doc(widget.profile)
+        .collection("Reviews")
+        .doc(currentUser);
+
+    // Check if the review document already exists
+    final docSnapshot = await reviewDocRef.get();
+
+    if (!docSnapshot.exists) {
+      await coinsManager.addCoins(currentUser, 20);
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Congratulations!'),
+            content: Text('You have received 20 coins for having left a review.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Keep going'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
 
     final reviewData = {
       "reviewerId": reviewerId,
@@ -73,18 +104,14 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
       "upload_time": FieldValue.serverTimestamp(),
     };
 
-    await db
-        .collection("Users")
-        .doc(widget.profile)
-        .collection("Reviews")
-        .doc(currentUser)
-        .set(reviewData);
+    await reviewDocRef.set(reviewData);
 
     Navigator.of(context).pop({
       'rating': _selectedRating,
       'review': reviewText,
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
