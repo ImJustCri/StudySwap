@@ -25,3 +25,20 @@ final userBooksProvider = StreamProvider.family<List<Map<String, dynamic>>, Stri
     ).toList(),
   );
 });
+
+// Books filtered by subject, latest 20 uploads
+final booksBySubjectProvider = StreamProvider.family<List<Map<String, dynamic>>, String>((ref, subject) {
+  final collectionRef = FirebaseFirestore.instance.collection('Books');
+
+  final query = collectionRef
+      .where('subject', isEqualTo: subject)
+      .orderBy('createdAt', descending: true)
+      .limit(20);
+
+  return query.snapshots().map(
+        (querySnapshot) => querySnapshot.docs.map(
+          (doc) => doc.data(),
+    ).toList(),
+  );
+});
+
