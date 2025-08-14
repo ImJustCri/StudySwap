@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../providers/subjects_providers.dart';
+import 'contact_input.dart';
 
 class TutoringUploadPage extends ConsumerStatefulWidget {
   const TutoringUploadPage({super.key});
@@ -16,11 +16,17 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _subjectController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  String? _selectedMode;
   final TextEditingController _hoursController = TextEditingController();
 
+  String? _selectedMode;
   String? _selectedSubject;
   final Set<int> _selectedClasses = {};
+
+  // Contact info state
+  String? _contactPlatform;
+  String? _contactHandle;
+
+  bool _isUploading = false;
 
   @override
   void dispose() {
@@ -31,11 +37,15 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   }
 
   void _submitForm() async {
+    if (_isUploading) return;
+
     if (_formKey.currentState!.validate()) {
-      final subject = _selectedSubject ?? _subjectController.text.trim();
-      final description = _descriptionController.text.trim();
-      final mode = _selectedMode!;
-      final hours = double.parse(_hoursController.text.trim());
+      if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter your contact handle')),
+        );
+        return;
+      }
 
       if (_selectedClasses.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -44,9 +54,21 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         return;
       }
 
+      setState(() {
+        _isUploading = true;
+      });
+
+      final subject = _selectedSubject ?? _subjectController.text.trim();
+      final description = _descriptionController.text.trim();
+      final mode = _selectedMode!;
+      final hours = double.parse(_hoursController.text.trim());
+
       // Convert selected classes to bool list of length 5
       final classesBoolList =
       List<bool>.generate(5, (index) => _selectedClasses.contains(index + 1));
+
+      final contactPlatform = _contactPlatform!;
+      final contactHandle = _contactHandle!;
 
       await _uploadTutoring(
         subject: subject,
@@ -54,17 +76,25 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         description: description,
         mode: mode,
         hours: hours,
+        contactPlatform: contactPlatform,
+        contactHandle: contactHandle,
       );
 
-      // Clear form & exit
+      // Clear form & reset states
       _formKey.currentState!.reset();
+      _subjectController.clear();
+      _descriptionController.clear();
+      _hoursController.clear();
+
       setState(() {
         _selectedSubject = null;
-        _selectedClasses.clear();
-        _subjectController.clear();
         _selectedMode = null;
-        _hoursController.clear();
+        _selectedClasses.clear();
+        _contactPlatform = null;
+        _contactHandle = null;
+        _isUploading = false;
       });
+
       Navigator.pop(context);
     }
   }
@@ -164,7 +194,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _hoursController,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: const InputDecoration(
                         labelText: 'Hours per session',
                         border: OutlineInputBorder(),
@@ -254,6 +284,33 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                         );
                       }),
                     ),
+                    const SizedBox(height: 24),
+
+                    // Contact Input Section
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Contact (choose platform and enter your handle)',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ContactInput(
+                      initialPlatform: _contactPlatform,
+                      initialHandle: _contactHandle,
+                      onChanged: (platform, handle) {
+                        _contactPlatform = platform;
+                        _contactHandle = handle;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Select the contact platform and enter your user handle (e.g., @username).',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -263,8 +320,14 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _submitForm,
-                  child: const Text('Submit', style: TextStyle(fontSize: 16)),
+                  onPressed: _isUploading ? null : _submitForm,
+                  child: _isUploading
+                      ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  )
+                      : const Text('Submit', style: TextStyle(fontSize: 16)),
                 ),
               ),
 
@@ -282,6 +345,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
     required List<bool> classes,
     required String mode,
     required double hours,
+    required String contactPlatform,
+    required String contactHandle,
   }) async {
     try {
       final tutoringCollection = FirebaseFirestore.instance.collection('Tutoring');
@@ -290,14 +355,16 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
       final newDocRef = tutoringCollection.doc();
 
       await newDocRef.set({
+        'id': newDocRef.id,
         'subject': subject,
         'classes': classes,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'description': description,
         'mode': mode,
         'hours': hours,
+        'contact_platform': contactPlatform,
+        'contact_handle': contactHandle,
         'createdAt': FieldValue.serverTimestamp(),
-        'id': newDocRef.id,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

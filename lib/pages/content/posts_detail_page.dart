@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import '../edit/edit_books_details.dart';
@@ -14,6 +15,8 @@ class PostDetailsPage extends ConsumerStatefulWidget {
   final int price;
   final String description;
   final String imageUrl;
+  final String contactPlatform;
+  final String contactHandle;
   final bool isOfUser;
 
   // Optional fields for books
@@ -31,6 +34,8 @@ class PostDetailsPage extends ConsumerStatefulWidget {
     required this.imageUrl,
     required this.isOfUser,
     required this.id,
+    required this.contactHandle,
+    required this.contactPlatform,
 
     // Optional fields for books
     this.isbn,
@@ -287,7 +292,39 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                           ),
                           elevation: 0,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(widget.contactPlatform),
+                                content: Row(
+                                  children: [
+                                    Expanded(
+                                      child: SelectableText(widget.contactHandle, style: const TextStyle(fontSize: 16)),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.copy),
+                                      tooltip: 'Copy to clipboard',
+                                      onPressed: () {
+                                        Clipboard.setData(ClipboardData(text: widget.contactHandle));
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('Copied to clipboard')),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Close'),
+                                    onPressed: () => Navigator.of(context).pop(),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                         label: Text(
                           'Contact owner',
                           style: TextStyle(fontSize: 16),

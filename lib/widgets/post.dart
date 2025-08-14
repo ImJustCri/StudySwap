@@ -13,6 +13,8 @@ class Post extends ConsumerWidget {
   final String imageUrl;
   final int price;
   final String id;
+  final String contactHandle;
+  final String contactPlatform;
 
   // Optional fields for books
   final String? isbn;
@@ -28,6 +30,8 @@ class Post extends ConsumerWidget {
     required this.price,
     required this.description,
     required this.imageUrl,
+    required this.contactHandle,
+    required this.contactPlatform,
 
     // Optional fields for books
     this.isbn,
@@ -60,6 +64,8 @@ final isOfUser = currentUser != null && currentUser.uid == userId;
               year: year,
               currency: currency,
               isOfUser: isOfUser,
+              contactHandle: contactHandle,
+              contactPlatform: contactPlatform,
             ),
           ),
         );
@@ -166,6 +172,8 @@ final isOfUser = currentUser != null && currentUser.uid == userId;
       isbn: map['isbn'], // nullable
       year: map['year'], // nullable
       currency: map['currency'],
+      contactHandle: map['contact_handle'],
+      contactPlatform: map['contact_platform'],
     );
   }
 }

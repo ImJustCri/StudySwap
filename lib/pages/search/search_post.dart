@@ -10,6 +10,8 @@ class SearchPost extends StatelessWidget {
   final String imageUrl;
   final int price;
   final String id;
+  final String contactHandle;
+  final String contactPlatform;
 
   final String? isbn;
   final int? year;
@@ -24,6 +26,9 @@ class SearchPost extends StatelessWidget {
     required this.price,
     required this.description,
     required this.imageUrl,
+    required this.contactHandle,
+    required this.contactPlatform,
+
     this.isbn,
     this.year,
     this.currency,
@@ -45,6 +50,8 @@ class SearchPost extends StatelessWidget {
           year: year,
           currency: currency,
           isOfUser: false,
+          contactHandle: contactHandle,
+          contactPlatform: contactPlatform,
         ),
       ),
     );
@@ -151,6 +158,8 @@ class SearchPost extends StatelessWidget {
       isbn: map['isbn'],
       year: map['year'],
       currency: map['currency'],
+      contactHandle: map['contact_handle'],
+      contactPlatform: map['contact_platform'],
     );
   }
 }

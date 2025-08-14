@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../compression/posts_compression.dart';
 import '../../providers/subjects_providers.dart';
 import '../../widgets/thumbnail_picker.dart';
-
+import 'contact_input.dart';
 
 class BooksUploadPage extends ConsumerStatefulWidget {
   const BooksUploadPage({super.key});
@@ -31,6 +31,11 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
   File? _selectedImage;
 
+  String? _contactPlatform;
+  String? _contactHandle;
+
+  bool _isUploading = false;
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -43,13 +48,28 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
   }
 
   void _submitForm() async {
-    if (_formKey.currentState!.validate()) {
+    if (_isUploading) return;
+
+    if (_formKey.currentState?.validate() ?? false) {
+      if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please enter your contact handle')),
+        );
+        return;
+      }
+
+      setState(() {
+        _isUploading = true;
+      });
+
       final title = _titleController.text.trim();
       final subject = _selectedSubject ?? _subjectController.text.trim();
       final cost = int.parse(_costController.text.trim());
       final isbn = _isbnController.text.trim();
       final year = int.parse(_yearController.text.trim());
       final description = _descriptionController.text.trim();
+      final contactPlatform = _contactPlatform!;
+      final contactHandle = _contactHandle!;
 
       await _uploadNote(
         title: title,
@@ -58,20 +78,26 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         isbn: isbn,
         year: year,
         description: description,
-        // You can also upload _selectedImage to Firebase Storage here if desired
+        contactPlatform: contactPlatform,
+        contactHandle: contactHandle,
       );
 
-      _formKey.currentState!.reset();
-      setState(() {
-        _selectedSubject = null;
-        _selectedImage = null;
-      });
+      _formKey.currentState?.reset();
       _titleController.clear();
       _costController.clear();
       _subjectController.clear();
       _isbnController.clear();
       _yearController.clear();
       _descriptionController.clear();
+
+      setState(() {
+        _selectedSubject = null;
+        _selectedImage = null;
+        _contactPlatform = null;
+        _contactHandle = null;
+        _isUploading = false;
+      });
+
       Navigator.pop(context);
     }
   }
@@ -108,7 +134,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-
                     TextFormField(
                       controller: _titleController,
                       decoration: const InputDecoration(
@@ -288,13 +313,45 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
+                    const SizedBox(height: 24),
+
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Contact (choose platform and enter your handle)',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    ContactInput(
+                      initialPlatform: _contactPlatform,
+                      initialHandle: _contactHandle,
+                      onChanged: (platform, handle) {
+                        _contactPlatform = platform;
+                        _contactHandle = handle;
+                      },
+                    ),
+                    const SizedBox(height: 4),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Select the contact platform and enter your user handle (e.g., @username).',
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                    ),
                     const SizedBox(height: 16),
 
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _submitForm,
-                        child: Text('Submit', style: TextStyle(fontSize: 16)),
+                        onPressed: _isUploading ? null : _submitForm,
+                        child: _isUploading
+                            ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                            : const Text('Submit', style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
@@ -314,6 +371,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
     required int cost,
     required String isbn,
     required int year,
+    required String contactPlatform,
+    required String contactHandle,
   }) async {
     try {
       final booksCollection = FirebaseFirestore.instance.collection('Books');
@@ -325,7 +384,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         return;
       }
 
-      final imageUid = Uuid().v4();
+      final imageUid = const Uuid().v4();
 
       final compressedImageFile = await PostsCompressor.compressImage(_selectedImage!);
 
@@ -339,7 +398,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
       final newDocRef = booksCollection.doc();
 
-      await newDocRef.update({
+      await newDocRef.set({
+        'id': newDocRef.id,
         'title': title,
         'subject': subject,
         'description': description,
@@ -350,7 +410,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         'createdAt': FieldValue.serverTimestamp(),
         'image_url': imageUrl,
         'currency': "€",
-        'id': newDocRef.id,
+        'contact_platform': contactPlatform,
+        'contact_handle': contactHandle,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
