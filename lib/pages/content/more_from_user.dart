@@ -32,13 +32,16 @@ class MoreFromUser extends ConsumerWidget {
 
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(right: 24),
         child: Row(
+          spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: fetchedPosts.map((post) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: post,
+            return ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 200, maxWidth: 320),
+              child: Material(
+                type: MaterialType.transparency,
+                child: post,
+              ),
             );
           }).toList(),
         ),

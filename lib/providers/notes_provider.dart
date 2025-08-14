@@ -57,8 +57,6 @@ final suggestedNotesProvider = StreamProvider<List<Map<String, dynamic>>>((ref) 
   final favoriteSubjects = favoriteSubjectsAsync.value ?? [];
 
   if (favoriteSubjects.isEmpty) {
-    // Firestore query with empty whereIn list causes errors,
-    // so return empty stream here
     return Stream.value(<Map<String, dynamic>>[]);
   }
 
@@ -78,3 +76,18 @@ final suggestedNotesProvider = StreamProvider<List<Map<String, dynamic>>>((ref) 
   );
 });
 
+// Notes filtered by subject, latest 20 uploads
+final notesBySubjectProvider = StreamProvider.family<List<Map<String, dynamic>>, String>((ref, subject) {
+  final collectionRef = FirebaseFirestore.instance.collection('Notes');
+
+  final query = collectionRef
+      .where('subject', isEqualTo: subject)
+      .orderBy('CreatedAt', descending: true)
+      .limit(20);
+
+  return query.snapshots().map(
+        (querySnapshot) => querySnapshot.docs.map(
+          (doc) => doc.data(),
+    ).toList(),
+  );
+});

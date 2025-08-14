@@ -97,6 +97,37 @@ class AppTheme {
     );
   }
 
+  static TabBarThemeData _sharedTabBarTheme(ColorScheme colorScheme) {
+    return TabBarThemeData(
+      labelColor: colorScheme.onSurface,
+      unselectedLabelColor: colorScheme.secondary,
+      labelStyle: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 18,
+        fontFamily: 'InstrumentSans',
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontWeight: FontWeight.normal,
+        fontSize: 18,
+        fontFamily: 'InstrumentSans',
+      ),
+      indicator: UnderlineTabIndicator(
+        borderSide: BorderSide(
+          color: colorScheme.onSurface,
+          width: 2.0,
+        ),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      overlayColor: WidgetStateProperty.resolveWith<Color?>(
+            (Set<WidgetState> states) {
+          return colorScheme.surface;
+        },
+      ),
+      dividerColor: Colors.transparent,
+    );
+  }
+
+
   static ThemeData get lightTheme {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF082030),
@@ -120,6 +151,7 @@ class AppTheme {
       dialogTheme: _sharedDialogTheme(colorScheme),
       snackBarTheme: _sharedSnackBarData(colorScheme),
       inputDecorationTheme: _sharedInputDecorationTheme(colorScheme),
+      tabBarTheme: _sharedTabBarTheme(colorScheme),
     );
   }
 
@@ -147,6 +179,7 @@ class AppTheme {
       dialogTheme: _sharedDialogTheme(colorScheme),
       snackBarTheme: _sharedSnackBarData(colorScheme),
       inputDecorationTheme: _sharedInputDecorationTheme(colorScheme),
+      tabBarTheme: _sharedTabBarTheme(colorScheme),
     );
   }
 }
