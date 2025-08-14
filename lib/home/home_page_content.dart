@@ -25,24 +25,20 @@ class HomePageContent extends ConsumerWidget {
 
 
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 24.0, top: 24.0, bottom: 24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CircolariCarousel(),
-            const SizedBox(height: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 24.0, top: 24.0),
+            child: const CircolariCarousel(),
+          ),
 
-            const Text("Suggested", style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 8),
+          SuggestedNotesSection(favorites: favorites),
 
-            SuggestedNotesSection(favorites: favorites),
-
-            const SizedBox(height: 24),
-
-            LatestNotesSection(),
-          ],
-        ),
+          const SizedBox(height: 8),
+          LatestNotesSection(),
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }

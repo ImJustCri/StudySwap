@@ -199,43 +199,44 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       decoration: TextDecoration.underline,
                     ),
                   )
-                      : Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfilePage(userId: widget.userId),
+                      : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfilePage(userId: widget.userId),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            username ?? '',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              decoration: TextDecoration.underline,
                             ),
-                          );
-                        },
-                        child: Text(
-                          username!,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            decoration: TextDecoration.underline,
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
-                        child: Text(
-                          "@${school!}",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: theme.colorScheme.onSecondaryContainer,
+                        const SizedBox(width: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.secondaryContainer,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "@${school ?? ''}",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: theme.colorScheme.onSecondaryContainer,
+                            ),
                           ),
                         ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 16),
                   IntrinsicWidth(
@@ -411,14 +412,14 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                         SizedBox(height: 16),
                         Divider(),
                         SizedBox(height: 16),
-                        MoreFromUser(
-                          isBook: widget.isbn != null ? true : false,
-                          userId: widget.userId,
-                          username: username,
-                        ),
                       ],
                     ),
-                  )
+                  ),
+                  MoreFromUser(
+                    isBook: widget.isbn != null ? true : false,
+                    userId: widget.userId,
+                    username: username,
+                  ),
                 ],
               ),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
-import 'package:studyswap/providers/notes_provider.dart';
+import '../providers/notes_provider.dart';
 
 class SuggestedNotesSection extends ConsumerWidget {
   final Set<String> favorites;
@@ -13,9 +13,22 @@ class SuggestedNotesSection extends ConsumerWidget {
     final theme = Theme.of(context);
     final notesAsyncValue = ref.watch(notesProvider);
 
+    Widget buildSectionTitle(String title) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 24.0, bottom: 12, top: 24),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+      );
+    }
+
     if (favorites.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.only(right: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -91,54 +104,55 @@ class SuggestedNotesSection extends ConsumerWidget {
       );
     }
 
-    return notesAsyncValue.when(
-      data: (notesList) {
-        final suggestedPostsData = notesList
-            .where((note) => favorites.contains(note['subject'] as String?))
-            .toList();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildSectionTitle("Suggested Notes"),
+        notesAsyncValue.when(
+          data: (notesList) {
+            final suggestedPostsData = notesList
+                .where((note) => favorites.contains(note['subject'] as String?))
+                .toList();
 
-        if (suggestedPostsData.isEmpty) {
-          return const SizedBox.shrink();
-        }
+            if (suggestedPostsData.isEmpty) {
+              return const SizedBox.shrink();
+            }
 
-        final suggestedPosts =
-        suggestedPostsData.map((note) => Post.fromMap(note)).toList();
+            final suggestedPosts =
+            suggestedPostsData.map((note) => Post.fromMap(note)).toList();
 
-        return SizedBox(
-          height: 260,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(right: 24.0, left: 16.0),
-            physics: const ClampingScrollPhysics(),
-            itemCount: suggestedPosts.length,
-            itemBuilder: (context, index) {
-              final post = suggestedPosts[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Material(
-                  type: MaterialType.transparency,
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: 200,
-                      maxWidth: 320,
+            return SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: suggestedPosts.map((post) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        minWidth: 200,
+                        maxWidth: 320,
+                      ),
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: post,
+                      ),
                     ),
-                    child: post,
-                  ),
-                ),
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
+                  );
+                }).toList(),
+              ),
+            );
+          },
+          loading: () => SizedBox(
+            height: 192,
+            child: const Center(child: CircularProgressIndicator()),
           ),
-        );
-      },
-      loading: () => SizedBox(
-        height: 192,
-        child: const Center(child: CircularProgressIndicator()),
-      ),
-      error: (error, _) => SizedBox(
-        height: 192,
-        child: Center(child: Text('Error loading suggestions: $error')),
-      ),
+          error: (error, _) => SizedBox(
+            height: 192,
+            child: Center(child: Text('Error loading suggestions: $error')),
+          ),
+        ),
+      ],
     );
   }
 }

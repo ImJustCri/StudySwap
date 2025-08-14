@@ -21,18 +21,18 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
     final favoriteSubjectsAsync = ref.watch(favoriteSubjectsProvider);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(left: 24.0, top: 24.0, right: 24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            favoriteSubjectsAsync.when(
-              data: (favoriteSubjects) {
-                final chipsSubjects = [null, ...favoriteSubjects];
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          favoriteSubjectsAsync.when(
+            data: (favoriteSubjects) {
+              final chipsSubjects = [null, ...favoriteSubjects];
 
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(bottom: 12),
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
                   child: Row(
                     children: chipsSubjects.map((subject) {
                       final isSelected = selectedSubject == subject;
@@ -52,13 +52,16 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
                       );
                     }).toList(),
                   ),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, _) => Center(child: Text('Error loading favorite subjects: $error')),
-            ),
+                ),
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, _) => Center(child: Text('Error loading favorite subjects: $error')),
+          ),
 
-            Row(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
@@ -77,42 +80,61 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
                 ),
               ],
             ),
+          ),
 
-            const SizedBox(height: 8),
+          const SizedBox(height: 8),
 
-            booksAsyncValue.when(
-              data: (bookList) {
-                final filteredBooks = selectedSubject == null
-                    ? bookList
-                    : bookList.where(
-                      (book) => book['subject'] == selectedSubject,
-                ).toList();
+          booksAsyncValue.when(
+            data: (bookList) {
+              final filteredBooks = selectedSubject == null
+                  ? bookList
+                  : bookList.where(
+                    (book) => book['subject'] == selectedSubject,
+              ).toList();
 
-                if (filteredBooks.isEmpty) {
-                  return const Center(child: Text('No books available for this subject.'));
-                }
-
-                final fetchedPosts = filteredBooks.map((noteData) => Post.fromMap(noteData)).toList();
-
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.only(right: 24),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: fetchedPosts.map((post) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 16),
-                        child: post,
-                      );
-                    }).toList(),
+              if (filteredBooks.isEmpty) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 64.0),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.no_sim_rounded,
+                          size: 48,
+                        ),
+                        SizedBox(height: 16),
+                        Text('No books uploaded for this subject.'),
+                      ],
+                    ),
                   ),
                 );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, _) => Center(child: Text('Error loading books: $error')),
-            ),
-          ],
-        ),
+              }
+
+              final fetchedPosts = filteredBooks.map((noteData) => Post.fromMap(noteData)).toList();
+
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  spacing: 16,
+                  children: fetchedPosts.map((post) {
+                    return ConstrainedBox(
+                      constraints: const BoxConstraints(minWidth: 200, maxWidth: 320),
+                      child: Material(
+                        type: MaterialType.transparency,
+                        child: post,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              );
+
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, _) => Center(child: Text('Error loading books: $error')),
+          ),
+
+        ],
       ),
     );
   }
