@@ -37,8 +37,15 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     super.dispose();
   }
 
+  bool _isUploading = false;
+
   void _submitForm() async {
+    if (_isUploading) return;
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isUploading = true;
+      });
+
       final title = _titleController.text.trim();
       final subject = _selectedSubject ?? _subjectController.text.trim();
       final cost = int.parse(_costController.text.trim());
@@ -51,11 +58,11 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         description: description,
       );
 
-      // After upload, clear the form and reset
       _formKey.currentState!.reset();
       setState(() {
         _selectedSubject = null;
         _selectedImage = null;
+        _isUploading = false;
       });
       _titleController.clear();
       _costController.clear();
