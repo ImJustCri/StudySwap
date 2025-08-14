@@ -110,15 +110,15 @@ class Auth {
       if(userCredential!=null){
         // Call to delete the content in Users
         await FirebaseFirestore.instance.collection('Users').doc(userCredential.uid).delete();
-        // Call to delete the account
-        await userCredential.delete();
 
         // Call to delete the user's uploads
         final firestore = FirebaseFirestore.instance;
-
         await deleteUploads(userCredential, firestore.collection("Notes"));
         await deleteUploads(userCredential, firestore.collection("Books"));
         await deleteUploads(userCredential, firestore.collection("Tutoring"));
+
+        // Call to delete the account
+        await userCredential.delete();
       }
     }on FirebaseAuthException catch (ex) {
       debugPrint('Exception in deleteAccount: $ex');
