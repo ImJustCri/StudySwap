@@ -25,8 +25,8 @@ class ReviewList extends ConsumerWidget {
 
             return reviewerDataAsync.when(
               data: (reviewerData) {
-                final username = (reviewerData?['username'] ?? "idk") as String;
-                final school = (reviewerData?['school'] ?? '@school') as String;
+                final username = (reviewerData?['username'] ?? "deleted") as String;
+                final school = (reviewerData?['school'] ?? 'user') as String;
 
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,7 +35,7 @@ class ReviewList extends ConsumerWidget {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ProfilePage(userId: reviewerId),
