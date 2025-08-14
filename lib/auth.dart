@@ -55,7 +55,8 @@ class Auth {
           'email': userCredential.user!.email,
           'darkmode': false,
           'favorite_subjects': [],
-          'token':token,
+          'token': token,
+          'user_id': uid,
         });
       }else{
         await userDocRef.update({
