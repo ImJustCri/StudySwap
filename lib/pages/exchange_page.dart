@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../providers/books_provider.dart';
 import '../providers/subjects_providers.dart';
-import '../widgets/view_all_uploads.dart';
 
 class ExchangePage extends ConsumerStatefulWidget {
   const ExchangePage({super.key});
@@ -59,28 +58,18 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
             error: (error, _) => Center(child: Text('Error loading favorite subjects: $error')),
           ),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  "Latest books",
-                  style: TextStyle(fontSize: 18),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ViewAllUploadsPage(notesProvider: booksProvider, "Books"),
-                      ),
-                    );
-                  },
-                  child: const Text('View all'),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       const Text(
+          //         "Latest books",
+          //         style: TextStyle(fontSize: 18),
+          //       ),
+          //     ],
+          //   ),
+          // ),
 
           const SizedBox(height: 8),
 
@@ -97,7 +86,7 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
                   padding: const EdgeInsets.only(top: 64.0),
                   child: Center(
                     child: Column(
-                      children: [
+                      children: const [
                         Icon(
                           Icons.no_sim_rounded,
                           size: 48,
@@ -110,30 +99,31 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
                 );
               }
 
-              final fetchedPosts = filteredBooks.map((noteData) => Post.fromMap(noteData)).toList();
+              final posts = filteredBooks.map((bookData) => Post.fromMap(bookData)).toList();
 
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+              // Calculate widths for items in 2 columns with spacing/padding
+              final double screenWidth = MediaQuery.of(context).size.width;
+              final double horizontalPadding = 24 * 2; // left + right padding
+              final double spacingBetweenItems = 16;
+              final double itemWidth = (screenWidth - horizontalPadding - spacingBetweenItems) / 2;
+
+              return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Row(
-                  spacing: 16,
-                  children: fetchedPosts.map((post) {
-                    return ConstrainedBox(
-                      constraints: const BoxConstraints(minWidth: 200, maxWidth: 320),
-                      child: Material(
-                        type: MaterialType.transparency,
-                        child: post,
-                      ),
+                child: Wrap(
+                  spacing: spacingBetweenItems,
+                  runSpacing: 16,
+                  children: posts.map((post) {
+                    return SizedBox(
+                      width: itemWidth,
+                      child: post,
                     );
                   }).toList(),
                 ),
               );
-
             },
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, _) => Center(child: Text('Error loading books: $error')),
           ),
-
         ],
       ),
     );

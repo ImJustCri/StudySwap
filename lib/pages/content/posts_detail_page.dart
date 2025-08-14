@@ -262,19 +262,22 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ElevatedButton.icon(
-                        icon: Icon(Icons.shopping_cart_rounded),
-                        onPressed: () {},
-                        label: const Text(
-                          'Buy this note',
-                          style: TextStyle(fontSize: 16),
+                      if (widget.isbn == null || widget.isbn!.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 24.0),
+                        child: ElevatedButton.icon(
+                          icon: Icon(Icons.shopping_cart_rounded),
+                          onPressed: () {},
+                          label: const Text(
+                            'Buy this note',
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       ElevatedButton.icon(
                         icon: Icon(Icons.messenger_outline_rounded),
                         style: ElevatedButton.styleFrom(
