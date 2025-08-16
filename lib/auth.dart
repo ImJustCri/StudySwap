@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:studyswap/notifications/notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
 class Auth {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -134,8 +134,12 @@ class Auth {
         // Create a batch
         final batch = FirebaseFirestore.instance.batch();
 
-        // Add each upload's deletion to the batch
         for (final doc in querySnapshot.docs) {
+          await Supabase.instance.client
+              .storage
+              .from('thumbnails')
+              .remove(doc["id"]);
+
           batch.delete(doc.reference);
         }
 
