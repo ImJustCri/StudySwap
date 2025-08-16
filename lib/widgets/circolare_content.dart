@@ -48,7 +48,7 @@ class CircolareContent extends StatelessWidget {
                   processedTitle,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
