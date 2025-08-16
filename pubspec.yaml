@@ -30,7 +30,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_messaging: ^14.9.4
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
   flutter_colorpicker: ^1.0.3
@@ -56,6 +55,9 @@ dependencies:
   flutter_native_splash: ^2.4.6
   flutter_svg: ^2.2.0
   font_awesome_flutter: ^10.9.0
+  file_picker: ^8.0.7
+  syncfusion_flutter_pdfviewer: ^27.2.5
+  firebase_messaging: ^14.9.4
 
 dev_dependencies:
   flutter_test:
