@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/data_provider.dart';
 import 'package:studyswap/providers/subjects_providers.dart';
@@ -91,3 +92,21 @@ final notesBySubjectProvider = StreamProvider.family<List<Map<String, dynamic>>,
     ).toList(),
   );
 });
+
+// Every bought notes in the database
+final boughtNotesProvider = StreamProvider<List<Map<String, dynamic>>>((ref) {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    return Stream.value([]);
+  }
+
+  var collectionRef = FirebaseFirestore.instance
+      .collection('Users')
+      .doc(user.uid)
+      .collection("Bought");
+
+  return collectionRef.snapshots().map(
+        (querySnapshot) => querySnapshot.docs.map((doc) => doc.data()).toList(),
+  );
+});
+
