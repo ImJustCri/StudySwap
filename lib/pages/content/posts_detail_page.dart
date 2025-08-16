@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import '../../providers/notes_provider.dart';
+import '../../services/posts_manager.dart';
 import '../bought/transaction.dart';
 import '../edit/edit_books_details.dart';
 import '../edit/edit_notes_details.dart';
@@ -119,42 +120,83 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
         title: const Text('Details'),
         actions: [
           if (widget.isOfUser)
-            IconButton(
-              onPressed: () {
-                widget.isbn == null
-                    ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditNotesPage(
-                      noteId: widget.id,
-                      title: widget.title,
-                      subject: widget.subject,
-                      userId: widget.userId,
-                      price: widget.price,
-                      description: widget.description,
-                      imageUrl: widget.imageUrl,
-                    ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    widget.isbn == null
+                        ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditNotesPage(
+                          noteId: widget.id,
+                          title: widget.title,
+                          subject: widget.subject,
+                          userId: widget.userId,
+                          price: widget.price,
+                          description: widget.description,
+                          imageUrl: widget.imageUrl,
+                        ),
+                      ),
+                    )
+                        : Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditBooksPage(
+                          bookId: widget.id,
+                          title: widget.title,
+                          subject: widget.subject,
+                          userId: widget.userId,
+                          price: widget.price,
+                          description: widget.description,
+                          imageUrl: widget.imageUrl,
+                          isbn: widget.isbn,
+                          year: widget.year,
+                          currency: widget.currency,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.edit),
+                ),
+                IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirm Delete'),
+                          content: const Text('Are you sure you want to delete this post?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                final postsManager = PostsManager();
+                                widget.isbn != null
+                                    ? postsManager.deleteBook(widget.id)
+                                : postsManager.deleteNote(widget.id);
+
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.delete_rounded,
+                    color: Colors.redAccent,
                   ),
-                )
-                    : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditBooksPage(
-                      bookId: widget.id,
-                      title: widget.title,
-                      subject: widget.subject,
-                      userId: widget.userId,
-                      price: widget.price,
-                      description: widget.description,
-                      imageUrl: widget.imageUrl,
-                      isbn: widget.isbn,
-                      year: widget.year,
-                      currency: widget.currency,
-                    ),
-                  ),
-                );
-              },
-              icon: Icon(Icons.edit),
+                ),
+              ],
             )
         ],
       ),
