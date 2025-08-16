@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
-import 'package:studyswap/services/coins_manager.dart';
 import '../../providers/notes_provider.dart';
 import '../bought/transaction.dart';
 import '../edit/edit_books_details.dart';

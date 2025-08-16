@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:studyswap/pages/profile/profile_page.dart';
 import 'package:studyswap/pages/search/results/books_results.dart';
 import 'package:studyswap/pages/search/results/notes_results.dart';
 import 'package:studyswap/pages/search/results/profile_results.dart';

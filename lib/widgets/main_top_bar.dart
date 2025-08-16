@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:studyswap/coins_page.dart';
-import 'package:studyswap/misc/resources.dart';
 import 'package:studyswap/providers/data_provider.dart';
 
 class TopBar extends ConsumerWidget implements PreferredSizeWidget {
