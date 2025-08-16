@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:studyswap/first_run.dart';
 import 'package:studyswap/pages/about_app.dart';
 import 'package:studyswap/pages/authentication/change_password.dart';
 import 'package:studyswap/pages/authentication/register.dart';
 import 'package:studyswap/pages/bought/bought_notes.dart';
+import 'package:studyswap/pages/no_internet_connection.dart';
 import 'package:studyswap/pages/onboarding/onboarding_page.dart';
 import 'package:studyswap/pages/profile/edit_profile.dart';
 import 'package:studyswap/pages/settings/favorite_subjects.dart';
@@ -32,11 +36,35 @@ class MyApp extends ConsumerStatefulWidget {
 
 class _MyAppState extends ConsumerState<MyApp> {
   bool splashRemoved = false;
+  bool isConnectedToInternet = false;
+
+  StreamSubscription? _internetConnectionStreamSubscription;
 
   @override
   void initState() {
     super.initState();
     setOptimalDisplayMode();
+    _internetConnectionStreamSubscription =
+        InternetConnection().onStatusChange.listen((event) {
+          switch (event) {
+            case InternetStatus.connected:
+              setState(() {
+                isConnectedToInternet = true;
+              });
+              break;
+            case InternetStatus.disconnected:
+              setState(() {
+                isConnectedToInternet = false;
+              });
+              break;
+          }
+        });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _internetConnectionStreamSubscription?.cancel();
   }
 
   Future<void> setOptimalDisplayMode() async {
@@ -115,7 +143,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         '/change-password': (context) => const ChangePassword(),
         '/bought-notes': (context) => BoughtNotes(),
       },
-      home: const LandingPage(),
+      home: isConnectedToInternet ? LandingPage() : NoInternetConnection(),
     );
   }
 }
