@@ -53,9 +53,20 @@ class LatestNotesSection extends ConsumerWidget {
         lastNotesAsyncValue.when(
           data: (notesList) {
             if (notesList.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
-                child: Center(child: Text('No notes available.')),
+              return Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Center(
+                  child: Column(
+                    children: const [
+                      Icon(
+                        Icons.no_sim_rounded,
+                        size: 48,
+                      ),
+                      SizedBox(height: 16),
+                      Text('No notes available.'),
+                    ],
+                  ),
+                ),
               );
             }
 

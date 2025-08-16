@@ -115,7 +115,21 @@ class SuggestedNotesSection extends ConsumerWidget {
                 .toList();
 
             if (suggestedPostsData.isEmpty) {
-              return const SizedBox.shrink();
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 24.0),
+                child: Center(
+                  child: Column(
+                    children: const [
+                      Icon(
+                        Icons.no_sim_rounded,
+                        size: 48,
+                      ),
+                      SizedBox(height: 16),
+                      Text('No suggested notes.'),
+                    ],
+                  ),
+                ),
+              );
             }
 
             final suggestedPosts =

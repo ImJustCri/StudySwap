@@ -24,7 +24,14 @@ class CoinsPage extends StatelessWidget {
             // Coins display container
             Container(
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer,
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primaryContainer,
+                    theme.colorScheme.tertiaryFixedDim.withAlpha(80),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomLeft,
+                ),
                 borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.all(24.0),
@@ -37,11 +44,13 @@ class CoinsPage extends StatelessWidget {
                     height: 48,
                   ),
                   const SizedBox(width: 16),
-                  Text(
-                    coins,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 48,
+                  Flexible(
+                    child: Text(
+                      coins,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 32,
+                      ),
                     ),
                   ),
                 ],
