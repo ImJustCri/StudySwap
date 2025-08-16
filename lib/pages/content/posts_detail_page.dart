@@ -3,6 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
+import 'package:studyswap/services/coins_manager.dart';
+import '../../providers/notes_provider.dart';
+import '../bought/transaction.dart';
 import '../edit/edit_books_details.dart';
 import '../edit/edit_notes_details.dart';
 import 'more_from_user.dart';
@@ -96,6 +99,21 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final boughtNotesAsync = ref.watch(boughtNotesProvider);
+
+    bool isBought = false;
+
+    boughtNotesAsync.when(
+        data: (boughtNotesList) {
+          isBought = boughtNotesList.any((note) => note['id'] == widget.id);
+        },
+        loading: () {
+          isBought = false;
+        },
+        error: (error, stack) {
+          isBought = false;
+        }
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -270,13 +288,36 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                         padding: const EdgeInsets.only(top: 24.0),
                         child: ElevatedButton.icon(
                           icon: Icon(Icons.shopping_cart_rounded),
-                          onPressed: () {},
-                          label: const Text(
+                          onPressed: isBought ? null : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransactionPage(
+                                  noteId: widget.id,
+                                  price: widget.price,
+                                  title: widget.title,
+                                  subject: widget.subject,
+                                  sellerId: widget.userId,
+                                ),
+                              ),
+                            );
+                          },
+
+                          label: isBought ? const Text(
+                            'Note already bought',
+                            style: TextStyle(fontSize: 16),
+                          ) : const Text(
                             'Buy this note',
                             style: TextStyle(fontSize: 16),
                           ),
+                          style: isBought
+                              ? ElevatedButton.styleFrom(
+                            backgroundColor: theme.disabledColor,
+                          )
+                              : null,
                         ),
                       ),
+
                       SizedBox(height: 16),
                       ElevatedButton.icon(
                         icon: Icon(Icons.messenger_outline_rounded),

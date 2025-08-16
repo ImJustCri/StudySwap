@@ -7,6 +7,7 @@ import 'package:studyswap/first_run.dart';
 import 'package:studyswap/pages/about_app.dart';
 import 'package:studyswap/pages/authentication/change_password.dart';
 import 'package:studyswap/pages/authentication/register.dart';
+import 'package:studyswap/pages/bought/bought_notes.dart';
 import 'package:studyswap/pages/onboarding/onboarding_page.dart';
 import 'package:studyswap/pages/profile/edit_profile.dart';
 import 'package:studyswap/pages/settings/favorite_subjects.dart';
@@ -112,6 +113,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         '/about-app': (context) => const AboutAppPage(),
         '/favorite-subjects': (context) => const FavoriteSubjectsSettingsPage(),
         '/change-password': (context) => const ChangePassword(),
+        '/bought-notes': (context) => BoughtNotes(),
       },
       home: const LandingPage(),
     );
