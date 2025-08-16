@@ -17,37 +17,35 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
     Widget coinsButton(String coins) {
       return ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: 180,
+          maxWidth: 600,
         ),
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(64.0),
             color: theme.colorScheme.onPrimaryContainer,
           ),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(64.0),
-                ),
+          child: TextButton.icon(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(64.0),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => CoinsPage(coins)),
-                );
-              },
-              icon: SvgPicture.asset(
-                'assets/coin_icon.svg',
-                colorFilter: ColorFilter.mode(theme.colorScheme.surface, BlendMode.srcIn),
-                width: 24,
-                height: 24,
-              ),
-              label: Text(
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CoinsPage(coins)),
+              );
+            },
+            icon: SvgPicture.asset(
+              'assets/coin_icon.svg',
+              colorFilter: ColorFilter.mode(theme.colorScheme.surface, BlendMode.srcIn),
+              width: 24,
+              height: 24,
+            ),
+            label: SizedBox(
+              child: Text(
                 coins,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
@@ -72,13 +70,13 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
       ),
       title: null,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.notifications),
-          color: theme.colorScheme.onPrimaryContainer,
-          onPressed: () {
-            Navigator.pushNamed(context, '/notifications');
-          },
-        ),
+        // IconButton(
+        //   icon: const Icon(Icons.notifications),
+        //   color: theme.colorScheme.onPrimaryContainer,
+        //   onPressed: () {
+        //     Navigator.pushNamed(context, '/notifications');
+        //   },
+        // ),
         PopupMenuButton<String>(
           icon: Icon(Icons.more_vert, color: theme.colorScheme.onPrimaryContainer),
           onSelected: (value) {
