@@ -342,21 +342,23 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
 
       final compressedImageFile = await PostsCompressor.compressImage(_selectedImage!);
 
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
       await Supabase.instance.client.storage
           .from('thumbnails')
-          .upload(noteUid, compressedImageFile);
+          .upload("$userId/$noteUid", compressedImageFile);
 
       await Supabase.instance.client.storage
           .from('notes')
-          .upload(noteUid, _selectedNote!);
+          .upload("$userId/$noteUid", _selectedNote!);
 
       final noteUrl = Supabase.instance.client.storage
           .from('notes')
-          .getPublicUrl(noteUid);
+          .getPublicUrl("$userId/$noteUid");
 
       final imageUrl = Supabase.instance.client.storage
           .from('thumbnails')
-          .getPublicUrl(noteUid);
+          .getPublicUrl("$userId/$noteUid");
 
       final newDocRef = notesCollection.doc(noteUid);
 

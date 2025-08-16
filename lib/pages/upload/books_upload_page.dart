@@ -388,13 +388,15 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
       final compressedImageFile = await PostsCompressor.compressImage(_selectedImage!);
 
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
       await Supabase.instance.client.storage
           .from('thumbnails')
-          .upload(noteUid, compressedImageFile);
+          .upload("$userId/$noteUid", compressedImageFile);
 
       final imageUrl = Supabase.instance.client.storage
           .from('thumbnails')
-          .getPublicUrl(noteUid);
+          .getPublicUrl("$userId/$noteUid");
 
       final newDocRef = booksCollection.doc(noteUid);
 
