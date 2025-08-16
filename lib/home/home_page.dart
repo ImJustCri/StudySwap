@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/providers/circolari_feed_provider.dart';
-import '../main_top_bar.dart';
+import '../widgets/main_top_bar.dart';
 import '../pages/settings/favorite_subjects.dart';
 import '../providers/notes_provider.dart';
 import '../widgets/expandable_menu.dart';
@@ -9,7 +9,7 @@ import 'home_page_content.dart';
 import 'package:studyswap/pages/search/search_page.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import 'package:studyswap/pages/exchange_page.dart';
-import '../bottom_nav_bar.dart';
+import '../widgets/bottom_nav_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MyHomePage extends ConsumerStatefulWidget {
