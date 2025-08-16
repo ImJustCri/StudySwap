@@ -10,9 +10,11 @@ class TutoringTile extends ConsumerWidget {
   final String userId;
   final String tutoringId;
   final num hours;
+  final String contactHandle;
+  final String contactPlatform;
   final String mode;
 
-  const TutoringTile({
+  const TutoringTile( {
     super.key,
     required this.title,
     required this.isYearSelected,
@@ -21,6 +23,8 @@ class TutoringTile extends ConsumerWidget {
     required this.tutoringId,
     required this.hours,
     required this.mode,
+    required this.contactHandle,
+    required this.contactPlatform
   });
 
   @override
@@ -83,6 +87,8 @@ class TutoringTile extends ConsumerWidget {
               tutoringId: tutoringId,
               hours: hours,
               mode: mode,
+              contactHandle: contactHandle,
+              contactPlatform: contactPlatform,
             ),
           ),
         );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
+import 'package:studyswap/services/posts_manager.dart';
 
 import '../edit/edit_tutoring_details.dart';
 
@@ -12,6 +14,8 @@ class TutoringDetailPage extends StatefulWidget {
   final String userId;
   final num hours;
   final String mode;
+  final String contactHandle;
+  final String contactPlatform;
   final bool isOfUser;
 
   const TutoringDetailPage({
@@ -24,6 +28,8 @@ class TutoringDetailPage extends StatefulWidget {
     required this.isOfUser,
     required this.hours,
     required this.mode,
+    required this.contactHandle,
+    required this.contactPlatform,
   });
 
   @override
@@ -126,7 +132,10 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pop(true);
+                                final postsManager = PostsManager();
+                                postsManager.deleteTutoring(widget.tutoringId);
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               },
                               child: const Text('Yes'),
                             ),
@@ -268,7 +277,37 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             elevation: 0,
                           ),
                           onPressed: () {
-                            // TODO: handle contact owner
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text(widget.contactPlatform),
+                                  content: Row(
+                                    children: [
+                                      Expanded(
+                                        child: SelectableText(widget.contactHandle, style: const TextStyle(fontSize: 16)),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.copy),
+                                        tooltip: 'Copy to clipboard',
+                                        onPressed: () {
+                                          Clipboard.setData(ClipboardData(text: widget.contactHandle));
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Copied to clipboard')),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('Close'),
+                                      onPressed: () => Navigator.of(context).pop(),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           },
                           icon: const Icon(Icons.messenger_outline_rounded),
                           label: const Text('Contact owner',

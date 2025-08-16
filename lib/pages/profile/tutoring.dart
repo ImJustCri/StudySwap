@@ -51,6 +51,8 @@ class Tutoring extends ConsumerWidget {
                 tutoringId: tutoring['id'] ?? "",
                 hours: tutoring['hours'] ?? 0,
                 mode: tutoring['mode'] ?? "Not specified",
+                contactHandle: tutoring['contact_handle'],
+                contactPlatform: tutoring['contact_platform'],
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 16),
