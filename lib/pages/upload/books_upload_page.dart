@@ -5,8 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../compression/posts_compression.dart';
 import '../../providers/subjects_providers.dart';
+import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
 import 'contact_input.dart';
 
@@ -384,22 +384,22 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         return;
       }
 
-      final imageUid = const Uuid().v4();
+      final noteUid = const Uuid().v4();
 
       final compressedImageFile = await PostsCompressor.compressImage(_selectedImage!);
 
       await Supabase.instance.client.storage
           .from('thumbnails')
-          .upload(imageUid, compressedImageFile);
+          .upload(noteUid, compressedImageFile);
 
       final imageUrl = Supabase.instance.client.storage
           .from('thumbnails')
-          .getPublicUrl(imageUid);
+          .getPublicUrl(noteUid);
 
-      final newDocRef = booksCollection.doc();
+      final newDocRef = booksCollection.doc(noteUid);
 
       await newDocRef.set({
-        'id': newDocRef.id,
+        'id': noteUid,
         'title': title,
         'subject': subject,
         'description': description,
