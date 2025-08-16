@@ -1,12 +1,13 @@
 import 'dart:io';
+import 'package:studyswap/pages/upload/note_picker.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import '../../compression/posts_compression.dart';
 import '../../providers/subjects_providers.dart';
+import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
 import 'contact_input.dart';
 
@@ -27,6 +28,8 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
 
   String? _selectedSubject;
   File? _selectedImage;
+  File? _selectedNote;
+
 
   String? _contactPlatform;
   String? _contactHandle;
@@ -52,6 +55,14 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         );
         return;
       }
+
+      if (_selectedNote == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a note file before uploading')),
+        );
+        return;
+      }
+
 
       setState(() {
         _isUploading = true;
@@ -276,6 +287,15 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    NotePicker(
+                      initialFile: _selectedNote,
+                      onFilePicked: (file) {
+                        setState(() {
+                          _selectedNote = file;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
 
                     SizedBox(
                       width: double.infinity,
@@ -318,22 +338,30 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         return;
       }
 
-      final imageUid = const Uuid().v4();
+      final noteUid = const Uuid().v4();
 
       final compressedImageFile = await PostsCompressor.compressImage(_selectedImage!);
 
       await Supabase.instance.client.storage
           .from('thumbnails')
-          .upload(imageUid, compressedImageFile);
+          .upload(noteUid, compressedImageFile);
+
+      await Supabase.instance.client.storage
+          .from('notes')
+          .upload(noteUid, _selectedNote!);
+
+      final noteUrl = Supabase.instance.client.storage
+          .from('notes')
+          .getPublicUrl(noteUid);
 
       final imageUrl = Supabase.instance.client.storage
           .from('thumbnails')
-          .getPublicUrl(imageUid);
+          .getPublicUrl(noteUid);
 
-      final newDocRef = notesCollection.doc();
+      final newDocRef = notesCollection.doc(noteUid);
 
       await newDocRef.set({
-        'id': newDocRef.id,
+        'id': noteUid,
         'title': title,
         'subject': subject,
         'price': cost,
@@ -343,6 +371,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         'contact_handle': contactHandle,
         'createdAt': FieldValue.serverTimestamp(),
         'image_url': imageUrl,
+        'note_url': noteUrl,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
