@@ -83,7 +83,7 @@ final notesBySubjectProvider = StreamProvider.family<List<Map<String, dynamic>>,
 
   final query = collectionRef
       .where('subject', isEqualTo: subject)
-      .orderBy('CreatedAt', descending: true)
+      .orderBy('createdAt', descending: true)
       .limit(20);
 
   return query.snapshots().map(
