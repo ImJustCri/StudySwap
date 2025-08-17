@@ -257,6 +257,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                     ],
                   ),
                   const SizedBox(height: 24),
+                  if (!widget.isOfUser)
                   Row(
                     children: [
                       Expanded(

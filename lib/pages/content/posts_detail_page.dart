@@ -321,6 +321,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       ),
                     ),
                   ),
+                  if (!widget.isOfUser)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
