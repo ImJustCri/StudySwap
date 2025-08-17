@@ -35,15 +35,9 @@ class AboutAppPage extends StatelessWidget {
                 height: 192,
               ),
             ),
-            const SizedBox(height: 24),
-            const Text(
-              'Hello!',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 24),
-            ),
             const SizedBox(height: 8),
             Text(
-              'v. yet to be released',
+              'v.1.0.0-alpha',
               style: TextStyle(
                 fontSize: 12,
                 color: theme.textTheme.bodySmall?.color ?? Colors.grey,
