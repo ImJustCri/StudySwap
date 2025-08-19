@@ -66,13 +66,13 @@ class SearchPost extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       onTap: () => _handleTap(context),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
+        margin: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: 128,
-              height: 88,
+              width: 104,
+              height: 64,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: imageUrl.isNotEmpty && imageUrl != "Empty"
