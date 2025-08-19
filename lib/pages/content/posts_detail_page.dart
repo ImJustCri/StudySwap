@@ -105,7 +105,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
 
     boughtNotesAsync.when(
         data: (boughtNotesList) {
-          isBought = boughtNotesList.any((note) => note['id'] == widget.id);
+          isBought = boughtNotesList.any((note) => note['note_id'] == widget.id);
         },
         loading: () {
           isBought = false;
