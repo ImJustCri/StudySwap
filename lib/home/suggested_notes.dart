@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:studyswap/providers/books_provider.dart';
+import 'package:studyswap/providers/user_provider.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../providers/notes_provider.dart';
 
@@ -11,7 +13,8 @@ class SuggestedNotesSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final notesAsyncValue = ref.watch(notesProvider);
+    final notesAsyncValue = ref.watch(last20NotesProvider);
+    final currentUserID = ref.watch(userProvider).value!.uid;
 
     Widget buildSectionTitle(String title) {
       return Padding(
@@ -111,7 +114,8 @@ class SuggestedNotesSection extends ConsumerWidget {
         notesAsyncValue.when(
           data: (notesList) {
             final suggestedPostsData = notesList
-                .where((note) => favorites.contains(note['subject'] as String?))
+                .where((note) => favorites.contains(note['subject'] as String?)
+                && (note['user_id'] as String?) != currentUserID)
                 .toList();
 
             if (suggestedPostsData.isEmpty) {
