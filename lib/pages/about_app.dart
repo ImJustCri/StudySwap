@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-class AboutAppPage extends StatelessWidget {
-  const AboutAppPage({Key? key}) : super(key: key);
+class AboutAppPage extends StatefulWidget {
+  const AboutAppPage({super.key});
+
+  @override
+  State<AboutAppPage> createState() => _AboutAppPageState();
+}
+
+class _AboutAppPageState extends State<AboutAppPage> {
+  PackageInfo _packageInfo = PackageInfo(
+    version: 'Unknown version',
+    buildNumber: 'Unknown build number',
+    appName: 'App',
+    packageName: 'Unknown package name',
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
   Future<void> _launchURL() async {
     final Uri url = Uri.parse('https://studyswap.it');
@@ -18,9 +44,9 @@ class AboutAppPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: const Text(
-          'About App',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          'About ${_packageInfo.appName}',
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
       body: Padding(
@@ -37,7 +63,7 @@ class AboutAppPage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'v.1.0.0-alpha',
+              _packageInfo.version,
               style: TextStyle(
                 fontSize: 12,
                 color: theme.textTheme.bodySmall?.color ?? Colors.grey,
@@ -62,7 +88,8 @@ class AboutAppPage extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               ),
               icon: Icon(
                 Icons.link,
