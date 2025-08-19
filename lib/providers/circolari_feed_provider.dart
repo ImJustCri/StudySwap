@@ -34,10 +34,10 @@ final circolariFeedProvider =
 
   // Mappatura dei dati in una lista di mappe
   return items.map((node) {
-    final title = node.findElements('title').first.text;
-    final link = node.findElements('link').first.text;
+    final title = node.findElements('title').first.innerText;
+    final link = node.findElements('link').first.innerText;
     final pubDate = node.findElements('pubDate').isNotEmpty
-        ? node.findElements('pubDate').first.text
+        ? node.findElements('pubDate').first.innerText
         : '';
     return {'title': title, 'link': link, 'pubDate': pubDate};
   }).toList();
