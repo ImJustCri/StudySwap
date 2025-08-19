@@ -1,59 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:dart_rss/dart_rss.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/circolare_content.dart';
+import '../providers/circolari_feed_provider.dart';
 
-final _httpClient = http.Client();
-
-final circolariFeedProvider = FutureProvider<List<RssItem>>((ref) async {
-  final user = FirebaseAuth.instance.currentUser;
-  if (user == null || user.email == null) {
-    throw Exception("User not logged in");
-  }
-  final emailDomain = user.email!.split('@')[1];
-
-  final response =
-  await _httpClient.get(Uri.parse('https://$emailDomain/circolare/rss/'));
-
-  if (response.statusCode != 200) {
-    throw Exception('Failed to load feed: ${response.statusCode}');
-  }
-
-  return RssFeed.parse(response.body).items;
-});
-
-// Helper to convert RSS pubDate to readable format
+/// Funzione helper per convertire la data del feed RSS in formato leggibile
 String? readableDate(String? date) {
-  if (date == null) return null;
+  if (date == null || date.isEmpty) return null;
   try {
-    DateTime dateTime = DateFormat("EEE, dd MMM yyyy HH:mm:ss Z").parse(date);
+    // Parsing della data dal formato RSS standard
+    DateTime dateTime =
+        DateFormat("EEE, dd MMM yyyy HH:mm:ss Z").parse(date);
+    // Ritorna la data in formato gg/mm/yyyy
     return DateFormat("dd/MM/yyyy").format(dateTime);
   } catch (e) {
     return null;
   }
 }
 
+/// Widget Carousel che mostra le circolari in orizzontale
+/// Gestisce loading, errore e visualizzazione dei dati
 class CircolariCarousel extends ConsumerWidget {
   const CircolariCarousel({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    // Osserva il provider del feed RSS
     final feedAsync = ref.watch(circolariFeedProvider);
 
     return feedAsync.when(
+      // Caso: dati caricati correttamente
       data: (items) {
         if (items.isEmpty) {
-          return const SizedBox.shrink();
+          return const SizedBox.shrink(); // Nessuna circolare disponibile
         }
 
+        // Mappatura dei dati in widget CircolareContent
         final itemWidgets = items.map((item) {
-          final title = item.title ?? 'No title';
-          final date = readableDate(item.pubDate) ?? 'No date';
+          final title = item['title'] ?? 'No title';
+          final date = readableDate(item['pubDate']) ?? 'No date';
 
           return CircolareContent(
             date: date,
@@ -61,6 +50,7 @@ class CircolariCarousel extends ConsumerWidget {
           );
         }).toList();
 
+        // Layout del carousel
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -79,11 +69,12 @@ class CircolariCarousel extends ConsumerWidget {
               child: CarouselView(
                 onTap: (int index) async {
                   final selectedItem = items[index];
-                  final link = selectedItem.link ?? "";
+                  final link = selectedItem['link'] ?? "";
                   if (link.isEmpty) return;
 
                   final uri = Uri.parse(link);
 
+                  // Apertura link esterno
                   if (await canLaunchUrl(uri)) {
                     await launchUrl(uri);
                   } else {
@@ -106,10 +97,11 @@ class CircolariCarousel extends ConsumerWidget {
           ],
         );
       },
+      // Caso: caricamento in corso
       loading: () {
         final placeholderItems = List.generate(
           3,
-              (index) => const CircolareContent(
+          (index) => const CircolareContent(
             date: "",
             title: "",
           ),
@@ -131,7 +123,7 @@ class CircolariCarousel extends ConsumerWidget {
               height: 144,
               width: double.infinity,
               child: CarouselView(
-                onTap: (_) {},
+                onTap: (_) {}, // Nessuna azione sul placeholder
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -146,16 +138,18 @@ class CircolariCarousel extends ConsumerWidget {
           ],
         );
       },
+      // Caso: errore nel caricamento del feed
       error: (error, _) {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Center(
               child: Text(
-                'Error loading feed: $error',
-                style: TextStyle(color: theme.colorScheme.error),
-              )),
+            'Error loading feed: $error',
+            style: TextStyle(color: theme.colorScheme.error),
+          )),
         );
       },
     );
   }
 }
+
