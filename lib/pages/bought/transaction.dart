@@ -97,7 +97,7 @@ class TransactionPage extends StatelessWidget {
 
                       final noteUrl = Supabase.instance.client.storage
                           .from('notes')
-                          .getPublicUrl(noteId);
+                          .getPublicUrl("$sellerId/$noteId");
 
                       docRef.set({
                         "note_id": noteId,
