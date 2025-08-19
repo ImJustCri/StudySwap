@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/pages/content/posts_detail_page.dart';
 
@@ -34,7 +35,7 @@ class SearchPost extends StatelessWidget {
     this.currency,
   });
 
-  void _handleTap(BuildContext context) {
+  void _handleTap(BuildContext context, currentUser) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -49,7 +50,7 @@ class SearchPost extends StatelessWidget {
           isbn: isbn,
           year: year,
           currency: currency,
-          isOfUser: false,
+          isOfUser: currentUser == userId ? true : false,
           contactHandle: contactHandle,
           contactPlatform: contactPlatform,
         ),
@@ -61,10 +62,11 @@ class SearchPost extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final compressedImageUrl = "$imageUrl?quality=10";
+    final currentUser = FirebaseAuth.instance.currentUser!.uid;
 
     return InkWell(
       borderRadius: BorderRadius.circular(8),
-      onTap: () => _handleTap(context),
+      onTap: () => _handleTap(context, currentUser),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
         child: Row(
