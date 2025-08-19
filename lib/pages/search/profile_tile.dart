@@ -26,7 +26,7 @@ class ProfileTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: GestureDetector(
-        onTap: () => _handleTap(context), // Internal tap handler
+        onTap: () => _handleTap(context),
         child: Row(
           children: [
             CircleAvatar(

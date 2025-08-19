@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:studyswap/providers/average_rating_provider.dart';
 import 'package:studyswap/providers/data_provider.dart';
 import 'package:studyswap/providers/user_provider.dart';
-import '../../widgets/reviews/review_average_calculator.dart';
 import 'about.dart';
 import 'tabs.dart';
 import 'bookshop.dart';
@@ -27,36 +27,11 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
-  double? averageStars;
-  bool isLoading = true;
-  String? error;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAverageStars();
-  }
-
-  Future<void> _loadAverageStars() async {
-    try {
-      final calculator = ReviewsAverageCalculator(userId: widget.userId);
-      final avg = await calculator.calculateAverage();
-      setState(() {
-        averageStars = avg;
-        isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        error = e.toString();
-        isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final currentUser = ref.watch(userProvider).value;
+    final averageReviewAsync = ref.watch(averageRatingProvider(widget.userId));
     final userDataAsync = ref.watch(dataProvider(widget.userId));
 
     final bool isMine = currentUser?.uid == widget.userId;
@@ -143,33 +118,32 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                 children: [
                                   Icon(Icons.star, size: 16, color: theme.colorScheme.primaryContainer),
                                   const SizedBox(width: 4),
-                                  if (isLoading)
-                                    SizedBox(
-                                      width: 14,
-                                      height: 14,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: theme.colorScheme.primaryContainer,
-                                      ),
-                                    )
-                                  else if (error != null)
-                                    Text(
-                                      "0",
-                                      style: TextStyle(
-                                        color: theme.colorScheme.surface,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    )
-                                  else
-                                    Text(
-                                      averageStars != null ? averageStars!.toStringAsFixed(1) : "0",
+                                  averageReviewAsync.when(
+                                    data: (average) => Text(
+                                      average != null ? average.toStringAsFixed(1) : "0",
                                       style: TextStyle(
                                         color: theme.colorScheme.surface,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
+                                    loading: () => SizedBox(
+                                      width: 14,
+                                      height: 14,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: theme.colorScheme.primaryContainer,
+                                      ),
+                                    ),
+                                    error: (_, __) => Text(
+                                      "0",
+                                      style: TextStyle(
+                                        color: theme.colorScheme.surface,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -314,7 +288,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         SingleChildScrollView(child: Tutoring(userId: widget.userId)),
                         SingleChildScrollView(
                           child: Reviews(
-                            stars: averageStars ?? 0,
+                            stars: averageReviewAsync.asData?.value ?? 0,
                             userId: widget.userId,
                             isMine: isMine,
                           ),
