@@ -3,7 +3,7 @@ import 'package:studyswap/pages/search/results/books_results.dart';
 import 'package:studyswap/pages/search/results/notes_results.dart';
 import 'package:studyswap/pages/search/results/profile_results.dart';
 import 'package:studyswap/pages/search/results_tabs.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});
 
@@ -44,7 +44,7 @@ class _SearchResultsState extends State<SearchResults>
             child: TextField(
               autofocus: true,
               decoration: InputDecoration(
-                hintText: "Search for notes, books, profiles...",
+                hintText: Translation.of(context)!.translate("rearch.page.hint"),
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                 filled: true,

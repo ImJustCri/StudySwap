@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class PassRecovery extends StatelessWidget {
   const PassRecovery({super.key});
 
@@ -33,7 +33,7 @@ class PassRecovery extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Recover your password",
+                      Translation.of(context)!.translate("recoveryPassword.title"),
                       style: theme.textTheme.headlineLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 40,
@@ -45,7 +45,7 @@ class PassRecovery extends StatelessWidget {
                       controller: email,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        hintText: 'Insert email',
+                        hintText: Translation.of(context)!.translate("boxEmail"),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -61,8 +61,8 @@ class PassRecovery extends StatelessWidget {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text("Invalid email"),
-                                  content: const Text("Please use an institutional email ending in 'edu.it'"),
+                                  title: Text(Translation.of(context)!.translate("invalidEmail")),
+                                  content: Text(Translation.of(context)!.translate("recoveryPassword.invalidEmailbody")),
                                   actions: [
                                     TextButton(
                                         onPressed: () => Navigator.pop(context),
@@ -80,8 +80,8 @@ class PassRecovery extends StatelessWidget {
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text("Error"),
-                                content: const Text("Enter an email before continuing"),
+                                title:  Text(Translation.of(context)!.translate("titleError")),
+                                content:  Text(Translation.of(context)!.translate("recoveryPassword.emailEmptybody")),
                                 actions: [
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
@@ -102,7 +102,7 @@ class PassRecovery extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: const Text('Verify'),
+                        child: Text(Translation.of(context)!.translate("recoveryPassword.button")),
                       ),
                     ),
                   ],

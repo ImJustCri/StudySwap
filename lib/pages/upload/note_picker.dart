@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class NotePicker extends StatefulWidget {
   final File? initialFile;
   final ValueChanged<File?> onFilePicked;
@@ -47,7 +47,7 @@ class _NotePickerState extends State<NotePicker> {
           widget.onFilePicked(file);
         } else {
           setState(() {
-            _errorText = 'Only upload PDF files below 15 MB';
+            _errorText = Translation.of(context)!.translate("notePicker.body");
           });
           widget.onFilePicked(null);
         }
@@ -59,7 +59,7 @@ class _NotePickerState extends State<NotePicker> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final fileName =
-    _selectedFile != null ? _selectedFile!.path.split('/').last : "No file selected";
+    _selectedFile != null ? _selectedFile!.path.split('/').last : Translation.of(context)!.translate("notePicker.noFile");
 
     return GestureDetector(
       onTap: _pickFile,
@@ -99,8 +99,8 @@ class _NotePickerState extends State<NotePicker> {
                 ),
               ],
               const SizedBox(height: 12),
-              const Text(
-                'Only upload PDF files below 15 MB',
+              Text(
+                Translation.of(context)!.translate("notePicker.noFile"),
                 style: TextStyle(fontSize: 12, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),

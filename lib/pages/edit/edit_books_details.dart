@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/subjects_providers.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class EditBooksPage extends ConsumerStatefulWidget {
   final String bookId;
   final String title;
@@ -104,6 +104,7 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjects = ref.watch(subjectsProvider);
+    final translatedSubjects = subjects.map((subject) => Translation.of(context)!.translate("Subject.$subject")).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -126,23 +127,23 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                 // Title input
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Title',
+                  decoration:  InputDecoration(
+                    labelText: Translation.of(context)!.translate("labelTitle"),
                     prefixIcon: Icon(Icons.note_add_rounded),
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a title';
+                      return Translation.of(context)!.translate("titleEmpty");
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the title of your book',
+                    Translation.of(context)!.translate("books.hintTitle"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -153,7 +154,7 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<String>.empty();
                     }
-                    return subjects.where((subject) =>
+                    return translatedSubjects.where((subject) =>
                         subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
                   },
                   onSelected: (selection) {
@@ -168,17 +169,17 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                     return TextFormField(
                       controller: controller,
                       focusNode: focusNode,
-                      decoration: const InputDecoration(
-                        labelText: 'Subject',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelSubject"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.category),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a subject';
+                          return Translation.of(context)!.translate("labelSubjectEmpty");
                         }
-                        if (!subjects.contains(value.trim())) {
-                          return 'Please select a valid subject from the list';
+                        if (!translatedSubjects.contains(value.trim())) {
+                          return Translation.of(context)!.translate("labelSubjectInvalid");
                         }
                         return null;
                       },
@@ -187,10 +188,10 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Select or type the subject related to your book.',
+                    Translation.of(context)!.translate("books.hintSubject"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -199,8 +200,8 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                 // ISBN input
                 TextFormField(
                   controller: _isbnController,
-                  decoration: const InputDecoration(
-                    labelText: 'ISBN (optional)',
+                  decoration: InputDecoration(
+                    labelText: 'ISBN',
                     prefixIcon: Icon(Icons.bookmark),
                     border: OutlineInputBorder(),
                   ),
@@ -209,10 +210,10 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the ISBN of the book, if available.',
+                   Translation.of(context)!.translate("hintISBN"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -222,8 +223,8 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                 TextFormField(
                   controller: _yearController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Year (optional)',
+                  decoration: InputDecoration(
+                    labelText: Translation.of(context)!.translate("books.labelYear"),
                     prefixIcon: Icon(Icons.calendar_today),
                     border: OutlineInputBorder(),
                   ),
@@ -231,17 +232,17 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                     if (value != null && value.trim().isNotEmpty) {
                       final year = int.tryParse(value.trim());
                       if (year == null || year < 0 || year > DateTime.now().year) {
-                        return 'Please enter a valid year';
+                        return Translation.of(context)!.translate("books.error.labelYearsInvalid");
                       }
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the publication year of the book, if available.',
+                    Translation.of(context)!.translate("books.error.hintYear"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -251,23 +252,23 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                 TextFormField(
                   controller: _descriptionController,
                   maxLines: null,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
+                  decoration: InputDecoration(
+                    labelText: Translation.of(context)!.translate("labelDescription"),
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.book),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a description';
+                      return Translation.of(context)!.translate("labelDescriptionEmpty");
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the description of the book.',
+                    Translation.of(context)!.translate("books.hintDescription"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -277,30 +278,30 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                 TextFormField(
                   controller: _priceController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Price',
+                  decoration:  InputDecoration(
+                    labelText: Translation.of(context)!.translate("labelCost"),
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.attach_money),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a price';
+                      return Translation.of(context)!.translate("labelCostEmpty");
                     }
                     final parsed = int.tryParse(value.trim());
                     if (parsed == null || parsed < 0) {
-                      return 'Please enter a positive value';
+                      return Translation.of(context)!.translate("labelCostInvalidValue");
                     }
                     if (parsed == 0) {
-                      return 'Your book cannot be free!';
+                      return Translation.of(context)!.translate("books.error.labelCost");
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the price for this book (must be greater than zero).',
+                    Translation.of(context)!.translate("books.hintCost"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -310,7 +311,7 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _submitForm,
-                    child: const Text('Submit', style: TextStyle(fontSize: 16)),
+                    child: Text(Translation.of(context)!.translate("button"), style: TextStyle(fontSize: 16)),
                   ),
                 ),
               ],
@@ -344,11 +345,11 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Book updated successfully!')),
+         SnackBar(content: Text(Translation.of(context)!.translate("books.MessageSuccessful"))),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update book: $e')),
+        SnackBar(content: Text(Translation.of(context)!.translate("books.MessageUnsuccessful")+"$e")),
       );
     }
   }

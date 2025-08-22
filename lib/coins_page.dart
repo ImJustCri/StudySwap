@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class CoinsPage extends StatelessWidget {
   final String coins;
   const CoinsPage(this.coins, {super.key});
@@ -11,8 +11,8 @@ class CoinsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Your balance",
+        title:  Text(
+          Translation.of(context)!.translate("coins.title"),
           style: TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
@@ -61,7 +61,7 @@ class CoinsPage extends StatelessWidget {
 
             // Title
             Text(
-              "How to earn more coins?",
+              Translation.of(context)!.translate("coins.howMoreCoins.title"),
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -86,9 +86,9 @@ class CoinsPage extends StatelessWidget {
                     size: 28,
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      "Upload notes or books",
+                      Translation.of(context)!.translate("coins.howMoreCoins.1"),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -116,9 +116,9 @@ class CoinsPage extends StatelessWidget {
                     size: 28,
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      "Offer tutoring",
+                      Translation.of(context)!.translate("coins.howMoreCoins.2"),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -146,9 +146,9 @@ class CoinsPage extends StatelessWidget {
                     size: 28,
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      "Leave reviews",
+                      Translation.of(context)!.translate("coins.howMoreCoins.3"),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,

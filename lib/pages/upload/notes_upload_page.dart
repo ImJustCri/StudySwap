@@ -10,6 +10,7 @@ import '../../providers/subjects_providers.dart';
 import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
 import 'contact_input.dart';
+import 'package:studyswap/providers/traslation_provider.dart';
 
 class NotesUploadPage extends ConsumerStatefulWidget {
   const NotesUploadPage({super.key});
@@ -51,14 +52,14 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     if (_formKey.currentState?.validate() ?? false) {
       if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter your contact handle')),
+           SnackBar(content: Text(Translation.of(context)!.translate("contactHandle"))),
         );
         return;
       }
 
       if (_selectedNote == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select a note file before uploading')),
+           SnackBar(content: Text(Translation.of(context)!.translate("notes.fileNotUpload"))),
         );
         return;
       }
@@ -106,11 +107,10 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjects = ref.watch(subjectsProvider);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Upload Notes",
+        title:  Text(
+          Translation.of(context)!.translate("notes.titlePage"),
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
         ),
         leading: const BackButton(),
@@ -137,23 +137,23 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                   children: [
                     TextFormField(
                       controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Title',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelTitle"),
                         prefixIcon: Icon(Icons.note_add_rounded),
                         border: OutlineInputBorder(),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a title';
+                          return Translation.of(context)!.translate("labelTitleEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                      Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Enter the topic of your notes',
+                        Translation.of(context)!.translate("notes.hintTitle"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -178,17 +178,17 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                         return TextFormField(
                           controller: controller,
                           focusNode: focusNode,
-                          decoration: const InputDecoration(
-                            labelText: 'Subject',
+                          decoration:  InputDecoration(
+                            labelText: Translation.of(context)!.translate("labelSubject"),
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.category),
                           ),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Please enter a subject';
+                              return Translation.of(context)!.translate("labelSubjectEmpty");
                             }
                             if (!subjects.contains(value.trim())) {
-                              return 'Please select a valid subject from the list';
+                              return Translation.of(context)!.translate("labelSubjectInvalid");
                             }
                             return null;
                           },
@@ -197,10 +197,10 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Select or type the subject related to your notes (e.g., Mathematics, History).',
+                        Translation.of(context)!.translate("notes.hintSubject"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -209,23 +209,23 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                     TextFormField(
                       maxLines: null,
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelDescription"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.book),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a description';
+                          return Translation.of(context)!.translate("labelDescriptionEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Add a brief description of the notes',
+                        Translation.of(context)!.translate("notes.hintDescription"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -234,29 +234,29 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                     TextFormField(
                       controller: _costController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Cost',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelCost"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.attach_money),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a cost';
+                          return Translation.of(context)!.translate("labelCostEmpty");
                         }
                         final cost = int.tryParse(value.trim());
                         if (cost == null || cost < 0) {
-                          return 'Please enter a positive value';
+                          return Translation.of(context)!.translate("labelCostInvalidValue");
                         } else if (cost == 0) {
-                          return 'Your note cannot be free!';
+                          return Translation.of(context)!.translate("notes.labelCostInvalidValue1");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Enter the price you want to charge for this note (must be greater than zero).',
+                        Translation.of(context)!.translate("notes.hintCost"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -265,7 +265,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Contact (choose platform and enter your handle)',
+                        Translation.of(context)!.translate("titleContact"),
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -279,10 +279,10 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Select the contact platform and enter your user handle (e.g., @username).',
+                        Translation.of(context)!.translate("hintContact"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -307,7 +307,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                            : const Text('Submit', style: TextStyle(fontSize: 16)),
+                            :  Text(Translation.of(context)!.translate("button"), style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
@@ -333,7 +333,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
 
       if (_selectedImage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select an image before uploading')),
+           SnackBar(content: Text(Translation.of(context)!.translate("imageNotUpload"))),
         );
         return;
       }
@@ -377,11 +377,11 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Note uploaded successfully!')),
+         SnackBar(content: Text(Translation.of(context)!.translate("notes.MessageSuccessful"))),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to upload note: $e')),
+        SnackBar(content: Text(Translation.of(context)!.translate("notes.MessageUnsuccessful")+"$e")),
       );
     }
   }

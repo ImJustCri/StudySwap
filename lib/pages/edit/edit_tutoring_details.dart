@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 import '../../providers/subjects_providers.dart';
 
 class EditTutoringDetails extends ConsumerStatefulWidget {
@@ -72,7 +72,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
 
       if (_selectedClasses.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select at least one class')),
+          SnackBar(content: Text(Translation.of(context)!.translate("tutoring.ClassEmpty"))),
         );
         return;
       }
@@ -107,11 +107,12 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjects = ref.watch(subjectsProvider);
+    final translatedSubjects = subjects.map((subject) => Translation.of(context)!.translate("Subject.$subject")).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Edit Tutoring Offer",
+        title:  Text(
+          Translation.of(context)!.translate("edit.tutorin.title"),
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
         ),
         leading: const BackButton(),
@@ -133,7 +134,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                         if (textEditingValue.text.isEmpty) {
                           return const Iterable<String>.empty();
                         }
-                        return subjects.where((subject) =>
+                        return translatedSubjects.where((subject) =>
                             subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
                       },
                       onSelected: (selection) {
@@ -150,17 +151,17 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                           controller: controller,
                           enabled: false,
                           focusNode: focusNode,
-                          decoration: const InputDecoration(
-                            labelText: 'Subject',
+                          decoration:  InputDecoration(
+                            labelText: Translation.of(context)!.translate("labelSubject"),
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.category),
                           ),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Please enter a subject';
+                              return Translation.of(context)!.translate("labelSubjectEmpty");
                             }
-                            if (!subjects.contains(value.trim())) {
-                              return 'Please select a valid subject from the list';
+                            if (!translatedSubjects.contains(value.trim())) {
+                              return Translation.of(context)!.translate("labelSubjectInvalid");
                             }
                             return null;
                           },
@@ -169,8 +170,8 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'You cannot edit the subject of a tutoring offer.',
+                    Text(
+                      Translation.of(context)!.translate("edit.tutorin.hintSubject"),
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
 
@@ -179,37 +180,37 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                     TextFormField(
                       maxLines: null,
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelDescription"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.book),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a description';
+                          return Translation.of(context)!.translate("labelDescriptionEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Edit the description of the tutoring session',
+                    Text(
+                      Translation.of(context)!.translate("edit.tutorin.hintDescription"),
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
 
                     // Mode dropdown
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: 'Mode',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("tutoring.mode.title"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.device_hub),
                       ),
                       value: _selectedMode,
-                      items: const [
-                        DropdownMenuItem(value: 'Digital', child: Text('Digital')),
-                        DropdownMenuItem(value: 'In real life', child: Text('In real life')),
-                        DropdownMenuItem(value: 'Both', child: Text('Both')),
+                      items: [
+                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.1"), child: Text(Translation.of(context)!.translate("tutoring.mode.1"))),
+                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.2"), child: Text(Translation.of(context)!.translate("tutoring.mode.2"))),
+                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.3"), child: Text(Translation.of(context)!.translate("tutoring.mode.3"))),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -218,14 +219,14 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please select a mode';
+                          return Translation.of(context)!.translate("tutoring.mode.modeEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Select whether tutoring will be digital, in real life, or both.',
+                    Text(
+                      Translation.of(context)!.translate("tutoring.mode.hint"),
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
 
@@ -234,25 +235,25 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                     TextFormField(
                       controller: _hoursController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        labelText: 'Hours per session',
+                      decoration: InputDecoration(
+                        labelText: Translation.of(context)!.translate("tutoring.labelHours"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.access_time),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter hours per session';
+                          return Translation.of(context)!.translate("tutoring.HoursEmpty");
                         }
                         final parsed = double.tryParse(value);
                         if (parsed == null || parsed <= 0) {
-                          return 'Please enter a valid positive number';
+                          return Translation.of(context)!.translate("tutoring.HoursInvalid");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Enter the duration of each session in hours.',
+                    Text(
+                      Translation.of(context)!.translate("tutoring.hintHours"),
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
 
@@ -260,15 +261,15 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
 
                     // Class selection chips
                     Text(
-                      "Select Classes",
+                      Translation.of(context)!.translate("tutoring.ClassesTitle"),
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Select one or more classes you are offering tutoring for (e.g., Class 1 to Class 5).',
+                    Text(
+                      Translation.of(context)!.translate("tutoring.hintClasses"),
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                     const SizedBox(height: 8),
@@ -279,7 +280,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                         final isSelected = _selectedClasses.contains(classNumber);
 
                         return FilterChip(
-                          label: Text('Class $classNumber'),
+                          label: Text(Translation.of(context)!.translate("tutoring.mode.class")+"$classNumber"),
                           selected: isSelected,
                           onSelected: (selected) {
                             setState(() {
@@ -301,7 +302,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _submitForm,
-                  child: const Text('Submit', style: TextStyle(fontSize: 16)),
+                  child:  Text(Translation.of(context)!.translate("button"), style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
@@ -333,11 +334,11 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tutoring updated successfully!')),
+         SnackBar(content: Text(Translation.of(context)!.translate("tutoring.MessageSuccessful"))),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update tutoring: $e')),
+        SnackBar(content: Text(Translation.of(context)!.translate("tutoring.MessageUnsuccessful")+"$e")),
       );
     }
   }

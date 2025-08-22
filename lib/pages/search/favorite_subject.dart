@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 import '../../providers/books_provider.dart';
 import '../../providers/notes_provider.dart';
 
@@ -44,7 +44,7 @@ class FavoriteSubject extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'No items available for this subject',
+                  Translation.of(context)!.translate("fovoriteSubject.body"),
                 ),
               ],
             ),
@@ -87,7 +87,7 @@ class FavoriteSubject extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSectionTitle('Notes'),
+              buildSectionTitle(Translation.of(context)!.translate("fovoriteSubject.titleNotes")),
               notesAsync.when(
                 data: (notesList) {
                   final posts = notesList.map((note) => Post.fromMap(note)).toList();
@@ -99,11 +99,11 @@ class FavoriteSubject extends ConsumerWidget {
                 ),
                 error: (error, _) => SizedBox(
                   height: 192,
-                  child: Center(child: Text('Error loading notes: $error')),
+                  child: Center(child: Text(Translation.of(context)!.translate("fovoriteSubject.errorNotes")+"$error")),
                 ),
               ),
 
-              buildSectionTitle('Books'),
+              buildSectionTitle(Translation.of(context)!.translate("fovoriteSubject.titleBook")),
               booksAsync.when(
                 data: (booksList) {
                   final posts = booksList.map((book) => Post.fromMap(book)).toList();
@@ -115,7 +115,7 @@ class FavoriteSubject extends ConsumerWidget {
                 ),
                 error: (error, _) => SizedBox(
                   height: 192,
-                  child: Center(child: Text('Error loading books: $error')),
+                  child: Center(child: Text(Translation.of(context)!.translate("fovoriteSubject.errorBook")+"$error")),
                 ),
               ),
               const SizedBox(height: 32),

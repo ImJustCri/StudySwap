@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'user_provider.dart';
 
 // List of subjects
-final List<String> subjects = const [
+final List<String> subjects =  [
   "Information Technology",
   "Mathematics",
   "Telecommunications",

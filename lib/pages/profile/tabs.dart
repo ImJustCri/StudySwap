@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class Tabs extends StatelessWidget {
   const Tabs({super.key});
 
@@ -7,15 +7,15 @@ class Tabs extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: const TabBar(
+      child:  TabBar(
         isScrollable: true,
         tabAlignment: TabAlignment.start,
         physics: ClampingScrollPhysics(),
         tabs: [
-          Tab(text: "Notes"),
-          Tab(text: "Bookshop"),
-          Tab(text: "Tutoring"),
-          Tab(text: "Reviews"),
+          Tab(text: Translation.of(context)!.translate("profile.tabs.notes")),
+          Tab(text: Translation.of(context)!.translate("profile.tabs.book")),
+          Tab(text: Translation.of(context)!.translate("profile.tabs.tutoring")),
+          Tab(text: Translation.of(context)!.translate("profile.tabs.review")),
         ],
       ),
     );

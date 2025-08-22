@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/search_results_provider.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 import '../search_post.dart';
 
 class BooksResults extends ConsumerWidget {
@@ -16,7 +16,7 @@ class BooksResults extends ConsumerWidget {
     return booksAsyncValue.when(
       data: (books) {
         if (books.isEmpty) {
-          return const Center(child: Text('No books found'));
+          return Center(child: Text(Translation.of(context)!.translate("results.noBooks")));
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),

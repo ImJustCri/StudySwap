@@ -31,6 +31,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_riverpod: ^3.0.0-dev.17
   screen_protector: ^1.4.2
   firebase_core: ^3.4.1
   firebase_auth: ^5.7.0
@@ -43,7 +44,6 @@ dependencies:
   intl: ^0.20.2
   url_launcher: ^6.3.1
   is_first_run: ^1.0.0
-  flutter_riverpod: ^3.0.0-dev.16
   riverpod_annotation: ^3.0.0-dev.16
   flutter_speed_dial: ^7.0.0
   flutter_displaymode: ^0.6.0
@@ -61,7 +61,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^28.1.33
   internet_connection_checker_plus: ^2.7.2
   package_info_plus: ^8.3.1
-  xml: ^6.1.0 # Sostituisce flutter_quill/dart_rss per mostrare contenuti HTML/RSS
+  xml: ^6.1.0
 
 dev_dependencies:
   flutter_test:

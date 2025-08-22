@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/search/profile_tile.dart';
 import 'package:studyswap/providers/search_results_provider.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class ProfileResults extends ConsumerWidget {
   final String searchQuery;
 
@@ -15,7 +15,7 @@ class ProfileResults extends ConsumerWidget {
     return profilesAsyncValue.when(
       data: (profile) {
         if (profile.isEmpty) {
-          return Center(child: Text('No profiles found'));
+          return Center(child: Text(Translation.of(context)!.translate("results.noProfile")));
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),

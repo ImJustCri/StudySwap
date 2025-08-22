@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 
 final Uri _url = Uri.parse('https://studyswap.it/terms');
 
@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Welcome!",
+                        Translation.of(context)!.translate("register.title"),
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -50,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert email',
+                          hintText: Translation.of(context)!.translate("boxEmail"),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert password',
+                          hintText: Translation.of(context)!.translate("boxPassword"),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -68,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Confirm password',
+                          hintText: Translation.of(context)!.translate("register.confirmPassword"),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -91,9 +91,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   color: theme.colorScheme.onSurface,
                                 ),
                                 children: [
-                                  const TextSpan(text: 'I agree with '),
+                                  TextSpan(text:Translation.of(context)!.translate("register.checkBox1")),
                                   TextSpan(
-                                    text: 'Terms of Service',
+                                    text: Translation.of(context)!.translate("register.checkBox2"),
                                     style: const TextStyle(
                                       decoration: TextDecoration.underline,
                                     ),
@@ -122,8 +122,8 @@ class _RegisterPageState extends State<RegisterPage> {
     				showDialog(
       				context: context,
       				builder: (context) => AlertDialog(
-        			title: const Text("Invalid email"),
-        			content: const Text("You can register only with an institutional email ending in .edu.it"),
+        			title: Text(Translation.of(context)!.translate("invalidEmail")),
+        			content: Text(Translation.of(context)!.translate("register.invalidEmailBody")),
         				actions: [
           				TextButton(
             				onPressed: () => Navigator.pop(context),
@@ -139,8 +139,8 @@ class _RegisterPageState extends State<RegisterPage> {
     				showDialog(
       				context: context,
      				builder: (context) => AlertDialog(
-        			title: const Text("Error"),
-        			content: const Text("Incorrect password"),
+        			title: Text(Translation.of(context)!.translate("titleError")),
+        			content: Text(Translation.of(context)!.translate("register.incorrectPassword")),
         			actions: [
          		 	TextButton(
             			onPressed: () => Navigator.pop(context),
@@ -158,7 +158,7 @@ class _RegisterPageState extends State<RegisterPage> {
     					showDialog(
       					context: context,
       					builder: (context) => AlertDialog(
-        				title: const Text("Error"),
+        				title: Text(Translation.of(context)!.translate("titleError")),
         				content: Text(error),
         				actions: [
           				TextButton(
@@ -172,8 +172,8 @@ class _RegisterPageState extends State<RegisterPage> {
   					}else{
               showDialog(context: context,
                builder: (context)=> AlertDialog(
-                title: const Text("Registration Successful"),
-                content: Text("A verification email has been sent to your address. Check your inbox and confirm your email before loggin in."),
+                title: Text(Translation.of(context)!.translate("register.registerSuccessfultitle")),
+                content: Text(Translation.of(context)!.translate("register.registerSuccessfulbody")),
                 actions: [
                   TextButton(onPressed: ()=> Navigator.pushReplacementNamed(context, '/login'), child: const Text("OK"))
                 ],
@@ -181,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage> {
                );
             }
 				} : null,
-                          child: const Text('Register'),
+                          child: Text(Translation.of(context)!.translate("register.button")),
                         ),
                       ),
                     ],
@@ -196,7 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Navigator.pushReplacementNamed(context, '/login');
                 },
                 child: Text(
-                  "Already have an account?",
+                  Translation.of(context)!.translate("register.buttonToLoginPage"),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                   ),

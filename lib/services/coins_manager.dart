@@ -29,9 +29,10 @@ class CoinsManager {
 
     final docRef = _firestore.collection('Users').doc(userId);
 
-    await docRef.update({
-      'coins': FieldValue.increment(-amount),
-    });
+       await docRef.update({
+        'coins': FieldValue.increment(-amount),
+      });
+   
   }
 
   /// Transfers [amount] coins from [fromUserId] to [toUserId].

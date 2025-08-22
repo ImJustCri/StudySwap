@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/books_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../widgets/post.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class MoreFromUser extends ConsumerWidget {
   final bool isBook;
   final String userId;
@@ -52,7 +52,7 @@ class MoreFromUser extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "More from $username",
+          Translation.of(context)!.translate("moreUser.title")+"$username",
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
@@ -61,14 +61,14 @@ class MoreFromUser extends ConsumerWidget {
         const SizedBox(height: 16),
         isBook
             ? booksAsyncValue.when(
-          data: (bookList) => buildListFromData(bookList, 'No books available.', 'Error loading books.'),
+          data: (bookList) => buildListFromData(bookList, Translation.of(context)!.translate("moreUser.noBook"), Translation.of(context)!.translate("moreUser.errorBook")),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Center(child: Text('Error loading books: $error')),
+          error: (error, _) => Center(child: Text(Translation.of(context)!.translate("moreUser.errorBook")+": $error")),
         )
             : notesAsyncValue.when(
-          data: (noteList) => buildListFromData(noteList, 'No notes available.', 'Error loading notes.'),
+          data: (noteList) => buildListFromData(noteList, Translation.of(context)!.translate("moreUser.noNotes"), Translation.of(context)!.translate("moreUser.errorNotes")),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, _) => Center(child: Text('Error loading notes: $error')),
+          error: (error, _) => Center(child: Text(Translation.of(context)!.translate("moreUser.errorNotes")+": $error")),
         ),
       ],
     );

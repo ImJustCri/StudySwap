@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/tutoring_provider.dart';
 import '../../widgets/tutoring_tile.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class Tutoring extends ConsumerWidget {
   final String userId;
 
@@ -27,7 +27,7 @@ class Tutoring extends ConsumerWidget {
                       size: 48,
                     ),
                     SizedBox(height: 16),
-                    Text('No tutoring sessions available.'),
+                    Text(Translation.of(context)!.translate("profile.noTutoring")),
                   ],
                 ),
               ),
@@ -42,15 +42,15 @@ class Tutoring extends ConsumerWidget {
               final tutoring = tutoringList[index];
 
               return TutoringTile(
-                title: tutoring['subject'] ?? 'No title',
+                title: tutoring['subject'] ?? Translation.of(context)!.translate("profile.noTitle"),
                 isYearSelected: (tutoring['classes'] as List<dynamic>?)
                     ?.cast<bool>() ??
                     [],
-                description: tutoring['description'] ?? "No description",
+                description: tutoring['description'] ?? Translation.of(context)!.translate("profile.noDescription"),
                 userId: userId,
                 tutoringId: tutoring['id'] ?? "",
                 hours: tutoring['hours'] ?? 0,
-                mode: tutoring['mode'] ?? "Not specified",
+                mode: tutoring['mode'] ?? Translation.of(context)!.translate("profile.noMode"),
                 contactHandle: tutoring['contact_handle'],
                 contactPlatform: tutoring['contact_platform'],
               );

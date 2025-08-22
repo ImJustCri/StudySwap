@@ -9,6 +9,7 @@ import '../../providers/subjects_providers.dart';
 import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
 import 'contact_input.dart';
+import 'package:studyswap/providers/traslation_provider.dart';
 
 class BooksUploadPage extends ConsumerStatefulWidget {
   const BooksUploadPage({super.key});
@@ -53,7 +54,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
     if (_formKey.currentState?.validate() ?? false) {
       if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter your contact handle')),
+           SnackBar(content: Text(Translation.of(context)!.translate("contactHandle"))),
         );
         return;
       }
@@ -109,8 +110,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Upload a Book",
+        title:  Text(
+          Translation.of(context)!.translate("books.titlePage"),
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
         ),
         leading: const BackButton(),
@@ -136,23 +137,23 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                   children: [
                     TextFormField(
                       controller: _titleController,
-                      decoration: const InputDecoration(
-                        labelText: 'Title',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelTitle"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.book),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a title';
+                          return Translation.of(context)!.translate("titleEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Enter the book title as it appears on the cover or title page.',
+                        Translation.of(context)!.translate("books.hintTitle"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -177,17 +178,17 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                         return TextFormField(
                           controller: controller,
                           focusNode: focusNode,
-                          decoration: const InputDecoration(
-                            labelText: 'Subject',
+                          decoration:  InputDecoration(
+                            labelText: Translation.of(context)!.translate("labelSubject"),
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.category),
                           ),
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
-                              return 'Please enter a subject';
+                              return Translation.of(context)!.translate("labelSubjectEmpty");
                             }
                             if (!subjects.contains(value.trim())) {
-                              return 'Please select a valid subject from the list';
+                              return Translation.of(context)!.translate("labelSubjectInvalid");
                             }
                             return null;
                           },
@@ -196,10 +197,10 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Select or type the subject area of the book (e.g., Mathematics, History).',
+                        Translation.of(context)!.translate("books.hintSubject"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -208,23 +209,23 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                     TextFormField(
                       maxLines: null,
                       controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        labelText: 'Description',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelDescription"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.book),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a description';
+                          return Translation.of(context)!.translate("labelDescriptionEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Add a brief description of the book you are selling',
+                        Translation.of(context)!.translate("books.hintDescription"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -233,29 +234,29 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                     TextFormField(
                       controller: _costController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Cost',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelCost"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.attach_money),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a cost';
+                          return Translation.of(context)!.translate("labelCostEmpty");
                         }
                         final cost = int.tryParse(value.trim());
                         if (cost == null || cost < 0) {
-                          return 'Please enter a positive value';
+                          return Translation.of(context)!.translate("labelCostInvalidValue");
                         } else if (cost == 0) {
-                          return 'Your book cannot be free!';
+                          return Translation.of(context)!.translate("books.labelCost");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Enter the price you want to charge for this book (must be greater than zero).',
+                        Translation.of(context)!.translate("books.hintCost"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -263,23 +264,23 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
                     TextFormField(
                       controller: _isbnController,
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         labelText: 'ISBN',
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.confirmation_number),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter the ISBN';
+                          return Translation.of(context)!.translate("books.labelISBNEmpty");
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Enter the ISBN number found on the back cover or copyright page.',
+                        Translation.of(context)!.translate("books.hintISBN"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -288,28 +289,28 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                     TextFormField(
                       controller: _yearController,
                       keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Year of Publication',
+                      decoration:  InputDecoration(
+                        labelText: Translation.of(context)!.translate("books.labelYear"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.calendar_today),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter the year of publication';
+                          return Translation.of(context)!.translate("books.labelYearEmpty");
                         }
                         final year = int.tryParse(value.trim());
                         final currentYear = DateTime.now().year;
                         if (year == null || year < 1000 || year > currentYear) {
-                          return 'Enter a valid year between 1000 and $currentYear';
+                          return Translation.of(context)!.translate("books.labellYearErrors")+"$currentYear";
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Enter the year this book was published, usually found on the copyright page.',
+                        Translation.of(context)!.translate("books.hintYear"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -318,7 +319,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Contact (choose platform and enter your handle)',
+                        Translation.of(context)!.translate("titleContact"),
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -332,10 +333,10 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                       },
                     ),
                     const SizedBox(height: 4),
-                    const Align(
+                       Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Select the contact platform and enter your user handle (e.g., @username).',
+                        Translation.of(context)!.translate("hintContact"),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ),
@@ -351,7 +352,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                           width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                            : const Text('Submit', style: TextStyle(fontSize: 16)),
+                            :  Text(Translation.of(context)!.translate("button"), style: TextStyle(fontSize: 16)),
                       ),
                     ),
                   ],
@@ -379,7 +380,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
       if (_selectedImage == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please select an image before uploading')),
+           SnackBar(content: Text(Translation.of(context)!.translate("imageNotUpload"))),
         );
         return;
       }
@@ -417,11 +418,11 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Book uploaded successfully!')),
+         SnackBar(content: Text(Translation.of(context)!.translate("MessageSuccessful"))),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to upload book: $e')),
+        SnackBar(content: Text(Translation.of(context)!.translate("MessageUnsuccessful")+"$e")),
       );
     }
   }

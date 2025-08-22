@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
 
@@ -111,7 +111,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Change your password",
+                        Translation.of(context)!.translate("changePassword.title"),
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -122,9 +122,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                       TextField(
                         controller: oldPasswordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert old password',
+                          hintText: Translation.of(context)!.translate("changePassword.labelOld"),
                           prefixIcon: Icon(Icons.lock_outline),
                         ),
                       ),
@@ -132,9 +132,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                       TextField(
                         controller: newPasswordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert new password',
+                          hintText: Translation.of(context)!.translate("changePassword.labelNew"),
                           prefixIcon: Icon(Icons.lock),
                         ),
                       ),
@@ -142,9 +142,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                       TextField(
                         controller: confirmPasswordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Confirm new password',
+                          hintText: Translation.of(context)!.translate("changePassword.labelConfirm"),
                           prefixIcon: Icon(Icons.lock),
                         ),
                       ),
@@ -152,16 +152,16 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                       // Password requirements
                       Text(
-                        "Password Requirements:",
+                        Translation.of(context)!.translate("changePassword.passwordRequirements.title"),
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      _buildGuidelineItem("At least 9 characters", hasMinLength),
-                      _buildGuidelineItem("Contains uppercase and lowercase letters", hasUpperCase),
-                      _buildGuidelineItem("Includes numbers", hasNumber),
-                      _buildGuidelineItem("Includes special characters (e.g. !@#\$&*)", hasSpecialChar),
+                      _buildGuidelineItem(Translation.of(context)!.translate("changePassword.passwordRequirements.1"), hasMinLength),
+                      _buildGuidelineItem(Translation.of(context)!.translate("changePassword.passwordRequirements.2"), hasUpperCase),
+                      _buildGuidelineItem(Translation.of(context)!.translate("changePassword.passwordRequirements.3"), hasNumber),
+                      _buildGuidelineItem(Translation.of(context)!.translate("changePassword.passwordRequirements.4"), hasSpecialChar),
                     ],
                   ),
 
@@ -178,8 +178,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: const Text("Please fill all password fields"),
+                              title: Text(Translation.of(context)!.translate("changePassword.titleError")),
+                              content: Text(Translation.of(context)!.translate("changePassword.errors.Empty")),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -195,8 +195,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text("Error"),
-                              content: const Text("New password and confirm password do not match"),
+                              title: Text(Translation.of(context)!.translate("changePassword.titleError")),
+                              content: Text(Translation.of(context)!.translate("changePassword.errors.DifferentPassword")),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -212,8 +212,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text("Weak Password"),
-                              content: const Text("Password must follow all the requirements"),
+                              title: Text(Translation.of(context)!.translate("changePassword.errors.NoRespecttitle")),
+                              content:  Text(Translation.of(context)!.translate("changePassword.errors.NoRespectbody")),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -232,9 +232,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text("Old password is incorrect"),
-                              content: const Text(
-                                  "If you do not remember your password, log out and click 'Forgot your password?'"),
+                              title:  Text(Translation.of(context)!.translate("changePassword.errors.oldPasswordtitle")),
+                              content: Text(
+                                  Translation.of(context)!.translate("changePassword.errors.oldPasswordbody")),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(context),
@@ -255,7 +255,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      child: const Text('Change password'),
+                      child: Text(Translation.of(context)!.translate("changePassword.button")),
                     ),
                   ),
                 ],

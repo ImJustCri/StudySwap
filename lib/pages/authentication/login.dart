@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
 import 'package:studyswap/notifications/notifications.dart';
+import 'package:studyswap/providers/traslation_provider.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
@@ -25,7 +26,7 @@ class LoginPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Look who's back!",
+                        Translation.of(context)!.translate("login.title"),
                         style: theme.textTheme.headlineLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -37,7 +38,7 @@ class LoginPage extends StatelessWidget {
                       	controller: email,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert email',
+                          hintText: Translation.of(context)!.translate("boxEmail"),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -46,7 +47,7 @@ class LoginPage extends StatelessWidget {
                         obscureText: true,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Insert password',
+                          hintText: Translation.of(context)!.translate("boxPassword"),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -55,7 +56,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.pushNamed(context, '/password-recovery');
                         },
                         child: Text(
-                          "Forgot your password?",
+                          Translation.of(context)!.translate("login.buttonToRecovery"),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             decoration: TextDecoration.underline,
                             color: theme.colorScheme.onSurface,
@@ -77,7 +78,7 @@ class LoginPage extends StatelessWidget {
                                 context: context,
                                 builder: (context)=> 
                                 AlertDialog(
-                                  title: const Text("Error"),
+                                  title: Text(Translation.of(context)!.translate("titleError")),
                                   content: Text(error),
                                   actions: [
                                     TextButton(onPressed: () => Navigator.pop(context), 
@@ -93,8 +94,8 @@ class LoginPage extends StatelessWidget {
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text("Error"),
-                                  content: Text("Enter a valid email o password before continuing"),
+                                  title: Text(Translation.of(context)!.translate("titleError")),
+                                  content: Text(Translation.of(context)!.translate("login.body")),
                                   actions: [
                                     TextButton(onPressed: ()=> Navigator.pop(context), 
                                     child: const Text("OK")),
@@ -103,7 +104,7 @@ class LoginPage extends StatelessWidget {
                                 );
                             }
                           },
-                          child: const Text('Log In'),
+                          child: Text(Translation.of(context)!.translate("login.buttonToLog")),
                         ),
                       ),
                     ],
@@ -118,7 +119,7 @@ class LoginPage extends StatelessWidget {
                   Navigator.pushReplacementNamed(context, '/register');
                 },
                 child: Text(
-                  "Don’t have an account?",
+                  Translation.of(context)!.translate("login.buttonToRegister"),
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.onSurface,
                   ),

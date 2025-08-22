@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../pages/content/tutoring_detail_page.dart';
 import '../providers/user_provider.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class TutoringTile extends ConsumerWidget {
   final String title;
   final List<bool> isYearSelected;
@@ -38,7 +38,7 @@ class TutoringTile extends ConsumerWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("Year:"),
+          Text(Translation.of(context)!.translate("Tutoring.yearT")),
           const SizedBox(width: 8),
           Expanded(
             child: Wrap(

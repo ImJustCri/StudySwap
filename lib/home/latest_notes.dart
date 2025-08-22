@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../providers/notes_provider.dart';
 import 'package:studyswap/widgets/view_all_uploads.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class LatestNotesSection extends ConsumerWidget {
   const LatestNotesSection({super.key});
 
@@ -35,7 +35,7 @@ class LatestNotesSection extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              buildSectionTitle("Latest notes"),
+              buildSectionTitle(Translation.of(context)!.translate("home.latestNotes.title")),
               TextButton(
                 onPressed: () {
                   Navigator.of(context).push(
@@ -45,7 +45,7 @@ class LatestNotesSection extends ConsumerWidget {
                     ),
                   );
                 },
-                child: const Text('View all'),
+                child:  Text(Translation.of(context)!.translate("home.latestNotes.button")),
               ),
             ],
           ),
@@ -57,13 +57,13 @@ class LatestNotesSection extends ConsumerWidget {
                 padding: const EdgeInsets.only(top: 24.0),
                 child: Center(
                   child: Column(
-                    children: const [
+                    children:  [
                       Icon(
                         Icons.no_sim_rounded,
                         size: 48,
                       ),
                       SizedBox(height: 16),
-                      Text('No notes available.'),
+                      Text(Translation.of(context)!.translate("home.latestNotes.noNotes")),
                     ],
                   ),
                 ),
@@ -98,7 +98,7 @@ class LatestNotesSection extends ConsumerWidget {
           ),
           error: (error, _) => Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-            child: Center(child: Text('Error loading notes: $error')),
+            child: Center(child: Text(Translation.of(context)!.translate("home.latestNotes.noNotes")+"$error")),
           ),
         ),
       ],

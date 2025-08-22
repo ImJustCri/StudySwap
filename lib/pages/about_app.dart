@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-
+import 'package:studyswap/providers/traslation_provider.dart';
 class AboutAppPage extends StatefulWidget {
   const AboutAppPage({super.key});
 
@@ -45,7 +45,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-          'About ${_packageInfo.appName}',
+           Translation.of(context)!.translate("about.title")+_packageInfo.appName,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -95,7 +95,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
                 Icons.link,
                 color: theme.colorScheme.onSurface,
               ),
-              label: const Text('Official Website'),
+              label:  Text(Translation.of(context)!.translate("about.button")),
             ),
           ],
         ),

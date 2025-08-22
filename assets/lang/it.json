@@ -1,0 +1,358 @@
+{
+    "titleError": "Errore",
+    "boxEmail": "Inserisci l'email",
+    "boxPassword": "Inserisci la password",
+    "invalidEmail": "Email non valida",
+    "contactHandle": "Inserisci il tuo contatto",
+    "labelTitle": "Titolo",
+    "titleEmpty": "Inserisci un titolo",
+    "labelSubject": "Materia",
+    "labelSubjectEmpty": "Inserisci una materia",
+    "labelSubjectInvalid": "Seleziona una materia valida dalla lista",
+    "labelDescription": "Descrizione",
+    "labelCost": "Prezzo",
+    "labelCostEmpty": "Inserisci un prezzo",
+    "labelCostInvalidValue": "Inserisci un valore positivo",
+    "labelDescriptionEmpty": "Inserisci una descrizione",
+    "titleContact": "Contatto (scegli la piattaforma e inserisci il tuo contatto)",
+    "hintContact": "Seleziona la piattaforma di contatto e inserisci il tuo nome utente (es. @username).",
+    "button": "Invia",
+    "imageNotUpload": "Seleziona un'immagine prima di caricare",
+    "habdle": "Contatto",
+    "onboarding": {
+        "onboarding1": {
+            "title": "Ti manca un appunto?",
+            "body": "Carica e scarica appunti, salva il tuo cervello"
+        },
+        "onboarding2": {
+            "title": "Finito i soldi per i libri?",
+            "body": "Compra, vendi e scambia libri usati, risparmia sul portafoglio"
+        },
+        "onboarding3": {
+            "title": "Condividi le tue opinioni",
+            "body": "Lascia recensioni, aiuta gli altri a fare scelte informate"
+        },
+        "onboarding4": {
+            "title": "Ce l'hai fatta!",
+            "body": "Sei pronto per entrare nel mondo di StudySwap"
+        },
+        "button": {
+            "next": "Avanti",
+            "skip": "Salta",
+            "start": "Inizia"
+        }
+    },
+    "recoveryPassword": {
+        "title": "Recupera la password",
+        "button": "Verifica",
+        "invalidEmailbody": "Usa un'email istituzionale che termini con '.edu.it'",
+        "emailEmptybody": "Inserisci un'email prima di procedere"
+    },
+    "login": {
+        "title": "Guarda chi è tornato!",
+        "buttonToRecovery": "Hai dimenticato la password?",
+        "errorbody": "Inserisci un'email o una password valida prima di continuare",
+        "buttonToLog": "Accedi",
+        "buttonToRegister": "Non hai un account?"
+    },
+    "register": {
+        "title": "Benvenuto!",
+        "confirmPassword": "Conferma password",
+        "checkBox1": "Accetto",
+        "checkBox2": "Termini di servizio",
+        "invalidEmailBody": "Puoi registrarti solo con un'email istituzionale che termini con '.edu.it'",
+        "incorrectPassword": "Password errata",
+        "registerSuccessfultitle": "Registrazione avvenuta",
+        "registerSuccessfulbody": "Una email di verifica è stata inviata al tuo indirizzo. Controlla la posta e conferma l'email prima di effettuare il login.",
+        "button": "Registrati",
+        "buttonToLoginPage": "Hai già un account?"
+    },
+    "editProfile": {
+        "nameEmpty": "È richiesto un nome utente per salvare le modifiche.",
+        "nameLenght": "Il nome utente non può superare i 20 caratteri.",
+        "errorCasual": "Si è verificato un errore. Riprova più tardi.",
+        "profileUpdatetitle": "Profilo aggiornato",
+        "profileUpdatabody": "Il tuo profilo è stato aggiornato con successo.",
+        "buttonToHome": "Torna alla Home",
+        "buttonEditProfile": "Modifica profilo",
+        "boxUsername": "Nome utente",
+        "boxNewUsername": "Inserisci il nuovo nome utente",
+        "boxBio": "Biografia",
+        "boxNewBio": "Raccontaci di te",
+        "buttonSafeChange": "Salva modifiche"
+    },
+    "notes": {
+        "labelCostInvalidValue1": "Il tuo appunto non può essere gratuito!",
+        "fileNotUpload": "Seleziona un file appunto prima di caricare",
+        "titlePage": "Carica appunti",
+        "hintTitle": "Inserisci l'argomento dei tuoi appunti",
+        "hintDescription": "Aggiungi una breve descrizione degli appunti",
+        "hintCost": "Inserisci il prezzo che vuoi chiedere per questo appunto (deve essere maggiore di zero).",
+        "MessageSuccessful": "Appunto caricato con successo!",
+        "MessageUnsuccessful": "Caricamento appunto non riuscito: ",
+        "hintSubject": "Seleziona o digita la materia relativa ai tuoi appunti (es. Matematica, Storia)."
+    },
+    "books": {
+        "error": {
+            "labelISBNEmpty": "Inserisci l'ISBN",
+            "labelYearEmpty": "Inserisci l'anno di pubblicazione",
+            "labellYearErrors": "Inserisci un anno valido tra 1000 e ",
+            "labelCost": "Il tuo libro non può essere gratuito!",
+            "labelYearsInvalid": "Per favore inserisci un anno valido"
+        },
+        "titlePage": "Carica un libro",
+        "hintTitle": "Inserisci il titolo del libro",
+        "hintDescription": "Aggiungi una breve descrizione del libro che stai vendendo",
+        "hintCost": "Inserisci il prezzo che vuoi chiedere per questo libro (deve essere maggiore di zero).",
+        "hintISBN": "Inserisci il numero ISBN che trovi sul retro o nella pagina del copyright.",
+        "labelYear": "Anno di pubblicazione",
+        "hintYear": "Inserisci l'anno di pubblicazione del libro, solitamente reperibile nella pagina dei copyright.",
+        "MessageSuccessful": "Libro caricato con successo!",
+        "MessageUnsuccessful": "Caricamento libro non riuscito: ",
+        "hintSubject": "Seleziona o digita l'area tematica del libro (es. Matematica, Storia)."
+    },
+    "settings": {
+        "titleDeleteA": "Elimina account",
+        "bodyDeleteA": "Sei sicuro di voler eliminare il tuo account? Questa azione non può essere annullata.",
+        "buttonCalcelA": "Annulla",
+        "buttonDeleteA": "Elimina",
+        "MessageDeleteA": "Account eliminato",
+        "titlePage": "Impostazioni",
+        "preferencesTitle": "PREFERENZE",
+        "preferencesErrorCasual": "Errore caricamento preferenze: ",
+        "preferences1": {
+            "title": "Aspetto dispositivo",
+            "hint": "Passa tra tema chiaro e scuro",
+            "error": "Aggiornamento tema non riuscito"
+        },
+        "preferences2": {
+            "title": "Materie preferite",
+            "hint": "Visualizza e modifica le tue materie preferite"
+        },
+        "titleAccount": "ACCOUNT",
+        "account1": {
+            "title": "Cambia password",
+            "hint": "Aggiorna la tua password"
+        },
+        "titleDangerZone": "ZONA PERICOLOSA",
+        "DangerZone": {
+            "title": "Elimina account",
+            "hint": "Elimina definitivamente il tuo account"
+        }
+    },
+    "home": {
+        "circolari": "Ultime dalla tua scuola",
+        "popupSuggestedNotes": {
+            "title": "Vuoi suggerimenti personalizzati?",
+            "body": "Scegli le tue materie preferite nelle impostazioni per ottenere raccomandazioni personalizzate.",
+            "button": "Vai alle impostazioni"
+        },
+        "suggestedNotes": {
+            "title": "Appunti suggeriti",
+            "body": "Nessun appunto suggerito.",
+            "errors": "Errore caricamento suggerimenti: "
+        },
+        "latestNotes": {
+            "title": "Ultimi appunti",
+            "button": "Vedi tutti",
+            "noNotes": "Nessun appunto disponibile.",
+            "errors": "Errore caricamento appunti: "
+        }
+    },
+    "about": {
+        "title": "Informazioni",
+        "button": "Sito ufficiale"
+    },
+    "favoriteSubject": {
+        "title": "Materie preferite",
+        "favoriteSubject": "Nessuna materia preferita selezionata.",
+        "addSubject": "Aggiungi materie:",
+        "button": "Salva preferenze",
+        "MessageSuccessfulAddSubject": "Preferenze salvate",
+        "MessageUnsuccessfulAddSubject": "Errore salvataggio preferenze: ",
+        "titleLabel": "Cerca e aggiungi materie"
+    },
+    "changePassword": {
+        "title": "Cambia la tua password",
+        "labelOld": "Inserisci la password vecchia",
+        "labelNew": "Inserisci la nuova password",
+        "labelConfirm": "Conferma la nuova password",
+        "passwordRequirements": {
+            "title": "Requisiti password:",
+            "1": "Almeno 9 caratteri",
+            "2": "Contiene lettere maiuscole e minuscole",
+            "3": "Include numeri",
+            "4": "Include caratteri speciali (es. !@#$&*)"
+        },
+        "errors": {
+            "Empty": "Compila tutti i campi della password",
+            "DifferentPassword": "La nuova password e la conferma non corrispondono",
+            "NoRespecttitle": "Password debole",
+            "NoRespectbody": "La password deve rispettare tutti i requisiti",
+            "oldPasswordtitle": "Password vecchia errata",
+            "oldPasswordbody": "Se non ricordi la password, esci e clicca 'Hai dimenticato la password?'"
+        },
+        "button": "Cambia password"
+    },
+    "boughtNotes": {
+        "title": "Appunti acquistati",
+        "Empty": "Nessun appunto trovato"
+    },
+    "offline": {
+        "title": "Sei offline",
+        "body": "Connettiti a internet e poi riavvia l'app"
+    },
+    "tutoring": {
+        "ClassEmpty": "Seleziona almeno una classe",
+        "titlePage": "Carica offerta di ripetizioni",
+        "hintDescription": "Aggiungi una breve descrizione della lezione di ripetizione",
+        "labelHours": "Ore per sessione",
+        "HoursEmpty": "Inserisci le ore per sessione",
+        "HoursInvalid": "Inserisci un numero positivo valido",
+        "hintHours": "Inserisci la durata di ogni sessione in ore.",
+        "mode": {
+            "title": "Modalità",
+            "1": "Digitale",
+            "2": "In presenza",
+            "3": "Entrambe",
+            "modeEmpty": "Seleziona una modalità",
+            "hint": "Seleziona se le ripetizioni saranno digitali, in presenza o entrambe."
+        },
+        "ClassesTitle": "Seleziona le classi",
+        "hintClasses": "Seleziona una o più classi per cui offri ripetizioni (es. 1ª classe fino a 5ª classe).",
+        "class": "Classe ",
+        "MessageSuccessful": "Ripetizioni caricate con successo!",
+        "MessageUnsuccessful": "Caricamento ripetizioni non riuscito: ",
+        "hintSubject": "Seleziona o digita la materia delle ripetizioni (es. Matematica, Storia)."
+    },
+    "edit": {
+        "tutorin": {
+            "title": "Modifica offerta di ripetizioni",
+            "hintSubject": "Non puoi modificare la materia di un'offerta di ripetizioni.",
+            "hintDescription": "Modifica la descrizione della lezione"
+        },
+        "notes": {
+            "title": "Modifica appunto"
+        },
+        "books": {
+            "title": "Modifica libro"
+        }
+    },
+    "postDetail": {
+        "titlePage": "Dettagli",
+        "titleDelete": "Conferma eliminazione",
+        "bodyDelete": "Sei sicuro di voler eliminare questo post?",
+        "buttonYesDelete": "Sì",
+        "noteBought": "Appunto già acquistato",
+        "buyNote": "Acquista questo appunto",
+        "contact": "Contatta il proprietario",
+        "viewLess": "Mostra meno",
+        "viewAll": "Mostra tutto",
+        "yearP": "Anno di pubblicazione",
+        "copyName": "Copiato negli appunti",
+        "copyNameButton": "Chiudi",
+        "yearT": "Anno: "
+    },
+    "moreUser": {
+        "title": "Altro da ",
+        "noBook": "Nessun libro disponibile.",
+        "errorBook": "Errore caricamento libri.",
+        "noNotes": "Nessun appunto disponibile.",
+        "errorNotes": "Errore caricamento appunti."
+    },
+    "profile": {
+        "title": "Ultimi caricamenti",
+        "noBooks": "Nessun libro caricato.",
+        "noNotes": "Nessun appunto caricato.",
+        "errorEmptyUser": "ID utente vuoto",
+        "userNotFound": "Dati utente non trovati.",
+        "buttonEdit": "Modifica profilo",
+        "logOutTitle": "Disconnettersi?",
+        "logOutBody": "La tua sessione scadrà e verrai riportato alla pagina di login",
+        "buttonYes": "Sì",
+        "buttonLogOut": "Esci",
+        "thanks": "Grazie per la tua recensione!",
+        "error": "Errore caricamento recensioni totali: ",
+        "error1": "Errore caricamento conteggi valutazioni: ",
+        "error2": "Errore caricamento recensioni: ",
+        "titleReview": "Lascia una recensione",
+        "tabs": {
+            "notes": "Appunti",
+            "book": "Libreria",
+            "tutoring": "Ripetizioni",
+            "review": "Recensioni"
+        },
+        "noTutoring": "Nessuna lezione di ripetizione disponibile.",
+        "noTitle": "Nessun titolo",
+        "noDescription": "Nessuna descrizione",
+        "noMode": "Non specificato"
+    },
+    "rearch": {
+        "tabs": {
+            "book": "Libri",
+            "profiles": "Profili"
+        },
+        "page": {
+            "hint": "Cerca appunti, libri, profili...",
+            "noFavorite": "Nessuna materia preferita disponibile",
+            "addFavorite": "Aggiungine alcune nelle impostazioni"
+        }
+    },
+    "coins": {
+        "title": "Il tuo saldo",
+        "howMoreCoins": {
+            "title": "Come guadagnare più coin?",
+            "1": "Carica appunti o libri",
+            "2": "Offri ripetizioni",
+            "3": "Lascia recensioni"
+        }
+    },
+    "buttonNavigationBar": {
+        "home": "Home",
+        "search": "Cerca",
+        "Exchange": "Scambi",
+        "you": "Profilo"
+    },
+    "topBar": {
+        "settings": "Impostazioni",
+        "BoughtNotes": "Appunti acquistati",
+        "AboutApp": "Informazioni sull'app"
+    },
+    "expandableMenu": {
+        "Note": "Appunto",
+        "Book": "Libro",
+        "Tutoring": "Ripetizioni"
+    },
+    "notePicker": {
+        "noFile": "Nessun file selezionato",
+        "body": "Carica solo file PDF inferiori a 15 MB"
+    },
+    "results": {
+        "noBooks": "Nessun libro trovato",
+        "noNotes": "Nessun appunto trovato",
+        "noProfile": "Nessun profilo trovato",
+        "viewAllUploads": {
+            "title": "Tutti gli appunti",
+            "body": "Nessun appunto disponibile."
+        }
+    },
+    "transaction": {
+        "titlePage": "Conferma acquisto",
+        "title": "Titolo:",
+        "subject": "Materia:",
+        "NoteID": "ID appunto:",
+        "price1": "Prezzo:",
+        "price2": "coin",
+        "error": "Utente non connesso. Effettua il login prima.",
+        "messageSuccessful": "Appunto acquistato con successo!",
+        "button": "Conferma acquisto"
+    },
+    "mediaDispayPage": "Visualizzatore note",
+    "fovoriteSubject":{
+        "body":"Nessun appunto disponibile per questa materia",
+        "titleNotes":"Note",
+        "titleBook":"Libri",
+        "errorNotes":"Errore nel caricare le note: ",
+        "errorBook":"Errore nel caricare i libri: "
+    }
+}
