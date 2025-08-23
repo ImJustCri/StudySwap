@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/theme_provider.dart';
 import 'package:studyswap/auth.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/providers/user_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
+
+import '../../providers/language_provider.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -59,6 +62,8 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final darkModeAsync = ref.watch(darkModeProvider);
     final updateDarkMode = ref.read(darkModeUpdateProvider);
+    final userId = ref.read(userProvider).value!.uid;
+    final language = ref.read(languageProvider(userId));
 
     return Scaffold(
       appBar: AppBar(title:  Text(Translation.of(context)!.translate("settings.titlePage"))),
@@ -100,6 +105,35 @@ class SettingsPage extends ConsumerWidget {
                 onTap: () {
                   Navigator.pushNamed(context, "/favorite-subjects");
                 },
+              ),
+
+              const Divider(),
+
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                leading: const Icon(Icons.language),
+                title: Text(Translation.of(context)!.translate("settings.language.title")),
+                subtitle: Text(Translation.of(context)!.translate("settings.language.hint")),
+                trailing: DropdownButton<String>(
+                  value: language,
+                  underline: const SizedBox(),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'en',
+                      child: Text('English'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'it',
+                      child: Text('Italian'),
+                    ),
+                  ],
+                  onChanged: (value) async {
+                    if (value != null) {
+                      await LocaleManager.setLocale(Locale(value), userId);
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
               ),
 
               _sectionLabel(context, Translation.of(context)!.translate("settings.titleAccount")),
@@ -146,7 +180,7 @@ class SettingsPage extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
-          child: Text(Translation.of(context)!.translate("settings.preferencesErrorCasual")+"$error"),
+          child: Text("${Translation.of(context)!.translate("settings.preferencesErrorCasual")}$error"),
         ),
       ),
     );
