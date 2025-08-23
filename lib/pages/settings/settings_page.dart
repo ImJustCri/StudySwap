@@ -130,7 +130,9 @@ class SettingsPage extends ConsumerWidget {
                   onChanged: (value) async {
                     if (value != null) {
                       await LocaleManager.setLocale(Locale(value), userId);
-                      Navigator.pop(context);
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
                     }
                   },
                 ),
