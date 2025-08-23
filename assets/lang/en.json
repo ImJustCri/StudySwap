@@ -134,6 +134,10 @@
             "title":"Change Password",
             "hint":"Update your password"
         },
+        "language":{
+            "title":"Change language",
+            "hint":"Update the app's language"
+        },
         "titleDangerZone":"DANGER ZONE",
         "DangerZone":{
             "title":"Delete Account",

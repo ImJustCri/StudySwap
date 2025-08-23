@@ -134,6 +134,10 @@
             "title": "Cambia password",
             "hint": "Aggiorna la tua password"
         },
+        "language":{
+            "title":"Cambia lingua",
+            "hint":"Aggiorna la lingua dell'app"
+        },
         "titleDangerZone": "ZONA PERICOLOSA",
         "DangerZone": {
             "title": "Elimina account",
@@ -141,7 +145,7 @@
         }
     },
     "home": {
-        "circolari": "Ultime dalla tua scuola",
+        "circolari": "Novità dalla tua scuola",
         "popupSuggestedNotes": {
             "title": "Vuoi suggerimenti personalizzati?",
             "body": "Scegli le tue materie preferite nelle impostazioni per ottenere raccomandazioni personalizzate.",
@@ -160,7 +164,7 @@
         }
     },
     "about": {
-        "title": "Informazioni",
+        "title": "Info su",
         "button": "Sito ufficiale"
     },
     "favoriteSubject": {
@@ -243,9 +247,9 @@
         "titleDelete": "Conferma eliminazione",
         "bodyDelete": "Sei sicuro di voler eliminare questo post?",
         "buttonYesDelete": "Sì",
-        "noteBought": "Appunto già acquistato",
-        "buyNote": "Acquista questo appunto",
-        "contact": "Contatta il proprietario",
+        "noteBought": "Già acquistato",
+        "buyNote": "Acquista appunto",
+        "contact": "Contatta proprietario",
         "viewLess": "Mostra meno",
         "viewAll": "Mostra tutto",
         "yearP": "Anno di pubblicazione",
@@ -261,7 +265,7 @@
         "errorNotes": "Errore caricamento appunti."
     },
     "profile": {
-        "title": "Ultimi caricamenti",
+        "title": "Ultimi caricati",
         "noBooks": "Nessun libro caricato.",
         "noNotes": "Nessun appunto caricato.",
         "errorEmptyUser": "ID utente vuoto",
@@ -347,12 +351,12 @@
         "messageSuccessful": "Appunto acquistato con successo!",
         "button": "Conferma acquisto"
     },
-    "mediaDispayPage": "Visualizzatore note",
+    "mediaDispayPage": "Lettore di appunti",
     "fovoriteSubject":{
-        "body":"Nessun appunto disponibile per questa materia",
-        "titleNotes":"Note",
+        "body":"Nessun post disponibile",
+        "titleNotes":"Appunti",
         "titleBook":"Libri",
-        "errorNotes":"Errore nel caricare le note: ",
+        "errorNotes":"Errore nel caricare gli appunti: ",
         "errorBook":"Errore nel caricare i libri: "
     }
 }
