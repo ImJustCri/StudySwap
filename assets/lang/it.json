@@ -348,6 +348,8 @@
         "price1": "Prezzo:",
         "price2": "coin",
         "error": "Utente non connesso. Effettua il login prima.",
+        "errorTitle": "Transazione fallita",
+        "errorBody": "Non hai abbastanza soldi per comprare questi appunti",
         "messageSuccessful": "Appunto acquistato con successo!",
         "button": "Conferma acquisto"
     },

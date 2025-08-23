@@ -350,6 +350,8 @@
         "price2":"coins",
         "error":"User not signed in. Please login first.",
         "messageSuccessful":"Note successfully bought!",
+        "errorTitle": "Failed Transaction",
+        "errorBody": "You do not have enough money to buy this note",
         "button":"Confirm Purchase"
     },
     "mediaDispayPage":"Note viewer",
@@ -360,5 +362,4 @@
         "errorNotes":"Error loading notes: ",
         "errorBook":"Error loading books: "
     }
-      
 }
