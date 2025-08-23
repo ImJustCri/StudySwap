@@ -83,7 +83,7 @@ class TransactionPage extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (buyerUserId == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
                            SnackBar(content: Text(Translation.of(context)!.translate("transaction.error"))),
@@ -91,27 +91,47 @@ class TransactionPage extends StatelessWidget {
                         return;
                       }
 
-                      coinsManager.transferCoins(buyerUserId, sellerId, price);
+                      try {
+                        await coinsManager.transferCoins(buyerUserId, sellerId, price);
 
-                      final docRef = FirebaseFirestore.instance.collection('Users').doc(buyerUserId).collection("Bought").doc(noteId);
+                        final docRef = FirebaseFirestore.instance.collection('Users').doc(buyerUserId).collection("Bought").doc(noteId);
 
-                      final noteUrl = Supabase.instance.client.storage
-                          .from('notes')
-                          .getPublicUrl("$sellerId/$noteId");
+                        final noteUrl = Supabase.instance.client.storage
+                            .from('notes')
+                            .getPublicUrl("$sellerId/$noteId");
 
-                      docRef.set({
-                        "note_id": noteId,
-                        "seller_id": sellerId,
-                        "title": title,
-                        "subject": subject,
-                        "price": price,
-                        "note_url": noteUrl,
-                      });
+                        docRef.set({
+                          "note_id": noteId,
+                          "seller_id": sellerId,
+                          "title": title,
+                          "subject": subject,
+                          "price": price,
+                          "note_url": noteUrl,
+                        });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                         SnackBar(content: Text(Translation.of(context)!.translate("transaction.messageSuccessful"))),
-                      );
-                      Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(Translation.of(context)!.translate("transaction.messageSuccessful"))),
+                        );
+                        Navigator.of(context).pop();
+
+                      } catch (e) {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text(Translation.of(context)!.translate("transaction.errorTitle")),
+                            content: Text(Translation.of(context)!.translate("transaction.errorBody")),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Ok"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
                     },
                     child:  Text(Translation.of(context)!.translate("transaction.button")),
                   ),
