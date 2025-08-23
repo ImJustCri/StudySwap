@@ -45,7 +45,7 @@ class _AboutAppPageState extends State<AboutAppPage> {
       appBar: AppBar(
         centerTitle: false,
         title: Text(
-           Translation.of(context)!.translate("about.title")+_packageInfo.appName,
+           "${Translation.of(context)!.translate("about.title")} ${_packageInfo.appName}",
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),

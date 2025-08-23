@@ -168,7 +168,7 @@ class SuggestedNotesSection extends ConsumerWidget {
           ),
           error: (error, _) => SizedBox(
             height: 192,
-            child: Center(child: Text(Translation.of(context)!.translate("home.suggestedNotes.errors")+"$error")),
+            child: Center(child: Text("${Translation.of(context)!.translate("home.suggestedNotes.errors")}$error")),
           ),
         ),
       ],
