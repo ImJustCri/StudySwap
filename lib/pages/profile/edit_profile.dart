@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image/image.dart' as img;
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
 

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/search/favorite_subject.dart';
 import 'package:studyswap/pages/search/search_results.dart';
 import '../../providers/subjects_providers.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class SearchPage extends ConsumerWidget {
   const SearchPage({super.key});
 

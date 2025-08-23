@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../../providers/notes_provider.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class Notes extends ConsumerWidget {
   final String userId;
 

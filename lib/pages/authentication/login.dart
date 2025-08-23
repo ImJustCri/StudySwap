@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
 import 'package:studyswap/notifications/notifications.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 

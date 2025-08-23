@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class NotePicker extends StatefulWidget {
   final File? initialFile;
   final ValueChanged<File?> onFilePicked;

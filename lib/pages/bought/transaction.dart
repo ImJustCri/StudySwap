@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studyswap/services/coins_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class TransactionPage extends StatelessWidget {
   final String noteId;
   final String sellerId;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../pages/content/tutoring_detail_page.dart';
 import '../providers/user_provider.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class TutoringTile extends ConsumerWidget {
   final String title;
   final List<bool> isYearSelected;

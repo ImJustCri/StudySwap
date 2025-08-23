@@ -3,7 +3,7 @@ import 'package:studyswap/pages/search/results/books_results.dart';
 import 'package:studyswap/pages/search/results/notes_results.dart';
 import 'package:studyswap/pages/search/results/profile_results.dart';
 import 'package:studyswap/pages/search/results_tabs.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class SearchResults extends StatefulWidget {
   const SearchResults({super.key});
 

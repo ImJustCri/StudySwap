@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/subjects_providers.dart';
 import '../../providers/user_provider.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 final userDataProvider = StreamProvider<Map?>((ref) {
   final userStream = ref.watch(userProvider);
   final currentUser = userStream.value;

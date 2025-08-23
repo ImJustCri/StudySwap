@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 
 final Uri _url = Uri.parse('https://studyswap.it/terms');
 

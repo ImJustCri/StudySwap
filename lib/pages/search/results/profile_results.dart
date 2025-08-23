@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/search/profile_tile.dart';
 import 'package:studyswap/providers/search_results_provider.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class ProfileResults extends ConsumerWidget {
   final String searchQuery;
 

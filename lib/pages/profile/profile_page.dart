@@ -11,7 +11,7 @@ import 'bookshop.dart';
 import 'notes.dart';
 import 'reviews.dart';
 import 'tutoring.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class ProfilePage extends ConsumerStatefulWidget {
   final String userId;
   final bool fromNavigation;

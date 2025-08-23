@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:studyswap/coins_page.dart';
 import 'package:studyswap/providers/data_provider.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class TopBar extends ConsumerWidget implements PreferredSizeWidget {
   const TopBar({super.key});
 

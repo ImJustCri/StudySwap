@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/subjects_providers.dart';
 import 'contact_input.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class TutoringUploadPage extends ConsumerStatefulWidget {
   const TutoringUploadPage({super.key});
 

@@ -24,7 +24,7 @@ import 'home/home_page.dart';
 import 'package:studyswap/pages/authentication/login.dart';
 import 'package:studyswap/pages/notifications_page.dart';
 import 'pages/authentication/password_recovery.dart';
-import 'providers/traslation_provider.dart';
+import 'services/traslation_manager.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends ConsumerStatefulWidget {

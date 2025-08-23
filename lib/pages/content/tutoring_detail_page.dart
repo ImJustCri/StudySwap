@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import 'package:studyswap/services/posts_manager.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 import '../edit/edit_tutoring_details.dart';
 
 class TutoringDetailPage extends StatefulWidget {

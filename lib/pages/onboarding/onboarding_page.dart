@@ -3,7 +3,7 @@ import 'package:flutter_sliding_tutorial/flutter_sliding_tutorial.dart';
 import 'package:studyswap/pages/onboarding/onboarding.dart';
 import 'package:studyswap/pages/onboarding/onboarding_content.dart';
 import 'package:studyswap/misc/resources.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});

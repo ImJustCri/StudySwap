@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class ContactInput extends StatefulWidget {
   final String? initialPlatform;
   final String? initialHandle;

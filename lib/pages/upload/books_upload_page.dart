@@ -9,7 +9,7 @@ import '../../providers/subjects_providers.dart';
 import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
 import 'contact_input.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 
 class BooksUploadPage extends ConsumerStatefulWidget {
   const BooksUploadPage({super.key});

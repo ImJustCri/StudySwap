@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/circolare_content.dart';
 import '../providers/circolari_feed_provider.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 
 /// Funzione helper per convertire la data del feed RSS in formato leggibile
 String? readableDate(String? date) {
@@ -112,7 +112,7 @@ class CircolariCarousel extends ConsumerWidget {
           children: [
             const SizedBox(height: 8),
             Text(
-              "Latest from your school",
+              Translation.of(context)!.translate("home.circolari"),
               style: TextStyle(
                 fontSize: 18,
                 color: theme.colorScheme.onSurface,
@@ -123,7 +123,7 @@ class CircolariCarousel extends ConsumerWidget {
               height: 144,
               width: double.infinity,
               child: CarouselView(
-                onTap: (_) {}, // Nessuna azione sul placeholder
+                onTap: (_) {},
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

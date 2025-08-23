@@ -58,7 +58,7 @@ class TranslationDelegate extends LocalizationsDelegate<Translation> {
 class LocaleManager {
   //Serve per ridisegnare tutta UI senza uscire dall'app
   static final ValueNotifier<Locale> currentLocale = ValueNotifier(
-    WidgetsBinding.instance.window.locale.languageCode == 'it'
+    WidgetsBinding.instance.platformDispatcher.locale.languageCode == 'it'
         ? const Locale('it')
         : const Locale('en'),
   );
@@ -71,7 +71,7 @@ class LocaleManager {
         currentLocale.value = Locale(user.data()!['language']);
         return currentLocale.value;
       } else {
-        final deviceLocale = WidgetsBinding.instance.window.locale;
+        final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
         final langCode =
             ['en', 'it'].contains(deviceLocale.languageCode)
                 ? deviceLocale.languageCode
@@ -102,5 +102,6 @@ class LocaleManager {
     }
   }
 }
+
 // Per cambiare lingua tramite l'impostazioni
 // await LocaleManager.setLocale(newLocale,userId);

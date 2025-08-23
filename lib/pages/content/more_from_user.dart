@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/books_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../widgets/post.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class MoreFromUser extends ConsumerWidget {
   final bool isBook;
   final String userId;

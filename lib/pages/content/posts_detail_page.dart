@@ -9,7 +9,7 @@ import '../bought/transaction.dart';
 import '../edit/edit_books_details.dart';
 import '../edit/edit_notes_details.dart';
 import 'more_from_user.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class PostDetailsPage extends ConsumerStatefulWidget {
   final String title;
   final String subject;

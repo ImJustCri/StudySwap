@@ -4,7 +4,7 @@ import '../../providers/reviews_provider.dart';
 import '../../widgets/reviews/review_bottom_sheet.dart';
 import '../../widgets/reviews/reviews_list.dart';
 import '../../widgets/reviews/reviews_panel.dart';
-import 'package:studyswap/providers/traslation_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 class Reviews extends ConsumerStatefulWidget {
   final double stars;
   final String userId;
