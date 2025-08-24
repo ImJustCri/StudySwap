@@ -331,7 +331,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                       const SizedBox(width: 24),
                       Flexible(
                         child: Text(
-                          widget.mode,
+                          Translation.of(context)!.translate("tutoring.mode.${widget.mode}"),
                           style: const TextStyle(
                             fontSize: 18,
                           ),

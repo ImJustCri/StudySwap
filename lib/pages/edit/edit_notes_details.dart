@@ -136,21 +136,44 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
 
                 // Subject autocomplete
                 Autocomplete<String>(
-                  optionsBuilder: (textEditingValue) {
+                  optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<String>.empty();
                     }
-                    return translatedSubjects.where((subject) =>
-                        subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                    // Filter subjects by matching translated text
+                    return subjects.where((subject) {
+                      final translated = Translation.of(context)!.translate("subjectsList.$subject");
+                      return translated.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                    });
                   },
                   onSelected: (selection) {
                     setState(() {
                       _selectedSubject = selection;
-                      _subjectController.text = selection;
+                      _subjectController.text = Translation.of(context)!.translate("subjectsList.$selection");
                     });
                   },
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return Material(
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: options.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final subjectKey = options.elementAt(index);
+                          final translated = Translation.of(context)!.translate("subjectsList.$subjectKey");
+                          return ListTile(
+                            title: Text(translated),
+                            onTap: () {
+                              onSelected(subjectKey);
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
                   fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
-                    controller.text = widget.subject;
+                    _subjectController.value = controller.value;
+                    controller.text = Translation.of(context)!.translate("subjectsList.${widget.subject}");
+
                     return TextFormField(
                       controller: controller,
                       focusNode: focusNode,
@@ -163,7 +186,7 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
                         if (value == null || value.trim().isEmpty) {
                           return Translation.of(context)!.translate("labelSubjectEmpty");
                         }
-                        if (!translatedSubjects.contains(value.trim())) {
+                        if (!subjects.contains(_selectedSubject)) {
                           return Translation.of(context)!.translate("labelSubjectInvalid");
                         }
                         return null;
@@ -281,7 +304,7 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Translation.of(context)!.translate("MessageUnsuccessful")+"$e")),
+        SnackBar(content: Text("${Translation.of(context)!.translate("MessageUnsuccessful")}$e")),
       );
     }
   }

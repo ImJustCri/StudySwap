@@ -44,7 +44,7 @@ class FavoriteSubject extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  Translation.of(context)!.translate("fovoriteSubject.body"),
+                  Translation.of(context)!.translate("searchFavoriteSubject.body"),
                 ),
               ],
             ),
@@ -75,7 +75,7 @@ class FavoriteSubject extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(subject),
+        title: Text((Translation.of(context)!.translate("subjectsList.$subject"))),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -87,7 +87,7 @@ class FavoriteSubject extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildSectionTitle(Translation.of(context)!.translate("fovoriteSubject.titleNotes")),
+              buildSectionTitle(Translation.of(context)!.translate("searchFavoriteSubject.titleNotes")),
               notesAsync.when(
                 data: (notesList) {
                   final posts = notesList.map((note) => Post.fromMap(note)).toList();
@@ -99,11 +99,11 @@ class FavoriteSubject extends ConsumerWidget {
                 ),
                 error: (error, _) => SizedBox(
                   height: 192,
-                  child: Center(child: Text(Translation.of(context)!.translate("fovoriteSubject.errorNotes")+"$error")),
+                  child: Center(child: Text("${Translation.of(context)!.translate("searchFavoriteSubject.errorNotes")}$error")),
                 ),
               ),
 
-              buildSectionTitle(Translation.of(context)!.translate("fovoriteSubject.titleBook")),
+              buildSectionTitle(Translation.of(context)!.translate("searchFavoriteSubject.titleBook")),
               booksAsync.when(
                 data: (booksList) {
                   final posts = booksList.map((book) => Post.fromMap(book)).toList();
@@ -115,7 +115,7 @@ class FavoriteSubject extends ConsumerWidget {
                 ),
                 error: (error, _) => SizedBox(
                   height: 192,
-                  child: Center(child: Text(Translation.of(context)!.translate("fovoriteSubject.errorBook")+"$error")),
+                  child: Center(child: Text("${Translation.of(context)!.translate("searchFavoriteSubject.errorBook")}$error")),
                 ),
               ),
               const SizedBox(height: 32),

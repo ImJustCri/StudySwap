@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/content/posts_detail_page.dart';
 
 import '../providers/user_provider.dart';
+import '../services/traslation_manager.dart';
 
 class Post extends ConsumerWidget {
   final String userId;
@@ -125,7 +127,7 @@ final isOfUser = currentUser != null && currentUser.uid == userId;
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    subject,
+                    Translation.of(context)!.translate("subjectsList.$subject"),
                     style: TextStyle(fontSize: 14, color: theme.colorScheme.secondary),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

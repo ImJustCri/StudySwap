@@ -109,6 +109,7 @@ class SettingsPage extends ConsumerWidget {
 
               const Divider(),
 
+              // Language changer
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 leading: const Icon(Icons.language),

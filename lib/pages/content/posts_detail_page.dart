@@ -432,7 +432,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       const SizedBox(width: 24),
                       Flexible(
                         child: Text(
-                          widget.subject,
+                          Translation.of(context)!.translate("subjectsList.${widget.subject}"),
                           style: const TextStyle(
                             fontSize: 18,
                           ),

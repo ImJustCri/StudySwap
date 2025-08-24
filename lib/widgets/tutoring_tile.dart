@@ -79,7 +79,7 @@ class TutoringTile extends ConsumerWidget {
           context,
           MaterialPageRoute(
             builder: (context) => TutoringDetailPage(
-              subject: title,
+              subject: (Translation.of(context)!.translate("subjectsList.$title")),
               description: description,
               classes: isYearSelected,
               userId: userId,
@@ -103,7 +103,7 @@ class TutoringTile extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              (Translation.of(context)!.translate("subjectsList.$title")),
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),

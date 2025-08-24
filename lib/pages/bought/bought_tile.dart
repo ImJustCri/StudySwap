@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../services/traslation_manager.dart';
 import 'media_viewer/media_display_page.dart';
 
 class BoughtPost extends StatelessWidget {
@@ -56,7 +57,7 @@ class BoughtPost extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    subject,
+                    Translation.of(context)!.translate("subjectsList.$subject"),
                     style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.secondary),
                   ),
                   const SizedBox(height: 8),

@@ -98,7 +98,7 @@ class SearchPage extends ConsumerWidget {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Text(
-                                    subject,
+                                    Translation.of(context)!.translate("subjectsList.$subject"),
                                     style: TextStyle(
                                       color: theme.colorScheme.onPrimaryContainer,
                                       fontSize: 18,

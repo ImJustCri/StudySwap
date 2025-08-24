@@ -129,23 +129,43 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                         if (textEditingValue.text.isEmpty) {
                           return const Iterable<String>.empty();
                         }
-                        return subjects.where((subject) =>
-                            subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                        // Filter subjects by matching translated text
+                        return subjects.where((subject) {
+                          final translated = Translation.of(context)!.translate("subjectsList.$subject");
+                          return translated.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                        });
                       },
                       onSelected: (selection) {
                         setState(() {
                           _selectedSubject = selection;
-                          _subjectController.text = selection;
+                          _subjectController.text = Translation.of(context)!.translate("subjectsList.$selection");
                         });
                       },
-                      fieldViewBuilder:
-                          (context, controller, focusNode, onEditingComplete) {
+                      optionsViewBuilder: (context, onSelected, options) {
+                        return Material(
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: options.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final subjectKey = options.elementAt(index);
+                              final translated = Translation.of(context)!.translate("subjectsList.$subjectKey");
+                              return ListTile(
+                                title: Text(translated),
+                                onTap: () {
+                                  onSelected(subjectKey);
+                                },
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
                         _subjectController.value = controller.value;
 
                         return TextFormField(
                           controller: controller,
                           focusNode: focusNode,
-                          decoration:  InputDecoration(
+                          decoration: InputDecoration(
                             labelText: Translation.of(context)!.translate("labelSubject"),
                             border: OutlineInputBorder(),
                             prefixIcon: Icon(Icons.category),
@@ -154,7 +174,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                             if (value == null || value.trim().isEmpty) {
                               return Translation.of(context)!.translate("labelSubjectEmpty");
                             }
-                            if (!subjects.contains(value.trim())) {
+                            if (!subjects.contains(_selectedSubject)) {
                               return Translation.of(context)!.translate("labelSubjectInvalid");
                             }
                             return null;
@@ -226,9 +246,9 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                       ),
                       value: _selectedMode,
                       items: [
-                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.1"), child: Text(Translation.of(context)!.translate("tutoring.mode.1"),)),
-                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.2"), child: Text(Translation.of(context)!.translate("tutoring.mode.2"),)),
-                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.3"), child: Text(Translation.of(context)!.translate("tutoring.mode.3"),)),
+                        DropdownMenuItem(value: "digital", child: Text(Translation.of(context)!.translate("tutoring.mode.digital"),)),
+                        DropdownMenuItem(value: "irl", child: Text(Translation.of(context)!.translate("tutoring.mode.irl"),)),
+                        DropdownMenuItem(value: "both", child: Text(Translation.of(context)!.translate("tutoring.mode.both"),)),
                       ],
                       onChanged: (value) {
                         setState(() {

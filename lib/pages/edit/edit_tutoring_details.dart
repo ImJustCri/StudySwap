@@ -208,9 +208,9 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                       ),
                       value: _selectedMode,
                       items: [
-                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.1"), child: Text(Translation.of(context)!.translate("tutoring.mode.1"))),
-                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.2"), child: Text(Translation.of(context)!.translate("tutoring.mode.2"))),
-                        DropdownMenuItem(value: Translation.of(context)!.translate("tutoring.mode.3"), child: Text(Translation.of(context)!.translate("tutoring.mode.3"))),
+                        DropdownMenuItem(value: "digital", child: Text(Translation.of(context)!.translate("tutoring.mode.digital"),)),
+                        DropdownMenuItem(value: "irl", child: Text(Translation.of(context)!.translate("tutoring.mode.irl"),)),
+                        DropdownMenuItem(value: "both", child: Text(Translation.of(context)!.translate("tutoring.mode.both"),)),
                       ],
                       onChanged: (value) {
                         setState(() {
@@ -280,7 +280,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                         final isSelected = _selectedClasses.contains(classNumber);
 
                         return FilterChip(
-                          label: Text(Translation.of(context)!.translate("tutoring.mode.class")+"$classNumber"),
+                          label: Text("${Translation.of(context)!.translate("tutoring.mode.class")}$classNumber"),
                           selected: isSelected,
                           onSelected: (selected) {
                             setState(() {
@@ -338,7 +338,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Translation.of(context)!.translate("tutoring.MessageUnsuccessful")+"$e")),
+        SnackBar(content: Text("${Translation.of(context)!.translate("tutoring.MessageUnsuccessful")}$e")),
       );
     }
   }
