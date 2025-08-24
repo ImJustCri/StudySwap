@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,12 +52,43 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     setState(() {});
   }
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(ThemeData theme) async {
     final picker = ImagePicker();
     final pickedXFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedXFile == null) return;
 
-    final bytes = await pickedXFile.readAsBytes();
+    // Use cropper here
+    final croppedFile = await ImageCropper().cropImage(
+      sourcePath: pickedXFile.path,
+      uiSettings: [
+        AndroidUiSettings(
+            aspectRatioPresets: [
+              CropAspectRatioPreset.square,
+            ],
+            activeControlsWidgetColor: theme.colorScheme.primary,
+            statusBarColor: theme.colorScheme.surface,
+            dimmedLayerColor: theme.colorScheme.surface,
+
+            toolbarTitle: 'Crop Image',
+            toolbarColor: theme.colorScheme.surface,
+            backgroundColor: theme.colorScheme.surface,
+            toolbarWidgetColor: theme.colorScheme.onSurface,
+            initAspectRatio: CropAspectRatioPreset.square,
+            lockAspectRatio: true,
+        ),
+        IOSUiSettings(
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+          ],
+          title: 'Crop Image',
+        ),
+      ],
+    );
+
+    if (croppedFile == null) return;
+
+    final bytes = await croppedFile.readAsBytes();
+
     img.Image? originalImage = img.decodeImage(bytes);
     if (originalImage == null) return;
 
@@ -64,10 +96,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     final resizedBytes = img.encodePng(resizedImage);
 
     final tempDir = Directory.systemTemp;
-
-    // This is to avoid reusing the same temp file so flutter won't the old image due to caching
     final uniquePath = '${tempDir.path}/resized_profile_${DateTime.now().millisecondsSinceEpoch}.png';
-
     final resizedFile = await File(uniquePath).writeAsBytes(resizedBytes);
 
     setState(() {
@@ -118,8 +147,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
           _currentImageUrl = imageUrlToSave;
         });
       }
-
-      // Save profile info to Firestore
+      
       await FirebaseFirestore.instance.collection('Users').doc(uid).update({
         'username': name.replaceAll(" ", ".").toLowerCase(),
         'aboutme': bio,
@@ -224,7 +252,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     }
 
     return GestureDetector(
-      onTap: _pickImage,  // Call your image picker on tap
+      onTap: () => _pickImage(theme),
       child: avatarContent,
     );
   }
