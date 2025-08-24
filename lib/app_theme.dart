@@ -140,8 +140,7 @@ class AppTheme {
       useMaterial3: true,
       fontFamily: 'InstrumentSans',
 
-      // Disable ripple effects and highlights globally in light mode
-      splashColor: Colors.transparent,
+      splashColor: colorScheme.secondaryContainer,
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
 
@@ -167,8 +166,8 @@ class AppTheme {
       useMaterial3: true,
       fontFamily: 'InstrumentSans',
 
-      // Disable ripple effects and highlights globally in dark mode
-      splashColor: Colors.transparent,
+
+      splashColor: colorScheme.secondaryContainer,
       highlightColor: Colors.transparent,
       hoverColor: Colors.transparent,
 
