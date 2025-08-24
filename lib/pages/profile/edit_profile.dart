@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image/image.dart' as img;
-
+import 'package:studyswap/services/traslation_manager.dart';
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
 
@@ -128,12 +128,12 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     final bio = _bioController.text.trim();
 
     if (name.isEmpty) {
-      _showErrorDialog("A username is required to save changes.");
+      _showErrorDialog(Translation.of(context)!.translate("editProfile.nameEmpty"));
       return;
     }
 
     if (name.length > 20) {
-      _showErrorDialog("Username cannot exceed 20 characters.");
+      _showErrorDialog(Translation.of(context)!.translate("editProfile.nameLenght"));
       return;
     }
 
@@ -157,7 +157,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
       _showSuccessDialog();
     } catch (e) {
       debugPrint("Error saving profile: $e");
-      _showErrorDialog("Something went wrong. Please try again later.");
+      _showErrorDialog(Translation.of(context)!.translate("editProfile.errorCasual"));
     }
   }
 
@@ -165,7 +165,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     showDialog(
       context: context,
       builder: (c) => AlertDialog(
-        title: const Text("Error"),
+        title:  Text(Translation.of(context)!.translate("titleError")),
         content: Text(message),
         actions: [
           TextButton(
@@ -182,8 +182,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
       context: context,
       barrierDismissible: false,
       builder: (c) => AlertDialog(
-        title: const Text("Profile Updated"),
-        content: const Text("Your profile has been updated successfully."),
+        title: Text(Translation.of(context)!.translate("editProfile.profileUpdatetitle")),
+        content: Text(Translation.of(context)!.translate("editProfile.profileUpdatabody")),
         actions: [
           Row(
             children: [
@@ -191,7 +191,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                 child: TextButton(
                   onPressed: () =>
                       Navigator.pushReplacementNamed(context, '/homescreen'),
-                  child: const Text("Back to Home"),
+                  child: Text(Translation.of(context)!.translate("editProfile.buttonToHome")),
                 ),
               ),
             ],
@@ -262,7 +262,7 @@ class _EditProfileState extends ConsumerState<EditProfile> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Edit Profile")),
+      appBar: AppBar(title: Text(Translation.of(context)!.translate("editProfile.buttonEditProfile"))),
       body: FutureBuilder(
         future: _profileFuture,
         builder: (context, snapshot) {
@@ -282,19 +282,19 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                         const SizedBox(height: 24),
                         TextField(
                           controller: _nameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Username',
+                          decoration: InputDecoration(
+                            labelText: Translation.of(context)!.translate("editProfile.boxUsername"),
                             border: OutlineInputBorder(),
-                            hintText: 'Enter your new username',
+                            hintText: Translation.of(context)!.translate("editProfile.boxNewUsername"),
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextField(
                           controller: _bioController,
-                          decoration: const InputDecoration(
-                            labelText: 'Bio',
+                          decoration:  InputDecoration(
+                            labelText: Translation.of(context)!.translate("editProfile.boxBio"),
                             border: OutlineInputBorder(),
-                            hintText: 'Tell us about yourself',
+                            hintText: Translation.of(context)!.translate("editProfile.boxNewBio"),
                           ),
                           maxLines: 3,
                         ),
@@ -308,8 +308,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   height: 56,
                   child: ElevatedButton(
                     onPressed: _saveProfile,
-                    child: const Text(
-                      'Save Changes',
+                    child: Text(
+                      Translation.of(context)!.translate("editProfile.buttonSafeChange"),
                       style: TextStyle(fontSize: 16),
                     ),
                   ),

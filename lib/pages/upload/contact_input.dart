@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class ContactInput extends StatefulWidget {
   final String? initialPlatform;
   final String? initialHandle;
@@ -96,14 +96,14 @@ class _ContactInputState extends State<ContactInput> {
         const SizedBox(height: 12),
         TextFormField(
           controller: _handleController,
-          decoration: const InputDecoration(
-            labelText: 'Handle',
+          decoration: InputDecoration(
+            labelText: Translation.of(context)!.translate("habdle"),
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.account_circle),
           ),
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return 'Please enter your handle';
+              return Translation.of(context)!.translate("contactHandle");
             }
             return null;
           },

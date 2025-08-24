@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/notes_provider.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 import 'bought_tile.dart';
 
 class BoughtNotes extends ConsumerWidget {
@@ -13,22 +13,22 @@ class BoughtNotes extends ConsumerWidget {
 
     return boughtNotesAsync.when(
       loading: () => Scaffold(
-        appBar: AppBar(title: Text("Bought Notes")),
+        appBar: AppBar(title: Text(Translation.of(context)!.translate("boughtNotes.title"))),
         body: const Center(child: CircularProgressIndicator()),
       ),
       error: (e, _) => Scaffold(
-        appBar: AppBar(title: Text("Bought Notes")),
+        appBar: AppBar(title: Text(Translation.of(context)!.translate("boughtNotes.title"))),
         body: Center(child: Text('Error: $e')),
       ),
       data: (boughtNotes) {
         if (boughtNotes.isEmpty) {
           return Scaffold(
-            appBar: AppBar(title: Text("Bought Notes")),
-            body: const Center(child: Text('No notes found')),
+            appBar: AppBar(title: Text(Translation.of(context)!.translate("boughtNotes.title"))),
+            body: Center(child: Text(Translation.of(context)!.translate("boughtNotes.Empty"))),
           );
         }
         return Scaffold(
-          appBar: AppBar(title: Text("Bought Notes")),
+          appBar: AppBar(title: Text(Translation.of(context)!.translate("boughtNotes.title"))),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: ListView.separated(

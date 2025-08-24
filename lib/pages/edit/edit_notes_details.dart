@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/subjects_providers.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class EditNotesPage extends ConsumerStatefulWidget {
   final String noteId;
   final String title;
@@ -86,11 +86,12 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjects = ref.watch(subjectsProvider);
+    final translatedSubjects = subjects.map((subject) => Translation.of(context)!.translate("Subject.$subject")).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Edit Note",
+        title: Text(
+          Translation.of(context)!.translate("edit.notes.title"),
           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 22),
         ),
         leading: const BackButton(),
@@ -111,23 +112,23 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
                 // Title input
                 TextFormField(
                   controller: _titleController,
-                  decoration: const InputDecoration(
-                    labelText: 'Title',
+                  decoration: InputDecoration(
+                    labelText: Translation.of(context)!.translate("labelTitle"),
                     prefixIcon: Icon(Icons.note_add_rounded),
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a title';
+                      return Translation.of(context)!.translate("titleEmpty");
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the topic of your notes',
+                    Translation.of(context)!.translate("notes.hintTitle"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -135,35 +136,58 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
 
                 // Subject autocomplete
                 Autocomplete<String>(
-                  optionsBuilder: (textEditingValue) {
+                  optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text.isEmpty) {
                       return const Iterable<String>.empty();
                     }
-                    return subjects.where((subject) =>
-                        subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                    // Filter subjects by matching translated text
+                    return subjects.where((subject) {
+                      final translated = Translation.of(context)!.translate("subjectsList.$subject");
+                      return translated.toLowerCase().contains(textEditingValue.text.toLowerCase());
+                    });
                   },
                   onSelected: (selection) {
                     setState(() {
                       _selectedSubject = selection;
-                      _subjectController.text = selection;
+                      _subjectController.text = Translation.of(context)!.translate("subjectsList.$selection");
                     });
                   },
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return Material(
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        itemCount: options.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final subjectKey = options.elementAt(index);
+                          final translated = Translation.of(context)!.translate("subjectsList.$subjectKey");
+                          return ListTile(
+                            title: Text(translated),
+                            onTap: () {
+                              onSelected(subjectKey);
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },
                   fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
-                    controller.text = widget.subject;
+                    _subjectController.value = controller.value;
+                    controller.text = Translation.of(context)!.translate("subjectsList.${widget.subject}");
+
                     return TextFormField(
                       controller: controller,
                       focusNode: focusNode,
-                      decoration: const InputDecoration(
-                        labelText: 'Subject',
+                      decoration: InputDecoration(
+                        labelText: Translation.of(context)!.translate("labelSubject"),
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.category),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a subject';
+                          return Translation.of(context)!.translate("labelSubjectEmpty");
                         }
-                        if (!subjects.contains(value.trim())) {
-                          return 'Please select a valid subject from the list';
+                        if (!subjects.contains(_selectedSubject)) {
+                          return Translation.of(context)!.translate("labelSubjectInvalid");
                         }
                         return null;
                       },
@@ -172,10 +196,10 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Select or type the subject related to your notes.',
+                    Translation.of(context)!.translate("hintSubject"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -185,23 +209,23 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
                 TextFormField(
                   controller: _descriptionController,
                   maxLines: null,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
+                  decoration: InputDecoration(
+                    labelText: Translation.of(context)!.translate("labelDescription"),
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.book),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a description';
+                      return Translation.of(context)!.translate("labelDescriptionEmpty");
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Add a brief description of the notes',
+                    Translation.of(context)!.translate("notes.hintDescription"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -211,30 +235,30 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
                 TextFormField(
                   controller: _priceController,
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Price',
+                  decoration: InputDecoration(
+                    labelText: Translation.of(context)!.translate("labelCost"),
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.attach_money),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Please enter a price';
+                      return Translation.of(context)!.translate("labelCostEmpty");
                     }
                     final parsed = int.tryParse(value.trim());
                     if (parsed == null || parsed < 0) {
-                      return 'Please enter a positive value';
+                      return Translation.of(context)!.translate("labelCostInvalidValue");
                     }
                     if (parsed == 0) {
-                      return 'Your note cannot be free!';
+                      return Translation.of(context)!.translate("notes.labelCostInvalidValue1");
                     }
                     return null;
                   },
                 ),
                 const SizedBox(height: 4),
-                const Align(
+                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Enter the price you want to charge for this note (must be greater than zero).',
+                    Translation.of(context)!.translate("notes.hintCost"),
                     style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ),
@@ -244,7 +268,7 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: _submitForm,
-                    child: const Text('Submit', style: TextStyle(fontSize: 16)),
+                    child:  Text(Translation.of(context)!.translate("button"), style: TextStyle(fontSize: 16)),
                   ),
                 ),
               ],
@@ -276,11 +300,11 @@ class _EditNotesPageState extends ConsumerState<EditNotesPage> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Note updated successfully!')),
+         SnackBar(content: Text(Translation.of(context)!.translate("MessageSuccessful"))),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update note: $e')),
+        SnackBar(content: Text("${Translation.of(context)!.translate("MessageUnsuccessful")}$e")),
       );
     }
   }

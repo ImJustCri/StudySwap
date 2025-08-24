@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class ResultsTabs extends StatelessWidget {
   final TabController? controller;
 
@@ -13,10 +13,10 @@ class ResultsTabs extends StatelessWidget {
         controller: controller,
         isScrollable: true,
         tabAlignment: TabAlignment.center,
-        tabs: const [
-          Tab(text: "Notes"),
-          Tab(text: "Books"),
-          Tab(text: "Profiles"),
+        tabs: [
+          Tab(text: Translation.of(context)!.translate("profile.tabs.notes")),
+          Tab(text: Translation.of(context)!.translate("rearch.tabs.book")),
+          Tab(text: Translation.of(context)!.translate("rearch.tabs.profiles")),
         ],
       ),
     );

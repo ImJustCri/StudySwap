@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/pages/content/posts_detail_page.dart';
 
+import '../../services/traslation_manager.dart';
+
 class SearchPost extends StatelessWidget {
   final String userId;
   final String title;
@@ -118,7 +120,7 @@ class SearchPost extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    subject,
+                    Translation.of(context)!.translate("subjectsList.$subject"),
                     style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.secondary),
                   ),
                   const SizedBox(height: 8),

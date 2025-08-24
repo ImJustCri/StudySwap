@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class NoInternetConnection extends StatelessWidget {
   const NoInternetConnection({super.key});
 
@@ -18,7 +18,7 @@ class NoInternetConnection extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              "You're offline",
+              Translation.of(context)!.translate("offline.title"),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -29,7 +29,7 @@ class NoInternetConnection extends StatelessWidget {
             SizedBox(
               width: 300,
               child: Text(
-                "Connect to an internet connection and then restart the app",
+                Translation.of(context)!.translate("offline.body"),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,

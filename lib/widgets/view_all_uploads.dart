@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/post.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class ViewAllUploadsPage extends ConsumerWidget {
   final StreamProvider<List<Map<String, dynamic>>> provider;
   final String type;
 
   const ViewAllUploadsPage(this.type, {super.key, required this.provider});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notesAsyncValue = ref.watch(provider);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('All $type'),
+        title: Text(Translation.of(context)!.translate("results.viewAllUploads.title")),
       ),
       body: notesAsyncValue.when(
         data: (notesList) {
           if (notesList.isEmpty) {
-            return const Center(child: Text('No notes available.'));
+            return Center(child: Text(Translation.of(context)!.translate("results.viewAllUploads.body")));
           }
 
           final posts = notesList.map((noteData) => Post.fromMap(noteData)).toList();

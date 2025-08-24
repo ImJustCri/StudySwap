@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
@@ -25,7 +24,8 @@ import 'home/home_page.dart';
 import 'package:studyswap/pages/authentication/login.dart';
 import 'package:studyswap/pages/notifications_page.dart';
 import 'pages/authentication/password_recovery.dart';
-
+import 'services/traslation_manager.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
@@ -118,15 +118,18 @@ class _MyAppState extends ConsumerState<MyApp> {
         themeMode = ThemeMode.light;
       },
     );
-
+    return ValueListenableBuilder<Locale>(
+  valueListenable: LocaleManager.currentLocale,
+  builder: (context, locale, child) {
     return MaterialApp(
       title: 'StudySwap',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
+      locale: locale,
       initialRoute: '/',
-      routes: {
+      routes:{
         '/onboarding': (context) => const OnboardingPage(),
         '/password-recovery': (context) => const PassRecovery(),
         '/homescreen': (context) => const MyHomePage(title: "StudySwap"),
@@ -143,8 +146,20 @@ class _MyAppState extends ConsumerState<MyApp> {
         '/change-password': (context) => const ChangePassword(),
         '/bought-notes': (context) => BoughtNotes(),
       },
+      localizationsDelegates:[
+        TranslationDelegate(locale),
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales:const[
+        Locale('en'),
+        Locale('it'),
+      ],
       home: isConnectedToInternet ? LandingPage() : NoInternetConnection(),
     );
-  }
+  },
+);
 }
-
+}
+    

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/subjects_providers.dart';
 import '../../providers/user_provider.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 final userDataProvider = StreamProvider<Map?>((ref) {
   final userStream = ref.watch(userProvider);
   final currentUser = userStream.value;
@@ -97,13 +97,13 @@ class _FavoriteSubjectsSettingsPageState
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Preferences saved')),
+           SnackBar(content: Text(Translation.of(context)!.translate("favoriteSubject.MessageSuccessfulAddSubject"))),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving preferences: $e')),
+          SnackBar(content: Text(Translation.of(context)!.translate("favoriteSubject.MessageUnsuccessfulAddSubject") +"$e")),
         );
       }
     }
@@ -131,7 +131,7 @@ class _FavoriteSubjectsSettingsPageState
           controller: controller,
           focusNode: focusNode,
           decoration: InputDecoration(
-            labelText: 'Search and add subjects',
+            labelText: Translation.of(context)!.translate("favoriteSubject.titleLabel"),
             prefixIcon: const Icon(Icons.search),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
             filled: true,
@@ -173,7 +173,7 @@ class _FavoriteSubjectsSettingsPageState
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Favorite Subjects')),
+      appBar: AppBar(title: Text(Translation.of(context)!.translate("favoriteSubject.title"))),
       body: userDataAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) => Center(child: Text('Error: $error')),
@@ -185,7 +185,7 @@ class _FavoriteSubjectsSettingsPageState
               children: [
                 const SizedBox(height: 8),
                 _favoriteSubjects.isEmpty
-                    ? const Text('No favorite subjects selected.')
+                    ?  Text(Translation.of(context)!.translate("favoriteSubject.favoriteSubject"))
                     : Wrap(
                   spacing: 8,
                   runSpacing: 8,
@@ -204,8 +204,8 @@ class _FavoriteSubjectsSettingsPageState
                 const SizedBox(height: 20),
                 const Divider(),
                 const SizedBox(height: 10),
-                const Text(
-                  'Add Subjects:',
+                 Text(
+                  Translation.of(context)!.translate("favoriteSubject.addSubject"),
                   style: TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 24),
@@ -217,7 +217,7 @@ class _FavoriteSubjectsSettingsPageState
                     child: ElevatedButton(
                       onPressed: _savePreferences,
                       child: Text(
-                        'Save Preferences',
+                        Translation.of(context)!.translate("favoriteSubject.button"),
                         style: TextStyle(fontSize: 16),
                       ),
                     ),

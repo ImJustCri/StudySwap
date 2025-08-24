@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studyswap/home/home_page.dart';
 import 'package:studyswap/misc/resources.dart';
 import 'package:studyswap/pages/onboarding/onboarding_page.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
   Future<bool> _checkFirstRun() => IsFirstRun.isFirstRun();
@@ -14,6 +14,7 @@ class LandingPage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return '/onboarding';
 
+    await LocaleManager.loadLanguage(user.uid);
     // If authenticated, go to home
     return '/homescreen';
   }

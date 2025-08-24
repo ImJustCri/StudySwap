@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class MediaDisplayPage extends StatefulWidget {
   final String url;
 
@@ -23,7 +23,7 @@ class _MediaDisplayPageState extends State<MediaDisplayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Note viewer"),
+        title: Text(Translation.of(context)!.translate("mediaDispayPage")),
       ),
       body: SfPdfViewer.network(
         widget.url,

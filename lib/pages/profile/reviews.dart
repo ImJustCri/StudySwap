@@ -4,7 +4,7 @@ import '../../providers/reviews_provider.dart';
 import '../../widgets/reviews/review_bottom_sheet.dart';
 import '../../widgets/reviews/reviews_list.dart';
 import '../../widgets/reviews/reviews_panel.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class Reviews extends ConsumerStatefulWidget {
   final double stars;
   final String userId;
@@ -34,7 +34,7 @@ class _ReviewsState extends ConsumerState<Reviews> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Thank you for your review!')),
+        SnackBar(content: Text(Translation.of(context)!.translate("profile.thanks"))),
       );
     }
   }
@@ -61,11 +61,11 @@ class _ReviewsState extends ConsumerState<Reviews> {
                   totalReviews: totalReviews,
                 );
               },
-              loading: () => const SizedBox(height: 128, child: Center(child: CircularProgressIndicator())),
-              error: (error, stack) => Text('Error loading total reviews: $error'),
+              loading: () => SizedBox(height: 128, child: Center(child: CircularProgressIndicator())),
+              error: (error, stack) => Text(Translation.of(context)!.translate("profile.error")+"$error"),
             ),
-            loading: () => const SizedBox(height: 128, child: Center(child: CircularProgressIndicator())),
-            error: (error, stack) => Text('Error loading rating counts: $error'),
+            loading: () =>  SizedBox(height: 128, child: Center(child: CircularProgressIndicator())),
+            error: (error, stack) => Text(Translation.of(context)!.translate("profile.error1")+"$error"),
           ),
 
           const SizedBox(height: 24),
@@ -86,7 +86,7 @@ class _ReviewsState extends ConsumerState<Reviews> {
                 color: theme.colorScheme.secondary,
               ),
               label: Text(
-                'Leave a Review',
+                Translation.of(context)!.translate("profile.titleReview"),
                 style: TextStyle(color: theme.colorScheme.secondary),
               ),
               onPressed: _showReviewDialog,
@@ -102,8 +102,8 @@ class _ReviewsState extends ConsumerState<Reviews> {
               child: Center(child: CircularProgressIndicator()),
             ),
             error: (error, stack) => Padding(
-              padding: const EdgeInsets.only(top: 24.0),
-              child: Center(child: Text('Error loading reviews: $error')),
+              padding:  EdgeInsets.only(top: 24.0),
+              child: Center(child: Text(Translation.of(context)!.translate("profile.error2") +"$error")),
             ),
           ),
         ],

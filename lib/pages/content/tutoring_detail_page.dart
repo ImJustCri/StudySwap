@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
 import 'package:studyswap/services/posts_manager.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 import '../edit/edit_tutoring_details.dart';
 
 class TutoringDetailPage extends StatefulWidget {
@@ -90,7 +90,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Details'),
+        title:  Text(Translation.of(context)!.translate("postDetail.titlePage")),
         actions: [
           if (isOfUser)
             Row(
@@ -121,8 +121,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Confirm Delete'),
-                          content: const Text('Are you sure you want to delete this post?'),
+                          title: Text(Translation.of(context)!.translate("postDetail.titleDelete")),
+                          content: Text(Translation.of(context)!.translate("postDetail.bodyDelete")),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
@@ -137,7 +137,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('Yes'),
+                              child: Text(Translation.of(context)!.translate("postDetail.buttonYesDelete")),
                             ),
                           ],
                         );
@@ -219,7 +219,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                   const SizedBox(height: 24),
                   Row(
                     children: [
-                      const Text("Year:"),
+                      Text(Translation.of(context)!.translate("postDetail.yearT")),
                       const SizedBox(width: 8),
                       Row(
                         children: List.generate(5, (index) {
@@ -294,7 +294,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                                         onPressed: () {
                                           Clipboard.setData(ClipboardData(text: widget.contactHandle));
                                           ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text('Copied to clipboard')),
+                                            SnackBar(content: Text(Translation.of(context)!.translate("postDetail.copyName"))),
                                           );
                                         },
                                       ),
@@ -302,7 +302,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                                   ),
                                   actions: [
                                     TextButton(
-                                      child: const Text('Close'),
+                                      child: Text(Translation.of(context)!.translate("postDetail.copyNameButton")),
                                       onPressed: () => Navigator.of(context).pop(),
                                     ),
                                   ],
@@ -311,7 +311,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             );
                           },
                           icon: const Icon(Icons.messenger_outline_rounded),
-                          label: const Text('Contact owner',
+                          label: Text(Translation.of(context)!.translate("postDetail.contact"),
                               style: TextStyle(fontSize: 16)),
                         ),
                       ),
@@ -321,8 +321,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Mode",
+                       Text(
+                        Translation.of(context)!.translate("tutoring.mode.title"),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -331,7 +331,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                       const SizedBox(width: 24),
                       Flexible(
                         child: Text(
-                          widget.mode,
+                          Translation.of(context)!.translate("tutoring.mode.${widget.mode}"),
                           style: const TextStyle(
                             fontSize: 18,
                           ),
@@ -343,8 +343,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Hours per session",
+                      Text(
+                        Translation.of(context)!.translate("tutoring.labelHours"),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -371,8 +371,8 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "Description",
+                            Text(
+                              Translation.of(context)!.translate("labelDescription"),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
@@ -380,7 +380,7 @@ class _TutoringDetailPageState extends State<TutoringDetailPage> {
                             ),
                             TextButton(
                               onPressed: toggleExpand,
-                              child: Text(isExpanded ? 'View Less' : 'View All'),
+                              child: Text(isExpanded ? Translation.of(context)!.translate("postDetail.viewLess") : Translation.of(context)!.translate("postDetail.viewAll")),
                             ),
                           ],
                         ),

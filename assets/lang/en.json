@@ -1,0 +1,404 @@
+{
+    "titleError":"Error",
+    "boxEmail":"Insert email",
+    "boxPassword":"Insert password",
+    "invalidEmail":"Invalid email",
+    "contactHandle":"Please enter your contact handle",
+    "labelTitle":"Title",
+    "titleEmpty":"Please enter a title",
+    "labelSubject":"Subject",
+    "labelSubjectEmpty":"Please enter a subject",
+    "labelSubjectInvalid":"Please select a valid subject from the list",
+    "labelDescription":"Description",
+    "labelCost":"Price",
+    "labelCostEmpty":"Please enter a Price",
+    "labelCostInvalidValue":"Please enter a positive value",
+    "labelDescriptionEmpty":"Please enter a description",
+    "titleContact":"Contact (choose platform and enter your handle)",
+    "hintContact":"Select the contact platform and enter your user handle (e.g., @username).",
+    "button":"Submit",
+    "imageNotUpload":"Please select an image before uploading",
+    "habdle":"Handle",
+    "onboarding":{
+        "onboarding1":{
+            "title": "Missed a note?",
+            "body": "Upload and download notes, save your brain"
+        },
+        "onboarding2":{
+            "title":"Broke from buying books?",
+            "body":"Buy, sell, and swap used books, save your wallet"
+        },
+        "onboarding3":{
+            "title":"Share your thoughts",
+            "body":"Leave reviews, help others make informed choices"
+        },
+        "onboarding4":{
+            "title":"You made it!",
+            "body":"Thou art ready to enter the StudySwap realm"
+        },
+        "button":{
+            "next": "Next",
+            "skip": "Skip",
+            "start": "Start"
+        }
+    },
+    "recoveryPassword":{
+        "title":"Recover your password",
+        "button":"Verify",
+        "invalidEmailbody":"Please use an institutional email ending in 'edu.it'",
+        "emailEmptybody":"Enter an email before continuing"
+    },
+    "login":{
+        "title":"Look who's back!",
+        "buttonToRecovery":"Forgot your password?",
+        "errorbody":"Enter a valid email o password before continuing",
+        "buttonToLog":"Log In",
+        "buttonToRegister":"Don’t have an account?"
+    },
+    "register":{
+        "title":"Welcome!",
+        "confirmPassword":"Confirm password",
+        "checkBox1":"I agree with",
+        "checkBox2":"Terms of Service",
+        "invalidEmailBody":"You can register only with an institutional email ending in .edu.it",
+        "incorrectPassword":"Incorrect password",
+        "registerSuccessfultitle":"Registration Successful",
+        "registerSuccessfulbody":"A verification email has been sent to your address. Check your inbox and confirm your email before loggin in.",
+        "button":"Register",
+        "buttonToLoginPage":"Already have an account?"
+    },
+    "editProfile":{
+        "nameEmpty":"A username is required to save changes.",
+        "nameLenght":"Username cannot exceed 20 characters.",
+        "errorCasual":"Something went wrong. Please try again later.",
+        "profileUpdatetitle":"Profile Updated",
+        "profileUpdatabody":"Your profile has been updated successfully.",
+        "buttonToHome":"Back to Home",
+        "buttonEditProfile":"Edit Profile",
+        "boxUsername":"Username",
+        "boxNewUsername":"Enter your new username",
+        "boxBio":"Bio",
+        "boxNewBio":"Tell us about yourself",
+        "buttonSafeChange":"Save Changes"
+    },
+    "notes":{
+        "labelCostInvalidValue1":"Your note cannot be free!",
+        "fileNotUpload":"Please select a note file before uploading",
+        "titlePage":"Upload Notes",
+        "hintTitle":"Enter the topic of your notes",
+        "hintDescription":"Add a brief description of the notes",
+        "hintCost":"Enter the price you want to charge for this note (must be greater than zero).",
+        "MessageSuccessful":"Note uploaded successfully!",
+        "MessageUnsuccessful":"Failed to upload note: ",
+        "hintSubject":"Select or type the subject related to your notes (e.g., Mathematics, History)."
+    },
+    "books":{
+        "error":{
+            "labelISBNEmpty":"Please enter the ISBN",
+            "labelYearEmpty":"Please enter the year of publication",
+            "labellYearErrors":"Enter a valid year between 1000 and ",
+            "labelCost":"Your book cannot be free!",
+            "labelYearsInvalid":"'Please enter a valid year'"
+        },
+        "titlePage":"Upload a Book",
+        "hintTitle":"Enter the title of your book",
+        "hintDescription":"Add a brief description of the book you are selling",
+        "hintCost":"Enter the price you want to charge for this book (must be greater than zero).",
+        "hintISBN":"Enter the ISBN number found on the back cover or copyright page.",
+        "labelYear":"Year of Publication",
+        "hintYear":"Enter the year this book was published, usually found on the copyright page.",
+        "MessageSuccessful":"Book uploaded successfully!",
+        "MessageUnsuccessful":"Failed to upload book: ",
+        "hintSubject":"Select or type the subject area of the book (e.g., Mathematics, History)."
+    },
+    "settings":{
+        "titleDeleteA":"Delete Account",
+        "bodyDeleteA":"Are you sure you want to delete your account? This action cannot be undone.",
+        "buttonCalcelA":"Cancel",
+        "buttonDeleteA":"Delete",
+        "MessageDeleteA":"Account deleted",
+        "titlePage":"Settings",
+        "preferencesTitle":"PREFERENCES",
+        "preferencesErrorCasual":"Error loading preferences: ",
+        "preferences1":{
+            "title":"Device Appearance",
+            "hint":"Toggle between light and dark themes",
+            "error":"Failed to update theme"
+        },
+        "preferences2":{
+            "title":"Favorite subjects",
+            "hint":"View and change your favorite subjects"
+        },
+        "titleAccount":"ACCOUNT",
+        "account1":{
+            "title":"Change Password",
+            "hint":"Update your password"
+        },
+        "language":{
+            "title":"Change language",
+            "hint":"Update the app's language"
+        },
+        "titleDangerZone":"DANGER ZONE",
+        "DangerZone":{
+            "title":"Delete Account",
+            "hint":"Permanently delete your account"
+        }
+    },
+    "home":{
+            "circolari":"Latest from your school",
+            "popupSuggestedNotes":{
+                "title":"Want personalized suggestions?",
+                "body":"Choose your favorite subjects in the settings to get customized recommendations.",
+                "button":"Go to settings"
+            },
+            "suggestedNotes":{
+                "title":"Suggested Notes",
+                "body":"No suggested notes.",
+                "errors":"Error loading suggestions: "
+            },
+            "latestNotes":{
+                "title":"Latest notes",
+                "button":"View all",
+                "noNotes":"No notes available.",
+                "errors":"Error loading notes: "
+            }
+        },
+    "about":{
+        "title":"About ",
+        "button":"Official Website "
+    },
+    "favoriteSubject":{
+        "title":"Favorite Subjects",
+        "favoriteSubject":"No favorite subjects selected.",
+        "addSubject":"Add Subjects:",
+        "button":"Save Preferences",
+        "MessageSuccessfulAddSubject":"Preferences saved",
+        "MessageUnsuccessfulAddSubject":"Error saving preferences: ",
+        "titleLabel":"Search and add subjects"
+    },
+    "changePassword":{
+        "title":"Change your password",
+        "labelOld":"Insert old password",
+        "labelNew":"Insert new password",
+        "labelConfirm":"Confirm new password",
+        "passwordRequirements":{
+            "title":"Password Requirements:",
+            "1":"At least 9 characters",
+            "2":"Contains uppercase and lowercase letters",
+            "3":"Includes numbers",
+            "4":"Includes special characters (e.g. !@#$&*)"
+        },
+        "errors":{
+            "Empty":"Please fill all password fields",
+            "DifferentPassword":"New password and confirm password do not match",
+            "NoRespecttitle":"Weak Password",
+            "NoRespectbody":"Password must follow all the requirements",
+            "oldPasswordtitle":"Old password is incorrect",
+            "oldPasswordbody":"If you do not remember your password, log out and click 'Forgot your password?'"
+        },
+        "button":"Change password"
+    },
+    "boughtNotes":{
+        "title":"Bought Notes",
+        "Empty":"No notes found"
+    },
+    "offline":{
+        "title":"You're offline",
+        "body":"Connect to an internet connection and then restart the app"
+    },
+    "tutoring":{
+        "ClassEmpty":"Please select at least one class",
+        "titlePage":"Upload Tutoring Offer",
+        "hintDescription":"Add a brief description of the tutoring session",
+        "labelHours":"Hours per session",
+        "HoursEmpty":"Please enter hours per session",
+        "HoursInvalid":"Please enter a valid positive number",
+        "hintHours":"Enter the duration of each session in hours.",
+        "mode":{
+            "title":"Mode",
+            "digital":"Digital",
+            "irl":"In real life",
+            "both":"Digital & In real life",
+            "modeEmpty":"Please select a mode",
+            "hint":"Select whether tutoring will be digital, in real life, or both."
+        },
+        "ClassesTitle":"Select Classes",
+        "hintClasses":"Select one or more classes you are offering tutoring for (e.g., Class 1 to Class 5).",
+        "class":"Class ",
+        "MessageSuccessful":"Tutoring uploaded successfully!",
+        "MessageUnsuccessful":"Failed to upload tutoring: ",
+        "hintSubject":"Select or type the subject area of the tutoring (e.g., Mathematics, History)."
+    },
+    "edit":{
+        "tutorin":{
+            "title":"Edit Tutoring Offer",
+            "hintSubject":"You cannot edit the subject of a tutoring offer.",
+            "hintDescription":"Edit the description of the tutoring session"
+        },
+        "notes":{
+            "title":"Edit Note"
+        },
+        "books":{
+            "title":"Edit Book"
+        }
+    },
+    "postDetail":{
+        "titlePage":"Details",
+        "titleDelete":"Confirm Delete",
+        "bodyDelete":"Are you sure you want to delete this post?",
+        "buttonYesDelete":"Yes",
+        "noteBought":"Note already bought",
+        "buyNote":"Buy this note",
+        "contact":"Contact owner",
+        "viewLess":"View Less",
+        "viewAll":"View All",
+        "yearP":"Year of Publication",
+        "copyName":"Copied to clipboard",
+        "copyNameButton":"Close",
+        "yearT":"Year: "
+    },
+    "moreUser":{
+        "title":"More from ",
+        "noBook":"No books available.",
+        "errorBook":"Error loading books.",
+        "noNotes":"No notes available.",
+        "errorNotes":"Error loading notes."
+    },
+    "profile":{
+            "title":"Latest uploads",
+            "noBooks":"No books uploaded.",
+            "noNotes":"No notes uploaded.",
+            "errorEmptyUser":"User ID is empty",
+            "userNotFound":"User data not found.",
+            "buttonEdit":"Edit profile",
+            "logOutTitle":"Log out?",
+            "logOutBody":"Your session will expire and you'll be sent back to the login page",
+            "buttonYes":"Yes",
+            "buttonLogOut":"Log Out",
+            "thanks":"Thank you for your review!",
+            "error":"Error loading total reviews: ",
+            "error1":"Error loading rating counts: ",
+            "error2":"Error loading reviews: ",
+            "titleReview":"Leave a Review",
+            "tabs":{
+                "notes":"Notes",
+                "book":"Bookshop",
+                "tutoring":"Tutoring",
+                "review":"Reviews"
+            },
+            "noTutoring":"No tutoring sessions available.",
+            "noTitle":"No title",
+            "noDescription":"No description",
+            "noMode":"Not specified"
+    },
+    "rearch":{
+        "tabs":{
+            "book":"Books",
+            "profiles":"Profiles"
+        },
+        "page": {
+            "hint":"Search for notes, books, profiles...",
+            "noFavorite":"No favorite subjects available",
+            "addFavorite":"Add some in the settings"
+        }
+    },
+    "coins":{
+        "title":"Your balance",
+        "howMoreCoins":{
+            "title":"How to earn more coins?",
+            "1":"Upload notes or books",
+            "2":"Offer tutoring",
+            "3":"Leave reviews"
+        }
+
+    },
+    "buttonNavigationBar":{
+        "home":"Home",
+        "search":"Search",
+        "Exchange":"Exchange",
+        "you":"You"
+    },
+    "topBar":{
+        "settings":"Settings",
+        "BoughtNotes":"Bought notes",
+        "AboutApp":"About the app"
+    },
+    "expandableMenu":{
+        "Note":"Note",
+        "Book":"Book",
+        "Tutoring":"Tutoring"
+    },
+    "notePicker":{
+        "noFile":"No file selected",
+        "body":"Only upload PDF files below 15 MB"
+    },
+    "results":{
+        "noBooks":"No books found",
+        "noNotes":"No notes found",
+        "noProfile":"No profiles found",
+        "viewAllUploads":{
+            "title":"All Notes",
+            "body":"No notes available."
+        }
+    },
+    "transaction":{
+        "titlePage":"Confirm Purchase",
+        "title":"Title:",
+        "subject":"Subject:",
+        "NoteID":"Note ID:",
+        "price1":"Price:",
+        "price2":"coins",
+        "error":"User not signed in. Please login first.",
+        "messageSuccessful":"Note successfully bought!",
+        "errorTitle": "Failed Transaction",
+        "errorBody": "You do not have enough money to buy this note",
+        "button":"Confirm Purchase"
+    },
+    "mediaDispayPage":"Note viewer",
+    "searchFavoriteSubject":{
+        "body":"No items available for this subject",
+        "titleNotes":"Notes",
+        "titleBook":"Books",
+        "errorNotes":"Error loading notes: ",
+        "errorBook":"Error loading books: "
+    },
+    "subjectsList": {
+        "Information Technology": "Information Technology",
+        "Mathematics": "Mathematics",
+        "Telecommunications": "Telecommunications",
+        "History": "History",
+        "Physical Education": "Physical Education",
+        "Italian Literature": "Italian Literature",
+        "Systems and Networking": "Systems and Networking",
+        "English Language": "English Language",
+        "TPSIT": "TPSIT",
+        "Business Economics": "Business Economics",
+        "Catholic Religion": "Catholic Religion",
+        "Law and Economics": "Law and Economics",
+        "Physics": "Physics",
+        "Chemistry": "Chemistry",
+        "Biology": "Biology",
+        "Earth Sciences": "Earth Sciences",
+        "Geography": "Geography",
+        "Astronomy": "Astronomy",
+        "Philosophy": "Philosophy",
+        "Sociology": "Sociology",
+        "Political Science": "Political Science",
+        "French Language": "French Language",
+        "Spanish Language": "Spanish Language",
+        "German Language": "German Language",
+        "Chinese Language": "Chinese Language",
+        "Art History": "Art History",
+        "Music": "Music",
+        "Drama": "Drama",
+        "Technology": "Technology",
+        "Environmental Science": "Environmental Science",
+        "Ethics": "Ethics",
+        "Citizenship and Constitution": "Citizenship and Constitution",
+        "Psychology": "Psychology",
+        "Graphic Design": "Graphic Design",
+        "Latin": "Latin",
+        "Ancient Greek": "Ancient Greek",
+        "Social Studies": "Social Studies"
+    }
+}

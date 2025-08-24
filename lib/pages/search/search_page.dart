@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/search/favorite_subject.dart';
 import 'package:studyswap/pages/search/search_results.dart';
 import '../../providers/subjects_providers.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class SearchPage extends ConsumerWidget {
   const SearchPage({super.key});
 
@@ -28,7 +28,7 @@ class SearchPage extends ConsumerWidget {
               child: AbsorbPointer(
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: "Search for notes, books, profiles...",
+                    hintText: Translation.of(context)!.translate("rearch.page.hint"),
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
                     filled: true,
@@ -39,8 +39,8 @@ class SearchPage extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              "Subjects",
+            Text(
+              Translation.of(context)!.translate("labelSubject"),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -54,20 +54,20 @@ class SearchPage extends ConsumerWidget {
                     return Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.error_outline,
                             size: 48,
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'No favorite subjects available',
+                            Translation.of(context)!.translate("rearch.page.noFavorite"),
                             style: TextStyle(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           SizedBox(height: 4),
-                          Text('Add some in the settings'),
+                          Text(Translation.of(context)!.translate("rearch.page.addFavorite")),
                         ],
                       ),
                     );
@@ -98,7 +98,7 @@ class SearchPage extends ConsumerWidget {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Text(
-                                    subject,
+                                    Translation.of(context)!.translate("subjectsList.$subject"),
                                     style: TextStyle(
                                       color: theme.colorScheme.onPrimaryContainer,
                                       fontSize: 18,

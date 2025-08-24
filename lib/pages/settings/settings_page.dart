@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/theme_provider.dart';
 import 'package:studyswap/auth.dart';
+import 'package:studyswap/providers/user_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
+
+import '../../providers/language_provider.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -11,27 +15,27 @@ class SettingsPage extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete Account'),
-        content: const Text(
-          'Are you sure you want to delete your account? This action cannot be undone.',
+        title:  Text(Translation.of(context)!.translate("settings.titleDeleteA")),
+        content:  Text(
+          Translation.of(context)!.translate("settings.bodyDeleteA"),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            child:  Text(Translation.of(context)!.translate("settings.buttonCalcelA")),
           ),
           TextButton(
             onPressed: () {
               auth.deleteAccount();
               Navigator.of(ctx).pop();
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Account deleted')),
+                 SnackBar(content: Text(Translation.of(context)!.translate("settings.MessageDeleteA"))),
               );
               Navigator.pushReplacementNamed(context, '/onboarding');
               // Here you would add actual account deletion logic.
             },
-            child: const Text(
-              'Delete',
+            child:  Text(
+              Translation.of(context)!.translate("settings.buttonDeleteA"),
               style: TextStyle(color: Colors.red),
             ),
           ),
@@ -58,20 +62,22 @@ class SettingsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final darkModeAsync = ref.watch(darkModeProvider);
     final updateDarkMode = ref.read(darkModeUpdateProvider);
+    final userId = ref.read(userProvider).value!.uid;
+    final language = ref.read(languageProvider(userId));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title:  Text(Translation.of(context)!.translate("settings.titlePage"))),
       body: darkModeAsync.when(
         data: (isDarkMode) {
           final darkModeValue = isDarkMode ?? false;
           return ListView(
             children: [
-              _sectionLabel(context, 'PREFERENCES'),
+              _sectionLabel(context, Translation.of(context)!.translate("settings.preferencesTitle")),
 
               SwitchListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
-                title: const Text('Device Appearance'),
-                subtitle: const Text('Toggle between light and dark themes'),
+                title:  Text(Translation.of(context)!.translate("settings.preferences1.title")),
+                subtitle:  Text(Translation.of(context)!.translate("settings.preferences1.hint")),
                 secondary: Icon(
                   darkModeValue ? Icons.nights_stay : Icons.wb_sunny,
                   color: darkModeValue ? Colors.indigo : Colors.orange,
@@ -83,7 +89,7 @@ class SettingsPage extends ConsumerWidget {
                     // Removed theme updated SnackBar here
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Failed to update theme')),
+                       SnackBar(content: Text(Translation.of(context)!.translate("settings.preferences1.error"))),
                     );
                   }
                 },
@@ -93,15 +99,47 @@ class SettingsPage extends ConsumerWidget {
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 leading: const Icon(Icons.edit),
-                title: const Text('Favorite subjects'),
-                subtitle: const Text('View and change your favorite subjects'),
+                title:  Text(Translation.of(context)!.translate("settings.preferences2.title")),
+                subtitle:  Text(Translation.of(context)!.translate("settings.preferences2.hint")),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.pushNamed(context, "/favorite-subjects");
                 },
               ),
 
-              _sectionLabel(context, 'ACCOUNT'),
+              const Divider(),
+
+              // Language changer
+              ListTile(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                leading: const Icon(Icons.language),
+                title: Text(Translation.of(context)!.translate("settings.language.title")),
+                subtitle: Text(Translation.of(context)!.translate("settings.language.hint")),
+                trailing: DropdownButton<String>(
+                  value: language,
+                  underline: const SizedBox(),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'en',
+                      child: Text('English'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'it',
+                      child: Text('Italian'),
+                    ),
+                  ],
+                  onChanged: (value) async {
+                    if (value != null) {
+                      await LocaleManager.setLocale(Locale(value), userId);
+                      if (context.mounted) {
+                        Navigator.pop(context);
+                      }
+                    }
+                  },
+                ),
+              ),
+
+              _sectionLabel(context, Translation.of(context)!.translate("settings.titleAccount")),
 
               // ListTile(
               //   contentPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -120,24 +158,24 @@ class SettingsPage extends ConsumerWidget {
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 leading: const Icon(Icons.lock),
-                title: const Text('Change Password'),
-                subtitle: const Text('Update your password'),
+                title:  Text(Translation.of(context)!.translate("settings.account1.title")),
+                subtitle:  Text(Translation.of(context)!.translate("settings.account1.hint")),
                 trailing: const Icon(Icons.arrow_forward_ios),
                 onTap: () {
                   Navigator.pushNamed(context, '/change-password');
                 },
               ),
 
-              _sectionLabel(context, 'DANGER ZONE', color: Colors.red[700]),
+              _sectionLabel(context, Translation.of(context)!.translate("settings.titleDangerZone"), color: Colors.red[700]),
 
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 24),
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
-                title: const Text(
-                  'Delete Account',
+                title:  Text(
+                  Translation.of(context)!.translate("settings.DangerZone.title"),
                   style: TextStyle(color: Colors.red),
                 ),
-                subtitle: const Text('Permanently delete your account'),
+                subtitle:  Text(Translation.of(context)!.translate("settings.DangerZone.hint")),
                 onTap: () => _showDeleteAccountDialog(context),
               ),
             ],
@@ -145,7 +183,7 @@ class SettingsPage extends ConsumerWidget {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(
-          child: Text('Error loading preferences: $error'),
+          child: Text("${Translation.of(context)!.translate("settings.preferencesErrorCasual")}$error"),
         ),
       ),
     );

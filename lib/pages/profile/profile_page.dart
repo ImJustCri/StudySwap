@@ -11,7 +11,7 @@ import 'bookshop.dart';
 import 'notes.dart';
 import 'reviews.dart';
 import 'tutoring.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class ProfilePage extends ConsumerStatefulWidget {
   final String userId;
   final bool fromNavigation;
@@ -37,16 +37,16 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     final bool isMine = currentUser?.uid == widget.userId;
 
     if (widget.userId.isEmpty) {
-      return const Scaffold(
-        body: Center(child: Text("User ID is empty")),
+      return  Scaffold(
+        body: Center(child: Text(Translation.of(context)!.translate("profile.errorEmptyUser"))),
       );
     }
 
     return userDataAsync.when(
       data: (userData) {
         if (userData == null) {
-          return const Scaffold(
-            body: Center(child: Text("User data not found.")),
+          return Scaffold(
+            body: Center(child: Text(Translation.of(context)!.translate("profile.userNotFound"))),
           );
         }
 
@@ -182,7 +182,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                       Icons.edit,
                                       color: theme.colorScheme.onSurface,
                                     ),
-                                    label: const Text("Edit profile"),
+                                    label: Text(Translation.of(context)!.translate("profile.buttonEdit")),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -191,8 +191,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                     showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
-                                        title: const Text("Log out?"),
-                                        content: const Text("Your session will expire and you'll be sent back to the login page"),
+                                        title:  Text(Translation.of(context)!.translate("profile.logOutTitle")),
+                                        content:  Text(Translation.of(context)!.translate("profile.logOutBody")),
                                         actions: [
                                           Row(
                                             children: [
@@ -209,7 +209,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                                     await FirebaseAuth.instance.signOut();
                                                     Navigator.pushReplacementNamed(context, '/login');
                                                   },
-                                                  child: const Text("Yes"),
+                                                  child: Text(Translation.of(context)!.translate("profile.buttonYes")),
                                                 ),
                                               ),
                                             ],
@@ -239,7 +239,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                                     Icons.logout,
                                     color: theme.colorScheme.onSurface,
                                   ),
-                                  label: const Text("Log Out"),
+                                  label: Text(Translation.of(context)!.translate("profile.buttonLogOut")),
                                 ),
                               ],
                             ),

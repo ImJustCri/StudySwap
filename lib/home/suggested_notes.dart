@@ -4,6 +4,7 @@ import 'package:studyswap/providers/books_provider.dart';
 import 'package:studyswap/providers/user_provider.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../providers/notes_provider.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 
 class SuggestedNotesSection extends ConsumerWidget {
   final Set<String> favorites;
@@ -62,7 +63,7 @@ class SuggestedNotesSection extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        "Want personalized suggestions?",
+                        Translation.of(context)!.translate("home.popupSuggestedNotes.title"),
                         style: theme.textTheme.titleMedium,
                       ),
                     ),
@@ -70,7 +71,7 @@ class SuggestedNotesSection extends ConsumerWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  "Choose your favorite subjects in the settings to get customized recommendations.",
+                  Translation.of(context)!.translate("home.popupSuggestedNotes.body"),
                   style: theme.textTheme.bodyMedium,
                 ),
                 const SizedBox(height: 16),
@@ -97,7 +98,7 @@ class SuggestedNotesSection extends ConsumerWidget {
                       Icons.settings,
                       color: theme.colorScheme.onSurface,
                     ),
-                    label: const Text("Go to settings"),
+                    label:  Text(Translation.of(context)!.translate("home.popupSuggestedNotes.button")),
                   ),
                 ),
               ],
@@ -110,7 +111,7 @@ class SuggestedNotesSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildSectionTitle("Suggested Notes"),
+        buildSectionTitle(Translation.of(context)!.translate("home.suggestedNotes.title")),
         notesAsyncValue.when(
           data: (notesList) {
             final suggestedPostsData = notesList
@@ -123,13 +124,13 @@ class SuggestedNotesSection extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: Center(
                   child: Column(
-                    children: const [
+                    children:  [
                       Icon(
                         Icons.no_sim_rounded,
                         size: 48,
                       ),
                       SizedBox(height: 16),
-                      Text('No suggested notes.'),
+                      Text(Translation.of(context)!.translate("home.suggestedNotes.body")),
                     ],
                   ),
                 ),
@@ -167,7 +168,7 @@ class SuggestedNotesSection extends ConsumerWidget {
           ),
           error: (error, _) => SizedBox(
             height: 192,
-            child: Center(child: Text('Error loading suggestions: $error')),
+            child: Center(child: Text("${Translation.of(context)!.translate("home.suggestedNotes.errors")}$error")),
           ),
         ),
       ],

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:studyswap/coins_page.dart';
 import 'package:studyswap/providers/data_provider.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class TopBar extends ConsumerWidget implements PreferredSizeWidget {
   const TopBar({super.key});
 
@@ -105,7 +105,7 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
                   children: [
                     Icon(Icons.settings, color: Theme.of(context).iconTheme.color),
                     SizedBox(width: 8),
-                    Text('Settings'),
+                    Text(Translation.of(context)!.translate("topBar.settings")),
                   ],
                 ),
               ),
@@ -118,7 +118,7 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
                   children: [
                     Icon(Icons.sticky_note_2_rounded, color: Theme.of(context).iconTheme.color),
                     SizedBox(width: 8),
-                    Text('Bought notes'),
+                    Text(Translation.of(context)!.translate("topBar.BoughtNotes")),
                   ],
                 ),
               ),
@@ -131,7 +131,7 @@ class TopBar extends ConsumerWidget implements PreferredSizeWidget {
                   children: [
                     Icon(Icons.info, color: Theme.of(context).iconTheme.color),
                     SizedBox(width: 8),
-                    Text('About the app'),
+                    Text(Translation.of(context)!.translate("topBar.AboutApp")),
                   ],
                 ),
               ),

@@ -9,7 +9,7 @@ import '../bought/transaction.dart';
 import '../edit/edit_books_details.dart';
 import '../edit/edit_notes_details.dart';
 import 'more_from_user.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class PostDetailsPage extends ConsumerStatefulWidget {
   final String title;
   final String subject;
@@ -117,7 +117,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Details'),
+        title:  Text(Translation.of(context)!.translate("postDetail.titlePage")),
         actions: [
           if (widget.isOfUser)
             Row(
@@ -165,8 +165,8 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: const Text('Confirm Delete'),
-                          content: const Text('Are you sure you want to delete this post?'),
+                          title:  Text(Translation.of(context)!.translate("postDetail.titleDelete")),
+                          content:  Text(Translation.of(context)!.translate("postDetail.bodyDelete")),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
@@ -184,7 +184,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                                 Navigator.of(context).pop();
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('Yes'),
+                              child: Text(Translation.of(context)!.translate("postDetail.buttonYesDelete")),
                             ),
                           ],
                         );
@@ -345,11 +345,11 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                             );
                           },
 
-                          label: isBought ? const Text(
-                            'Note already bought',
+                          label: isBought ?  Text(
+                            Translation.of(context)!.translate("postDetail.noteBought"),
                             style: TextStyle(fontSize: 16),
-                          ) : const Text(
-                            'Buy this note',
+                          ) : Text(
+                            Translation.of(context)!.translate("postDetail.buyNote"),
                             style: TextStyle(fontSize: 16),
                           ),
                           style: isBought
@@ -395,7 +395,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                                       onPressed: () {
                                         Clipboard.setData(ClipboardData(text: widget.contactHandle));
                                         ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Copied to clipboard')),
+                                           SnackBar(content: Text(Translation.of(context)!.translate("postDetail.copyName"))),
                                         );
                                       },
                                     ),
@@ -403,7 +403,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                                 ),
                                 actions: [
                                   TextButton(
-                                    child: const Text('Close'),
+                                    child: Text(Translation.of(context)!.translate("postDetail.copyNameButton")),
                                     onPressed: () => Navigator.of(context).pop(),
                                   ),
                                 ],
@@ -412,7 +412,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                           );
                         },
                         label: Text(
-                          'Contact owner',
+                          Translation.of(context)!.translate("postDetail.contact"),
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
@@ -422,8 +422,8 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        "Subject",
+                       Text(
+                        Translation.of(context)!.translate("labelSubject"),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -432,7 +432,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       const SizedBox(width: 24),
                       Flexible(
                         child: Text(
-                          widget.subject,
+                          Translation.of(context)!.translate("subjectsList.${widget.subject}"),
                           style: const TextStyle(
                             fontSize: 18,
                           ),
@@ -446,8 +446,8 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "Year of Publication",
+                           Text(
+                            Translation.of(context)!.translate("postDetail.yearT"),
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
@@ -502,8 +502,8 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "Description",
+                             Text(
+                              Translation.of(context)!.translate("labelDescription"),
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
@@ -511,7 +511,7 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                             ),
                             TextButton(
                               onPressed: toggleExpand,
-                              child: Text(isExpanded ? 'View Less' : 'View All'),
+                              child: Text(isExpanded ?  Translation.of(context)!.translate("postDetail.viewLess") :  Translation.of(context)!.translate("postDetail.viewAll")),
                             ),
                           ],
                         ),

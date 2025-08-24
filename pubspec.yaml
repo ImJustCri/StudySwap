@@ -11,9 +11,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # build by specifying --build-name and --build-number, respectively.
 # In Android, build-name is used as versionName while build-number used as versionCode.
 # Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In iOS, build-name is used as CFBundleShortVersionString
+# while build-number used as CFBundleVersion.
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.1-alpha+1
@@ -30,19 +29,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^3.0.0-dev.17
   screen_protector: ^1.4.2
-  firebase_core: ^2.27.0
-  firebase_auth: ^4.17.8
+  firebase_core: ^3.4.1
+  firebase_auth: ^5.7.0
+  firebase_messaging: ^15.1.2
+  cloud_firestore: ^5.0.0
   flutter_colorpicker: ^1.0.3
   flutter_sliding_tutorial: ^2.0.0+1
   cupertino_icons: ^1.0.8
-  dart_rss: ^3.0.3
   http: ^1.4.0
-  intl: ^0.19.0
+  intl: ^0.20.2
   url_launcher: ^6.3.1
   is_first_run: ^1.0.0
-  cloud_firestore: ^4.17.5
-  flutter_riverpod: ^3.0.0-dev.16
   riverpod_annotation: ^3.0.0-dev.16
   flutter_speed_dial: ^7.0.0
   flutter_displaymode: ^0.6.0
@@ -57,10 +58,10 @@ dependencies:
   flutter_svg: ^2.2.0
   font_awesome_flutter: ^10.9.0
   file_picker: ^8.0.7
-  syncfusion_flutter_pdfviewer: ^27.2.5
-  firebase_messaging: ^14.9.4
+  syncfusion_flutter_pdfviewer: ^28.1.33
   internet_connection_checker_plus: ^2.7.2
   package_info_plus: ^8.3.1
+  xml: ^6.1.0
   image_cropper: ^9.1.0
 
 dev_dependencies:
@@ -81,11 +82,14 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icon.png"
   min_sdk_android: 21
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
+
   fonts:
     - family: InstrumentSans
       fonts:
@@ -99,6 +103,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/lang/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -118,7 +123,7 @@ flutter:
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
+  # family key with the font family name, and a fonts key with a
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
@@ -133,5 +138,6 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+  # For details riguardanti i fonts dalle dipendenze, vedere:
+  # https://flutter.dev/to/font-from-package
+

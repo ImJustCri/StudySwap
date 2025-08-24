@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:studyswap/services/traslation_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
 class Auth {
@@ -64,7 +65,8 @@ class Auth {
           'token':token,
         });
       }
-
+      //load of database
+      await LocaleManager.loadLanguage(uid);
       return null;
     } on FirebaseAuthException catch (ex) {
       return ex.message;

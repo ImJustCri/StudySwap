@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class ExpandableFabMenu extends StatelessWidget {
   const ExpandableFabMenu({super.key});
 
@@ -22,21 +22,21 @@ class ExpandableFabMenu extends StatelessWidget {
       children: [
         SpeedDialChild(
           child: Icon(Icons.note, color: theme.colorScheme.surface),
-          label: 'Note',
+          label: Translation.of(context)!.translate("expandableMenu.Note"),
           backgroundColor: theme.colorScheme.primary,
           labelStyle: const TextStyle(fontSize: 16),
           onTap: () => Navigator.pushNamed(context, '/notes-upload'),
         ),
         SpeedDialChild(
           child: Icon(Icons.book, color: theme.colorScheme.surface),
-          label: 'Book',
+          label: Translation.of(context)!.translate("expandableMenu.Book"),
           backgroundColor: theme.colorScheme.primary,
           labelStyle: const TextStyle(fontSize: 16),
           onTap: () => Navigator.pushNamed(context, '/books-upload'),
         ),
         SpeedDialChild(
           child: Icon(Icons.school, color: theme.colorScheme.surface),
-          label: 'Tutoring',
+          label: Translation.of(context)!.translate("expandableMenu.Tutoring"),
           backgroundColor: theme.colorScheme.primary,
           labelStyle: const TextStyle(fontSize: 16),
           onTap: () => Navigator.pushNamed(context, '/tutoring-upload'),

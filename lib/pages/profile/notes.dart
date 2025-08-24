@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../../providers/notes_provider.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class Notes extends ConsumerWidget {
   final String userId;
 
@@ -16,8 +16,8 @@ class Notes extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Latest uploads",
+           Text(
+            Translation.of(context)!.translate("profile.title"),
             style: TextStyle(
               fontSize: 18,
             ),
@@ -36,7 +36,7 @@ class Notes extends ConsumerWidget {
                             size: 48,
                           ),
                           SizedBox(height: 16),
-                          Text('No notes uploaded.'),
+                          Text(Translation.of(context)!.translate("profile.noNotes")),
                         ],
                       ),
                   ),

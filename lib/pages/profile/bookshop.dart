@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 import '../../providers/books_provider.dart';
 import '../../widgets/post.dart';
 
@@ -16,8 +16,8 @@ class Books extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Latest uploads",
+          Text(
+            Translation.of(context)!.translate("profile.title"),
             style: TextStyle(
               fontSize: 18,
             ),
@@ -36,7 +36,7 @@ class Books extends ConsumerWidget {
                           size: 48,
                         ),
                         SizedBox(height: 16),
-                        Text('No books uploaded.'),
+                        Text(Translation.of(context)!.translate("profile.noBooks")),
                       ],
                     ),
                   ),

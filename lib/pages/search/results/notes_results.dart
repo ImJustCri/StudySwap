@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/search_results_provider.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 import '../search_post.dart';
 
 class NotesResults extends ConsumerWidget {
@@ -16,7 +16,7 @@ class NotesResults extends ConsumerWidget {
     return notesAsyncValue.when(
       data: (notes) {
         if (notes.isEmpty) {
-          return Center(child: Text('No notes found'));
+          return Center(child: Text(Translation.of(context)!.translate("results.noNotes")));
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),

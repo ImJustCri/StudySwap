@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studyswap/services/coins_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class TransactionPage extends StatelessWidget {
   final String noteId;
   final String sellerId;
@@ -52,68 +52,88 @@ class TransactionPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Confirm Purchase'),
+        title: Text(Translation.of(context)!.translate("transaction.titlePage")),
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            infoRow('Title:', title),
+            infoRow(Translation.of(context)!.translate("transaction.title"), title),
             const SizedBox(height: 16),
             Divider(),
             const SizedBox(height: 16),
 
-            infoRow('Subject:', subject),
+            infoRow(Translation.of(context)!.translate("transaction.subject"), subject),
             const SizedBox(height: 16),
             Divider(),
             const SizedBox(height: 16),
 
-            infoRow('Note ID:', noteId),
+            infoRow(Translation.of(context)!.translate("transaction.NoteID"), noteId),
             const SizedBox(height: 16),
             Divider(),
             const Spacer(),
 
             Divider(),
             const SizedBox(height: 16),
-            infoRow('Price:', '$price coins'),
+            infoRow(Translation.of(context)!.translate("transaction.price1"),"$price "+Translation.of(context)!.translate("transaction.price2")),
             const SizedBox(height: 16),
 
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (buyerUserId == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('User not signed in. Please login first.')),
+                           SnackBar(content: Text(Translation.of(context)!.translate("transaction.error"))),
                         );
                         return;
                       }
 
-                      coinsManager.transferCoins(buyerUserId, sellerId, price);
+                      try {
+                        await coinsManager.transferCoins(buyerUserId, sellerId, price);
 
-                      final docRef = FirebaseFirestore.instance.collection('Users').doc(buyerUserId).collection("Bought").doc(noteId);
+                        final docRef = FirebaseFirestore.instance.collection('Users').doc(buyerUserId).collection("Bought").doc(noteId);
 
-                      final noteUrl = Supabase.instance.client.storage
-                          .from('notes')
-                          .getPublicUrl("$sellerId/$noteId");
+                        final noteUrl = Supabase.instance.client.storage
+                            .from('notes')
+                            .getPublicUrl("$sellerId/$noteId");
 
-                      docRef.set({
-                        "note_id": noteId,
-                        "seller_id": sellerId,
-                        "title": title,
-                        "subject": subject,
-                        "price": price,
-                        "note_url": noteUrl,
-                      });
+                        docRef.set({
+                          "note_id": noteId,
+                          "seller_id": sellerId,
+                          "title": title,
+                          "subject": subject,
+                          "price": price,
+                          "note_url": noteUrl,
+                        });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Note successfully bought!')),
-                      );
-                      Navigator.of(context).pop();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(Translation.of(context)!.translate("transaction.messageSuccessful"))),
+                        );
+                        Navigator.of(context).pop();
+
+                      } catch (e) {
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            title: Text(Translation.of(context)!.translate("transaction.errorTitle")),
+                            content: Text(Translation.of(context)!.translate("transaction.errorBody")),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Ok"),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+
                     },
-                    child: const Text('Confirm Purchase'),
+                    child:  Text(Translation.of(context)!.translate("transaction.button")),
                   ),
                 ),
               ],
