@@ -28,6 +28,7 @@ class _FavoriteSubjectsSettingsPageState
   Set<String> _favoriteSubjects = {};
   Set<String> _initialFavoriteSubjects = {};
   bool _hasChanges = false;
+  String _translated = "";
 
   late final ProviderSubscription<AsyncValue<Map?>> _subscription;
 
@@ -103,7 +104,7 @@ class _FavoriteSubjectsSettingsPageState
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(Translation.of(context)!.translate("favoriteSubject.MessageUnsuccessfulAddSubject") +"$e")),
+          SnackBar(content: Text("${Translation.of(context)!.translate("favoriteSubject.MessageUnsuccessfulAddSubject")}$e")),
         );
       }
     }
@@ -116,15 +117,15 @@ class _FavoriteSubjectsSettingsPageState
           return const Iterable<String>.empty();
         }
         final query = textEditingValue.text.toLowerCase();
-        return subjects.where(
-              (subject) =>
-          subject.toLowerCase().contains(query) &&
-              !_favoriteSubjects.contains(subject),
-        );
+        return subjects.where((subject) {
+          final translated = Translation.of(context)!.translate("subjectsList.$subject");
+          return translated.toLowerCase().contains(query);
+        });
       },
       onSelected: (String selectedSubject) {
         final newFavorites = Set<String>.from(_favoriteSubjects)..add(selectedSubject);
         _updateFavoriteSubjects(newFavorites);
+        _translated = Translation.of(context)!.translate("subjectsList.$selectedSubject");
       },
       fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
         return TextField(
@@ -139,7 +140,6 @@ class _FavoriteSubjectsSettingsPageState
           ),
           onEditingComplete: onEditingComplete,
         );
-
       },
       optionsViewBuilder: (context, onSelected, options) {
         return Align(
@@ -152,10 +152,11 @@ class _FavoriteSubjectsSettingsPageState
                 padding: EdgeInsets.zero,
                 itemCount: options.length,
                 itemBuilder: (BuildContext context, int index) {
-                  final option = options.elementAt(index);
+                  final subject = options.elementAt(index);
+                  final translated = Translation.of(context)!.translate("subjectsList.$subject");
                   return ListTile(
-                    title: Text(option),
-                    onTap: () => onSelected(option),
+                    title: Text(translated),
+                    onTap: () => onSelected(subject),
                   );
                 },
               ),
@@ -166,11 +167,11 @@ class _FavoriteSubjectsSettingsPageState
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     final userDataAsync = ref.watch(userDataProvider);
     final subjects = ref.watch(subjectsProvider);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(Translation.of(context)!.translate("favoriteSubject.title"))),
@@ -191,7 +192,7 @@ class _FavoriteSubjectsSettingsPageState
                   runSpacing: 8,
                   children: _favoriteSubjects.map((subject) {
                     return Chip(
-                      label: Text(subject),
+                      label: Text(Translation.of(context)!.translate("subjectsList.$subject")),
                       deleteIcon: const Icon(Icons.close),
                       onDeleted: () {
                         final newFavorites = Set<String>.from(_favoriteSubjects);

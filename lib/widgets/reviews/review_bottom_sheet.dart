@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/services/coins_manager.dart';
-
+import 'package:studyswap/services/traslation_manager.dart';
 class ReviewBottomSheet extends StatefulWidget {
   final int initialRating;
   final String profile;
@@ -53,13 +53,13 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
     final reviewText = _reviewController.text.trim();
     if (_selectedRating == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a star rating')),
+        SnackBar(content: Text(Translation.of(context)!.translate("profile.writeReview.message1"))),
       );
       return;
     }
     if (reviewText.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a review')),
+         SnackBar(content: Text(Translation.of(context)!.translate("profile.writeReview.message2"))),
       );
       return;
     }
@@ -82,12 +82,12 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Congratulations!'),
-            content: Text('You have received 20 coins for having left a review.'),
+            title: Text(Translation.of(context)!.translate("profile.writeReview.titleCongratulation")),
+            content: Text(Translation.of(context)!.translate("profile.writeReview.bodyCongratulation")),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Keep going'),
+                child: Text(Translation.of(context)!.translate("profile.writeReview.buttonCongratulation")),
               ),
             ],
           );
@@ -123,7 +123,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
       stream: db.collection("Users").doc(widget.profile).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text('Error loading user data'));
+          return Center(child: Text(Translation.of(context)!.translate("profile.writeReview.error")));
         }
         if (!snapshot.hasData || !snapshot.data!.exists) {
           return Center(child: CircularProgressIndicator());
@@ -150,7 +150,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                 ),
                 Center(
                   child: Text(
-                    'Leave a Review for ${userData['username'] ?? widget.profile}',
+                    Translation.of(context)!.translate("profile.writeReview.titlePage")+'${userData['username'] ?? widget.profile}',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -166,8 +166,8 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                 TextField(
                   controller: _reviewController,
                   maxLines: 5,
-                  decoration: const InputDecoration(
-                    hintText: 'Write your review here',
+                  decoration: InputDecoration(
+                    hintText: Translation.of(context)!.translate("profile.writeReview.box"),
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -191,7 +191,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text('Cancel'),
+                      child: Text(Translation.of(context)!.translate("profile.writeReview.cancelButton")),
                     ),
                     const SizedBox(width: 12),
                     ElevatedButton(
@@ -207,7 +207,7 @@ class _ReviewBottomSheetState extends State<ReviewBottomSheet> {
                       onPressed: () {
                         submit(userData['username']);
                       },
-                      child: const Text('Submit'),
+                      child: Text(Translation.of(context)!.translate("profile.writeReview.submitButton")),
                     ),
                   ],
                 ),

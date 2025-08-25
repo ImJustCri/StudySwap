@@ -156,7 +156,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         Locale('en'),
         Locale('it'),
       ],
-      home: isConnectedToInternet ? LandingPage() : NoInternetConnection(),
+      home: isConnectedToInternet ? LandingPage(): NoInternetConnection(),
     );
   },
 );
