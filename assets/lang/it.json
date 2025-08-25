@@ -411,5 +411,6 @@
         "Latin": "Latino",
         "Ancient Greek": "Greco Antico",
         "Social Studies": "Scienze Sociali"
-    }
+    },
+    "allSubjects": "Tutte le materie"
 }

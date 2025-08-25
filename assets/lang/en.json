@@ -412,5 +412,6 @@
         "Latin": "Latin",
         "Ancient Greek": "Ancient Greek",
         "Social Studies": "Social Studies"
-    }
+    },
+    "allSubjects": "All subjects"
 }
