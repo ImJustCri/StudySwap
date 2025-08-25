@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'package:studyswap/services/traslation_manager.dart';
+
+import 'contact_input.dart';
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
 
@@ -19,6 +21,8 @@ class EditProfile extends ConsumerStatefulWidget {
 class _EditProfileState extends ConsumerState<EditProfile> {
   final _nameController = TextEditingController();
   final _bioController = TextEditingController();
+  String? _contactPlatform;
+  String? _contactHandle;
   Future<void>? _profileFuture;
 
   File? _selectedImageFile;
@@ -44,6 +48,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         final data = doc.data()!;
         _nameController.text = data['username']?.toString() ?? '';
         _bioController.text = data['aboutme']?.toString() ?? '';
+        _contactPlatform = data['contactPlatform']?.toString() ?? '';
+        _contactHandle = data['contactHandle']?.toString() ?? '';
         _currentImageUrl = data['image']?.toString();
       }
     } catch (e) {
@@ -126,6 +132,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
 
     final name = _nameController.text.trim();
     final bio = _bioController.text.trim();
+    final handle = _contactHandle?.trim();
+    final platform = _contactPlatform?.trim();
 
     if (name.isEmpty) {
       _showErrorDialog(Translation.of(context)!.translate("editProfile.nameEmpty"));
@@ -152,6 +160,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
         'username': name.replaceAll(" ", ".").toLowerCase(),
         'aboutme': bio,
         'image': imageUrlToSave,
+        'contactHandle': handle,
+        'contactPlatform': platform,
       });
 
       _showSuccessDialog();
@@ -278,7 +288,10 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        // image
                         _buildProfileImage(theme),
+
+                        // username
                         const SizedBox(height: 24),
                         TextField(
                           controller: _nameController,
@@ -289,6 +302,8 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                           ),
                         ),
                         const SizedBox(height: 16),
+
+                        // Bio
                         TextField(
                           controller: _bioController,
                           decoration:  InputDecoration(
@@ -297,6 +312,34 @@ class _EditProfileState extends ConsumerState<EditProfile> {
                             hintText: Translation.of(context)!.translate("editProfile.boxNewBio"),
                           ),
                           maxLines: 3,
+                        ),
+
+                        // Contact section
+
+                        const SizedBox(height: 24),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            Translation.of(context)!.translate("titleContact"),
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        ContactInput(
+                          initialPlatform: _contactPlatform,
+                          initialHandle: _contactHandle,
+                          onChanged: (platform, handle) {
+                            _contactPlatform = platform;
+                            _contactHandle = handle;
+                          },
+                        ),
+                        const SizedBox(height: 4),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            Translation.of(context)!.translate("hintContact"),
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
                         ),
                       ],
                     ),

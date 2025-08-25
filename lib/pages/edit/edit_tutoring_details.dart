@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/services/traslation_manager.dart';
-import '../../providers/subjects_providers.dart';
 
 class EditTutoringDetails extends ConsumerStatefulWidget {
   final String tutoringId;
@@ -106,8 +105,6 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final subjects = ref.watch(subjectsProvider);
-    final translatedSubjects = subjects.map((subject) => Translation.of(context)!.translate("Subject.$subject")).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -128,46 +125,28 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
               Expanded(
                 child: ListView(
                   children: [
-                    // Subject Autocomplete (disabled)
-                    Autocomplete<String>(
-                      optionsBuilder: (TextEditingValue textEditingValue) {
-                        if (textEditingValue.text.isEmpty) {
-                          return const Iterable<String>.empty();
-                        }
-                        return translatedSubjects.where((subject) =>
-                            subject.toLowerCase().contains(textEditingValue.text.toLowerCase()));
-                      },
-                      onSelected: (selection) {
-                        setState(() {
-                          _selectedSubject = selection;
-                          _subjectController.text = selection;
-                        });
-                      },
-                      fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
-                        controller.text = widget.subject;
-                        _subjectController.value = controller.value;
-
-                        return TextFormField(
-                          controller: controller,
-                          enabled: false,
-                          focusNode: focusNode,
-                          decoration:  InputDecoration(
-                            labelText: Translation.of(context)!.translate("labelSubject"),
-                            border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.category),
+                    // Subjects
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.category, color: Colors.grey),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              widget.subject,
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return Translation.of(context)!.translate("labelSubjectEmpty");
-                            }
-                            if (!translatedSubjects.contains(value.trim())) {
-                              return Translation.of(context)!.translate("labelSubjectInvalid");
-                            }
-                            return null;
-                          },
-                          onEditingComplete: onEditingComplete,
-                        );
-                      },
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -206,7 +185,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.device_hub),
                       ),
-                      value: _selectedMode,
+                      initialValue: _selectedMode,
                       items: [
                         DropdownMenuItem(value: "digital", child: Text(Translation.of(context)!.translate("tutoring.mode.digital"),)),
                         DropdownMenuItem(value: "irl", child: Text(Translation.of(context)!.translate("tutoring.mode.irl"),)),

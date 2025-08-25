@@ -97,7 +97,7 @@ class _ContactInputState extends State<ContactInput> {
         TextFormField(
           controller: _handleController,
           decoration: InputDecoration(
-            labelText: Translation.of(context)!.translate("habdle"),
+            labelText: Translation.of(context)!.translate("hanle"),
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.account_circle),
           ),

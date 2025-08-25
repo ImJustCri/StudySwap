@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/contact_provider.dart';
 import '../../providers/tutoring_provider.dart';
 import '../../widgets/tutoring_tile.dart';
 import 'package:studyswap/services/traslation_manager.dart';
@@ -11,6 +12,7 @@ class Tutoring extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tutoringAsyncValue = ref.watch(userTutoringProvider(userId));
+    final contact = ref.watch(contactProvider(userId)).value;
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -51,8 +53,8 @@ class Tutoring extends ConsumerWidget {
                 tutoringId: tutoring['id'] ?? "",
                 hours: tutoring['hours'] ?? 0,
                 mode: tutoring['mode'] ?? Translation.of(context)!.translate("profile.noMode"),
-                contactHandle: tutoring['contact_handle'],
-                contactPlatform: tutoring['contact_platform'],
+                contactHandle: contact?['handle'] ?? Translation.of(context)!.translate("profile.noContact.explanation"),
+                contactPlatform: contact?['platform'] ?? Translation.of(context)!.translate("profile.noContact.title"),
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 16),

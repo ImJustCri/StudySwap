@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/pages/profile/profile_page.dart';
+import '../../providers/contact_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../services/posts_manager.dart';
 import '../bought/transaction.dart';
@@ -18,8 +19,6 @@ class PostDetailsPage extends ConsumerStatefulWidget {
   final int price;
   final String description;
   final String imageUrl;
-  final String contactPlatform;
-  final String contactHandle;
   final bool isOfUser;
 
   // Optional fields for books
@@ -37,8 +36,6 @@ class PostDetailsPage extends ConsumerStatefulWidget {
     required this.imageUrl,
     required this.isOfUser,
     required this.id,
-    required this.contactHandle,
-    required this.contactPlatform,
 
     // Optional fields for books
     this.isbn,
@@ -100,6 +97,9 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final boughtNotesAsync = ref.watch(boughtNotesProvider);
+    final contact = ref.watch(contactProvider(widget.userId)).value;
+    final contactHandle = contact?['handle'] ?? Translation.of(context)!.translate("profile.noContact.explanation");
+    final contactPlatform = contact?['platform'] ?? Translation.of(context)!.translate("profile.noContact.title");
 
     bool isBought = false;
 
@@ -383,17 +383,17 @@ class _PostDetailsPageState extends ConsumerState<PostDetailsPage> {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text(widget.contactPlatform),
+                                title: Text(contactPlatform),
                                 content: Row(
                                   children: [
                                     Expanded(
-                                      child: SelectableText(widget.contactHandle, style: const TextStyle(fontSize: 16)),
+                                      child: SelectableText(contactHandle, style: const TextStyle(fontSize: 16)),
                                     ),
                                     IconButton(
                                       icon: const Icon(Icons.copy),
                                       tooltip: 'Copy to clipboard',
                                       onPressed: () {
-                                        Clipboard.setData(ClipboardData(text: widget.contactHandle));
+                                        Clipboard.setData(ClipboardData(text: contactHandle));
                                         ScaffoldMessenger.of(context).showSnackBar(
                                            SnackBar(content: Text(Translation.of(context)!.translate("postDetail.copyName"))),
                                         );

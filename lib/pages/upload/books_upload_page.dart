@@ -8,8 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/subjects_providers.dart';
 import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
-import 'contact_input.dart';
 import 'package:studyswap/services/traslation_manager.dart';
+
+import 'contact_section.dart';
 
 class BooksUploadPage extends ConsumerStatefulWidget {
   const BooksUploadPage({super.key});
@@ -32,9 +33,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
 
   File? _selectedImage;
 
-  String? _contactPlatform;
-  String? _contactHandle;
-
   bool _isUploading = false;
 
   @override
@@ -52,12 +50,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
     if (_isUploading) return;
 
     if (_formKey.currentState?.validate() ?? false) {
-      if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(Translation.of(context)!.translate("contactHandle"))),
-        );
-        return;
-      }
 
       setState(() {
         _isUploading = true;
@@ -69,8 +61,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
       final isbn = _isbnController.text.trim();
       final year = int.parse(_yearController.text.trim());
       final description = _descriptionController.text.trim();
-      final contactPlatform = _contactPlatform!;
-      final contactHandle = _contactHandle!;
 
       await _uploadNote(
         title: title,
@@ -79,8 +69,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         isbn: isbn,
         year: year,
         description: description,
-        contactPlatform: contactPlatform,
-        contactHandle: contactHandle,
       );
 
       _formKey.currentState?.reset();
@@ -94,8 +82,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
       setState(() {
         _selectedSubject = null;
         _selectedImage = null;
-        _contactPlatform = null;
-        _contactHandle = null;
         _isUploading = false;
       });
 
@@ -323,7 +309,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                         final year = int.tryParse(value.trim());
                         final currentYear = DateTime.now().year;
                         if (year == null || year < 1000 || year > currentYear) {
-                          return Translation.of(context)!.translate("books.labellYearErrors")+"$currentYear";
+                          return "${Translation.of(context)!.translate("books.labellYearErrors")}$currentYear";
                         }
                         return null;
                       },
@@ -338,30 +324,8 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Translation.of(context)!.translate("titleContact"),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ContactInput(
-                      initialPlatform: _contactPlatform,
-                      initialHandle: _contactHandle,
-                      onChanged: (platform, handle) {
-                        _contactPlatform = platform;
-                        _contactHandle = handle;
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                       Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Translation.of(context)!.translate("hintContact"),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ),
+                    // Contact
+                    const ContactSection(),
                     const SizedBox(height: 16),
 
                     SizedBox(
@@ -394,8 +358,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
     required int cost,
     required String isbn,
     required int year,
-    required String contactPlatform,
-    required String contactHandle,
   }) async {
     try {
       final booksCollection = FirebaseFirestore.instance.collection('Books');
@@ -435,8 +397,6 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
         'createdAt': FieldValue.serverTimestamp(),
         'image_url': imageUrl,
         'currency': "€",
-        'contact_platform': contactPlatform,
-        'contact_handle': contactHandle,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -444,7 +404,7 @@ class _BooksUploadPageState extends ConsumerState<BooksUploadPage> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Translation.of(context)!.translate("MessageUnsuccessful")+"$e")),
+        SnackBar(content: Text("${Translation.of(context)!.translate("MessageUnsuccessful")}$e")),
       );
     }
   }

@@ -9,8 +9,8 @@ import 'package:uuid/uuid.dart';
 import '../../providers/subjects_providers.dart';
 import '../../services/compression/posts_compression.dart';
 import '../../widgets/thumbnail_picker.dart';
-import 'contact_input.dart';
 import 'package:studyswap/services/traslation_manager.dart';
+import 'contact_section.dart';
 
 class NotesUploadPage extends ConsumerStatefulWidget {
   const NotesUploadPage({super.key});
@@ -31,10 +31,6 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
   File? _selectedImage;
   File? _selectedNote;
 
-
-  String? _contactPlatform;
-  String? _contactHandle;
-
   bool _isUploading = false;
 
   @override
@@ -50,12 +46,6 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     if (_isUploading) return;
 
     if (_formKey.currentState?.validate() ?? false) {
-      if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(Translation.of(context)!.translate("contactHandle"))),
-        );
-        return;
-      }
 
       if (_selectedNote == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -73,16 +63,12 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
       final subject = _selectedSubject ?? _subjectController.text.trim();
       final cost = int.parse(_costController.text.trim());
       final description = _descriptionController.text.trim();
-      final contactPlatform = _contactPlatform!;
-      final contactHandle = _contactHandle!;
 
       await _uploadNote(
         title: title,
         subject: subject,
         cost: cost,
         description: description,
-        contactPlatform: contactPlatform,
-        contactHandle: contactHandle,
       );
 
       _formKey.currentState?.reset();
@@ -94,8 +80,6 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
       setState(() {
         _selectedSubject = null;
         _selectedImage = null;
-        _contactPlatform = null;
-        _contactHandle = null;
         _isUploading = false;
       });
 
@@ -107,6 +91,7 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjects = ref.watch(subjectsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title:  Text(
@@ -285,30 +270,10 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Translation.of(context)!.translate("titleContact"),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ContactInput(
-                      initialPlatform: _contactPlatform,
-                      initialHandle: _contactHandle,
-                      onChanged: (platform, handle) {
-                        _contactPlatform = platform;
-                        _contactHandle = handle;
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                       Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Translation.of(context)!.translate("hintContact"),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ),
+                    // Contact
+                    const ContactSection(),
+
+                    // Note picker
                     const SizedBox(height: 16),
                     NotePicker(
                       initialFile: _selectedNote,
@@ -348,8 +313,6 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
     required String subject,
     required int cost,
     required String description,
-    required String contactPlatform,
-    required String contactHandle,
   }) async {
     try {
       final notesCollection = FirebaseFirestore.instance.collection('Notes');
@@ -392,8 +355,6 @@ class _NotesUploadPageState extends ConsumerState<NotesUploadPage> {
         'price': cost,
         'user_id': FirebaseAuth.instance.currentUser?.uid,
         'description': description,
-        'contact_platform': contactPlatform,
-        'contact_handle': contactHandle,
         'createdAt': FieldValue.serverTimestamp(),
         'image_url': imageUrl,
         'note_url': noteUrl,

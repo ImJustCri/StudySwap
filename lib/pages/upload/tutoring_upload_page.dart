@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/subjects_providers.dart';
-import 'contact_input.dart';
 import 'package:studyswap/services/traslation_manager.dart';
+
+import 'contact_section.dart';
 class TutoringUploadPage extends ConsumerStatefulWidget {
   const TutoringUploadPage({super.key});
 
@@ -22,10 +23,6 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
   String? _selectedSubject;
   final Set<int> _selectedClasses = {};
 
-  // Contact info state
-  String? _contactPlatform;
-  String? _contactHandle;
-
   bool _isUploading = false;
 
   @override
@@ -40,12 +37,6 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
     if (_isUploading) return;
 
     if (_formKey.currentState!.validate()) {
-      if (_contactHandle == null || _contactHandle!.trim().isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text(Translation.of(context)!.translate("contactHandle"))),
-        );
-        return;
-      }
 
       if (_selectedClasses.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -67,17 +58,12 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
       final classesBoolList =
       List<bool>.generate(5, (index) => _selectedClasses.contains(index + 1));
 
-      final contactPlatform = _contactPlatform!;
-      final contactHandle = _contactHandle!;
-
       await _uploadTutoring(
         subject: subject,
         classes: classesBoolList,
         description: description,
         mode: mode,
         hours: hours,
-        contactPlatform: contactPlatform,
-        contactHandle: contactHandle,
       );
 
       // Clear form & reset states
@@ -90,8 +76,6 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         _selectedSubject = null;
         _selectedMode = null;
         _selectedClasses.clear();
-        _contactPlatform = null;
-        _contactHandle = null;
         _isUploading = false;
       });
 
@@ -244,7 +228,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.device_hub),
                       ),
-                      value: _selectedMode,
+                      initialValue: _selectedMode,
                       items: [
                         DropdownMenuItem(value: "digital", child: Text(Translation.of(context)!.translate("tutoring.mode.digital"),)),
                         DropdownMenuItem(value: "irl", child: Text(Translation.of(context)!.translate("tutoring.mode.irl"),)),
@@ -290,7 +274,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                         final isSelected = _selectedClasses.contains(classNumber);
 
                         return FilterChip(
-                          label: Text(Translation.of(context)!.translate("tutoring.class")+"$classNumber"),
+                          label: Text("${Translation.of(context)!.translate("tutoring.class")}$classNumber"),
                           selected: isSelected,
                           onSelected: (selected) {
                             setState(() {
@@ -306,32 +290,8 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    // Contact Input Section
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Translation.of(context)!.translate("titleContact"),
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ContactInput(
-                      initialPlatform: _contactPlatform,
-                      initialHandle: _contactHandle,
-                      onChanged: (platform, handle) {
-                        _contactPlatform = platform;
-                        _contactHandle = handle;
-                      },
-                    ),
-                    const SizedBox(height: 4),
-                       Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        Translation.of(context)!.translate("hintContact"),
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
+                    // Contact Section
+                    const ContactSection(),
                   ],
                 ),
               ),
@@ -365,8 +325,6 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
     required List<bool> classes,
     required String mode,
     required double hours,
-    required String contactPlatform,
-    required String contactHandle,
   }) async {
     try {
       final tutoringCollection = FirebaseFirestore.instance.collection('Tutoring');
@@ -382,8 +340,6 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
         'description': description,
         'mode': mode,
         'hours': hours,
-        'contact_platform': contactPlatform,
-        'contact_handle': contactHandle,
         'createdAt': FieldValue.serverTimestamp(),
       });
 
@@ -392,7 +348,7 @@ class _TutoringUploadPageState extends ConsumerState<TutoringUploadPage> {
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(Translation.of(context)!.translate("tutoring.MessageSuccessful")+" $e")),
+        SnackBar(content: Text("${Translation.of(context)!.translate("tutoring.MessageSuccessful")} $e")),
       );
     }
   }
