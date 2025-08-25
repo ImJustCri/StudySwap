@@ -289,7 +289,19 @@
         "noTutoring": "Nessuna lezione di ripetizione disponibile.",
         "noTitle": "Nessun titolo",
         "noDescription": "Nessuna descrizione",
-        "noMode": "Non specificato"
+        "noMode": "Non specificato",
+        "writeReview":{
+                "titlePage":"Lascia una recensione per ",
+                "box":"Scrivi la tua recensione qui",
+                "cancelButton":"Cancella",
+                "submitButton":"Invia",
+                "error":"Errore nel caricamento dei dati utente",
+                "titleCongratulation":"Congratulazioni!",
+                "bodyCongratulation":"Hai ricevuto 20 coin per aver lasciato una recensione",
+                "buttonCongratulation":"Continua cosi",
+                "message1":"Scegli quante stelle dare",
+                "message2":"Inserisci una recensione"
+            }
     },
     "rearch": {
         "tabs": {
@@ -353,7 +365,7 @@
         "messageSuccessful": "Appunto acquistato con successo!",
         "button": "Conferma acquisto"
     },
-    "mediaDispayPage": "Lettore di appunti",
+    "mediaDispayPage": "Dettagli nota",
     "searchFavoriteSubject":{
         "body":"Nessun post disponibile",
         "titleNotes":"Appunti",

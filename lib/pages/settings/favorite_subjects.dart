@@ -170,7 +170,6 @@ class _FavoriteSubjectsSettingsPageState
   Widget build(BuildContext context) {
     final userDataAsync = ref.watch(userDataProvider);
     final subjects = ref.watch(subjectsProvider);
-    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(title: Text(Translation.of(context)!.translate("favoriteSubject.title"))),

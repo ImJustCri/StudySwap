@@ -104,7 +104,6 @@ class _EditBooksPageState extends ConsumerState<EditBooksPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final subjects = ref.watch(subjectsProvider);
-    final translatedSubjects = subjects.map((subject) => Translation.of(context)!.translate("Subject.$subject")).toList();
 
     return Scaffold(
       appBar: AppBar(
