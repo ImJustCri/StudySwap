@@ -266,10 +266,6 @@
     },
     "profile":{
             "title":"Latest uploads",
-            "noContact": {
-                "title": "Not specified",
-                "explanation": "The user has not chosen a platform to be contacted on"
-            },
             "noBooks":"No books uploaded.",
             "noNotes":"No notes uploaded.",
             "errorEmptyUser":"User ID is empty",
@@ -405,6 +401,7 @@
         "Ancient Greek": "Ancient Greek",
         "Social Studies": "Social Studies"
     },
+    "allSubjects": "All subjects",
     "uploadContact": {
         "title": "Your contact",
         "hint": "You can edit the contact platform and handle in your profile's settings"

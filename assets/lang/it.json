@@ -266,10 +266,6 @@
     },
     "profile": {
         "title": "Ultimi caricati",
-        "noContact": {
-            "title": "Non specificato",
-            "explanation": "L'utente non ha scelto una piattaforma dove essere contattato"
-        },
         "noBooks": "Nessun libro caricato.",
         "noNotes": "Nessun appunto caricato.",
         "errorEmptyUser": "ID utente vuoto",
@@ -404,6 +400,7 @@
         "Ancient Greek": "Greco Antico",
         "Social Studies": "Scienze Sociali"
     },
+    "allSubjects": "Tutte le materie",
     "uploadContact": {
         "title": "Dove contattarti",
         "hint": "Puoi modificare la piattaforma e l'username di contatto nelle impostazioni del tuo profilo"

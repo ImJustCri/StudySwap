@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/widgets/post.dart';
 import '../providers/books_provider.dart';
 import '../providers/subjects_providers.dart';
+import '../services/traslation_manager.dart';
 
 class ExchangePage extends ConsumerStatefulWidget {
   const ExchangePage({super.key});
@@ -35,8 +36,9 @@ class _ExchangePageState extends ConsumerState<ExchangePage> {
                   child: Row(
                     children: chipsSubjects.map((subject) {
                       final isSelected = selectedSubject == subject;
-                      final label = subject ?? 'All subjects';
-
+                      final label = subject == null
+                          ? Translation.of(context)!.translate("allSubjects")
+                          : Translation.of(context)!.translate("subjectsList.$subject");
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ChoiceChip(
