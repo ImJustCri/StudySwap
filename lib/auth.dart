@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:studyswap/services/traslation_manager.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
@@ -39,7 +39,7 @@ class Auth {
       final uid = userCredential.user!.uid;
       final userDocRef = db.collection("Users").doc(uid);
       final userDoc = await userDocRef.get();
-      String? token= await FirebaseMessaging.instance.getToken();
+      // String? token= await FirebaseMessaging.instance.getToken();
 
       // Update collection "Users" to add new entry only when the email is verified
       // And only when the user hasn't been created yet
@@ -57,12 +57,7 @@ class Auth {
           'email': userCredential.user!.email,
           'darkmode': false,
           'favorite_subjects': [],
-          'token': token,
           'user_id': uid,
-        });
-      }else{
-        await userDocRef.update({
-          'token':token,
         });
       }
       //load of database

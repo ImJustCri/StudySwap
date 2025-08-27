@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:studyswap/auth.dart';
-import 'package:studyswap/notifications/notifications.dart';
 import 'package:studyswap/services/traslation_manager.dart';
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -11,7 +10,6 @@ class LoginPage extends StatelessWidget {
     final auth = Auth(); // Creates Auth Object
     final email=TextEditingController();
     final password=TextEditingController();
-    setupNotifications();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(

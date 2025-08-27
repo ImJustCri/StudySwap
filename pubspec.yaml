@@ -35,7 +35,6 @@ dependencies:
   screen_protector: ^1.4.2
   firebase_core: ^3.4.1
   firebase_auth: ^5.7.0
-  firebase_messaging: ^15.1.2
   cloud_firestore: ^5.0.0
   flutter_colorpicker: ^1.0.3
   flutter_sliding_tutorial: ^2.0.0+1
