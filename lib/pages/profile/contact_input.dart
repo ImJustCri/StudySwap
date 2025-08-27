@@ -25,7 +25,9 @@ class _ContactInputState extends State<ContactInput> {
   @override
   void initState() {
     super.initState();
-    _selectedPlatform = widget.initialPlatform ?? _platforms.first;
+    _selectedPlatform = _platforms.contains(widget.initialPlatform)
+        ? widget.initialPlatform!
+        : 'Telegram';
     _handleController = TextEditingController(text: widget.initialHandle ?? '');
 
     _handleController.addListener(() {
