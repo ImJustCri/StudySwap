@@ -58,7 +58,7 @@
     "register": {
         "title": "Benvenuto!",
         "confirmPassword": "Conferma password",
-        "checkBox1": "Accetto",
+        "checkBox1": "Accetto i ",
         "checkBox2": "Termini di servizio",
         "invalidEmailBody": "Puoi registrarti solo con un'email istituzionale che termini con '.edu.it'",
         "incorrectPassword": "Password errata",

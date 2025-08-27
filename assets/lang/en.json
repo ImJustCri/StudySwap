@@ -58,7 +58,7 @@
     "register":{
         "title":"Welcome!",
         "confirmPassword":"Confirm password",
-        "checkBox1":"I agree with",
+        "checkBox1":"I agree with ",
         "checkBox2":"Terms of Service",
         "invalidEmailBody":"You can register only with an institutional email ending in .edu.it",
         "incorrectPassword":"Incorrect password",
