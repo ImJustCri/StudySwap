@@ -104,20 +104,22 @@ class Auth {
   Future<void> deleteAccount() async{
     try{
       User? userCredential=FirebaseAuth.instance.currentUser;
-      if(userCredential!=null){
-        // Call to delete the content in Users
-        await FirebaseFirestore.instance.collection('Users').doc(userCredential.uid).delete();
+      final userId = userCredential!.uid;
 
-        // Call to delete the user's uploads
-        final firestore = FirebaseFirestore.instance;
-        await deleteUploads(userCredential, firestore.collection("Notes"));
-        await deleteUploads(userCredential, firestore.collection("Books"));
-        await deleteUploads(userCredential, firestore.collection("Tutoring"));
+      // Call to delete the content in Users
+      await FirebaseFirestore.instance.collection('Users').doc(userCredential.uid).delete();
 
-        // Call to delete the account
-        await userCredential.delete();
-      }
-    }on FirebaseAuthException catch (ex) {
+      // Call to delete the user's uploads
+      final firestore = FirebaseFirestore.instance;
+      await deleteUploads(userCredential, firestore.collection("Notes"));
+      await deleteUploads(userCredential, firestore.collection("Books"));
+      await deleteUploads(userCredential, firestore.collection("Tutoring"));
+
+      await Supabase.instance.client.storage.from('pfp').remove([userId]);
+
+      // Call to delete the account
+      await userCredential.delete();
+        }on FirebaseAuthException catch (ex) {
       debugPrint('Exception in deleteAccount: $ex');
     }
   }
@@ -128,24 +130,18 @@ class Auth {
         // Query all uploads where 'user_id' equals current user's uid
         final querySnapshot = await collectionRef.where('user_id', isEqualTo: currentUser.uid).get();
 
-        // Create a batch
-        final batch = FirebaseFirestore.instance.batch();
-
         for (final doc in querySnapshot.docs) {
-          await Supabase.instance.client
-              .storage
-              .from('thumbnails')
-              .remove(doc["id"]);
+          // Delete file from Supabase storage
+          await Supabase.instance.client.storage.from('thumbnails').remove(["${currentUser.uid}/${doc["id"]}"]);
 
-          batch.delete(doc.reference);
+          // Delete Firestore document individually
+          await doc.reference.delete();
         }
-
-        // Commit the batch to delete all uploads at once
-        await batch.commit();
       }
     } on FirebaseAuthException catch (ex) {
       debugPrint('Exception in deleteAccount: $ex');
     }
   }
+
 }
 
