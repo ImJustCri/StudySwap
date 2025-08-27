@@ -113,10 +113,11 @@
     },
     "settings":{
         "titleDeleteA":"Delete Account",
-        "bodyDeleteA":"Are you sure you want to delete your account? This action cannot be undone.",
+        "bodyDeleteA":"For enhanced security, you must insert your password in order to delete your account.",
         "buttonCalcelA":"Cancel",
         "buttonDeleteA":"Delete",
         "MessageDeleteA":"Account deleted",
+        "wrongPassword": "Wrong password",
         "titlePage":"Settings",
         "preferencesTitle":"PREFERENCES",
         "preferencesErrorCasual":"Error loading preferences: ",
@@ -142,7 +143,9 @@
         "DangerZone":{
             "title":"Delete Account",
             "hint":"Permanently delete your account"
-        }
+        },
+        "passwordLabel": "Password",
+        "enterPasswordMessage": "Insert your password"
     },
     "home":{
             "circolari":"Latest from your school",

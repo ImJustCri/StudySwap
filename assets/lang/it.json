@@ -113,9 +113,10 @@
     },
     "settings": {
         "titleDeleteA": "Elimina account",
-        "bodyDeleteA": "Sei sicuro di voler eliminare il tuo account? Questa azione non può essere annullata.",
+        "bodyDeleteA": "Per una maggiore sicurezza, è necessario inserire la tua password per eliminare il tuo account.",
         "buttonCalcelA": "Annulla",
         "buttonDeleteA": "Elimina",
+        "wrongPassword": "Password errata",
         "MessageDeleteA": "Account eliminato",
         "titlePage": "Impostazioni",
         "preferencesTitle": "PREFERENZE",
@@ -142,7 +143,9 @@
         "DangerZone": {
             "title": "Elimina account",
             "hint": "Elimina definitivamente il tuo account"
-        }
+        },
+        "passwordLabel": "Password",
+        "enterPasswordMessage": "Inserisci la tua password"
     },
     "home": {
         "circolari": "Novità dalla tua scuola",

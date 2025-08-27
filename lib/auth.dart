@@ -99,30 +99,39 @@ class Auth {
     }
   }
 
-  /// Account deletion
+  /// Account deletion.
+  /// Returns true if account is deleted, false if there is an error.
 
-  Future<void> deleteAccount() async{
-    try{
-      User? userCredential=FirebaseAuth.instance.currentUser;
-      final userId = userCredential!.uid;
+  Future<bool> deleteAccount(String password) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) return false;
 
-      // Call to delete the content in Users
-      await FirebaseFirestore.instance.collection('Users').doc(userCredential.uid).delete();
+      final userEmail = user.email;
+      if (userEmail == null) return false;
 
-      // Call to delete the user's uploads
+      AuthCredential credential = EmailAuthProvider.credential(email: userEmail, password: password);
+      await user.reauthenticateWithCredential(credential);
+
+      await FirebaseFirestore.instance.collection('Users').doc(user.uid).delete();
+
       final firestore = FirebaseFirestore.instance;
-      await deleteUploads(userCredential, firestore.collection("Notes"));
-      await deleteUploads(userCredential, firestore.collection("Books"));
-      await deleteUploads(userCredential, firestore.collection("Tutoring"));
+      await deleteUploads(user, firestore.collection("Notes"));
+      await deleteUploads(user, firestore.collection("Books"));
+      await deleteUploads(user, firestore.collection("Tutoring"));
 
-      await Supabase.instance.client.storage.from('pfp').remove([userId]);
+      await Supabase.instance.client.storage.from('pfp').remove([user.uid]);
 
-      // Call to delete the account
-      await userCredential.delete();
-        }on FirebaseAuthException catch (ex) {
+      await user.delete();
+
+      return true;
+    } on FirebaseAuthException catch (ex) {
       debugPrint('Exception in deleteAccount: $ex');
+      return false;
     }
   }
+
+
 
   Future<void> deleteUploads(User? currentUser, collectionRef) async {
     try {
