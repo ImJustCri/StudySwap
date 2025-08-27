@@ -1,48 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/providers/theme_provider.dart';
-import 'package:studyswap/auth.dart';
 import 'package:studyswap/providers/user_provider.dart';
 import 'package:studyswap/services/traslation_manager.dart';
 
 import '../../providers/language_provider.dart';
+import 'delete_account.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
-
-  void _showDeleteAccountDialog(BuildContext context) {
-    final auth = Auth();
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title:  Text(Translation.of(context)!.translate("settings.titleDeleteA")),
-        content:  Text(
-          Translation.of(context)!.translate("settings.bodyDeleteA"),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child:  Text(Translation.of(context)!.translate("settings.buttonCalcelA")),
-          ),
-          TextButton(
-            onPressed: () {
-              auth.deleteAccount();
-              Navigator.of(ctx).pop();
-              ScaffoldMessenger.of(context).showSnackBar(
-                 SnackBar(content: Text(Translation.of(context)!.translate("settings.MessageDeleteA"))),
-              );
-              Navigator.pushReplacementNamed(context, '/onboarding');
-              // Here you would add actual account deletion logic.
-            },
-            child:  Text(
-              Translation.of(context)!.translate("settings.buttonDeleteA"),
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _sectionLabel(BuildContext context, String text, {Color? color}) {
     return Padding(
@@ -176,7 +142,7 @@ class SettingsPage extends ConsumerWidget {
                   style: TextStyle(color: Colors.red),
                 ),
                 subtitle:  Text(Translation.of(context)!.translate("settings.DangerZone.hint")),
-                onTap: () => _showDeleteAccountDialog(context),
+                onTap: () => showDeleteAccountDialog(context),
               ),
             ],
           );
