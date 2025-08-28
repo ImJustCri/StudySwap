@@ -93,7 +93,7 @@ class CircolariCarousel extends ConsumerWidget {
                 children: itemWidgets,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
           ],
         );
       },
@@ -134,7 +134,7 @@ class CircolariCarousel extends ConsumerWidget {
                 children: placeholderItems,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
           ],
         );
       },
