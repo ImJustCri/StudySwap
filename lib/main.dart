@@ -5,7 +5,6 @@ import 'app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:screen_protector/screen_protector.dart';
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -19,7 +18,5 @@ Future<void> main() async {
       return token;
     },
   );
-
-  await ScreenProtector.preventScreenshotOn();
   runApp(const ProviderScope(child: MyApp()));
 }

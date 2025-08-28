@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:studyswap/services/traslation_manager.dart';
 class MediaDisplayPage extends StatefulWidget {
@@ -17,6 +18,13 @@ class _MediaDisplayPageState extends State<MediaDisplayPage> {
   void initState() {
     super.initState();
     c = PdfViewerController();
+    ScreenProtector.preventScreenshotOn();
+  }
+
+  @override
+  void dispose() {
+    ScreenProtector.preventScreenshotOff();
+    super.dispose();
   }
 
   @override
