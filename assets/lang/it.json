@@ -292,7 +292,18 @@
         "noTutoring": "Nessuna lezione di ripetizione disponibile.",
         "noTitle": "Nessun titolo",
         "noDescription": "Nessuna descrizione",
-        "noMode": "Non specificato"
+        "noMode": "Non specificato",
+        "writeReview":{
+                "titlePage":"Scrivi una recensione per ",
+                "box":"Scrivi la tua recensione qui",
+                "cancelButton":"Cancella",
+                "submitButton":"Invia",
+                "titleCongratulation":"Congratulazioni!",
+                "bodyCongratulation":"Hai ricevuto 20 coins per aver lasciato una recensione",
+                "buttonCongratulation":"Continua cosi",
+                "message1":"Grazie per la tua recensione!",
+                "message2":"Perfavore scrivi la tua recensione" 
+        }
     },
     "rearch": {
         "tabs": {

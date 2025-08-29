@@ -292,7 +292,18 @@
             "noTutoring":"No tutoring sessions available.",
             "noTitle":"No title",
             "noDescription":"No description",
-            "noMode":"Not specified"
+            "noMode":"Not specified",
+            "writeReview":{
+                "titlePage":"Leave a Review for ",
+                "box":"Write your review here",
+                "cancelButton":"Cancel",
+                "submitButton":"Submit",
+                "titleCongratulation":"Congratulations!",
+                "bodyCongratulation":"You have received 20 coins for having left a review",
+                "buttonCongratulation":"Keep going",
+                "message1":"Thanks you for your review!",
+                "message2":"Please enter a review" 
+        }
     },
     "rearch":{
         "tabs":{

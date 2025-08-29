@@ -185,7 +185,7 @@ class _TutoringUploadPageState extends ConsumerState<EditTutoringDetails> {
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.device_hub),
                       ),
-                      initialValue: _selectedMode,
+                      value: _selectedMode,
                       items: [
                         DropdownMenuItem(value: "digital", child: Text(Translation.of(context)!.translate("tutoring.mode.digital"),)),
                         DropdownMenuItem(value: "irl", child: Text(Translation.of(context)!.translate("tutoring.mode.irl"),)),
