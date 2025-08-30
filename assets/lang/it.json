@@ -209,6 +209,10 @@
         "title": "Sei offline",
         "body": "Connettiti a internet e poi riavvia l'app"
     },
+    "update":{
+        "title":"Nuovo aggiornamento disponibile!",
+        "body":"Scarica l'ultima versione per continuare ad usare quest'app."
+    },
     "tutoring": {
         "ClassEmpty": "Seleziona almeno una classe",
         "titlePage": "Carica offerta di ripetizioni",

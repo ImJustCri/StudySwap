@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:studyswap/home/suggested_notes.dart';
 import 'package:studyswap/pages/settings/favorite_subjects.dart';
 import 'package:studyswap/widgets/circolari_carousel.dart';
-import 'package:studyswap/widgets/post.dart';
 import 'latest_notes.dart';
 
 class HomePageContent extends ConsumerWidget {
@@ -22,7 +21,6 @@ class HomePageContent extends ConsumerWidget {
       },
       orElse: () => <String>{},
     );
-
 
     return SingleChildScrollView(
       child: Column(

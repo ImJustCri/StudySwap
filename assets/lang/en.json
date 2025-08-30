@@ -209,6 +209,10 @@
         "title":"You're offline",
         "body":"Connect to an internet connection and then restart the app"
     },
+    "update":{
+        "title":"New update available!",
+        "body":"Download the latest version to keep using this app."
+    },
     "tutoring":{
         "ClassEmpty":"Please select at least one class",
         "titlePage":"Upload Tutoring Offer",

@@ -15,6 +15,7 @@ import 'package:studyswap/pages/onboarding/onboarding_page.dart';
 import 'package:studyswap/pages/profile/edit_profile.dart';
 import 'package:studyswap/pages/settings/favorite_subjects.dart';
 import 'package:studyswap/pages/settings/settings_page.dart';
+import 'package:studyswap/pages/update_page.dart';
 import 'package:studyswap/pages/upload/books_upload_page.dart';
 import 'package:studyswap/pages/upload/notes_upload_page.dart';
 import 'package:studyswap/pages/upload/tutoring_upload_page.dart';
@@ -57,21 +58,21 @@ class _DynamicHomeState extends ConsumerState<DynamicHome> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.listen<bool>(internetStatusProvider, (previous, next) {
-        if (next) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const LandingPage()),
-            (route) => false,
-          );
-        } else {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const NoInternetConnection()),
-            (route) => false,
-          );
-        }
-      });
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   ref.listen<bool>(internetStatusProvider, (previous, next) {
+    //     if (next) {
+    //       Navigator.of(context).pushAndRemoveUntil(
+    //         MaterialPageRoute(builder: (_) => const LandingPage()),
+    //         (route) => false,
+    //       );
+    //     } else {
+    //       Navigator.of(context).pushAndRemoveUntil(
+    //         MaterialPageRoute(builder: (_) => const NoInternetConnection()),
+    //         (route) => false,
+    //       );
+    //     }
+    //   });
+    // });
   }
 
   @override
@@ -179,6 +180,7 @@ class _MyAppState extends ConsumerState<MyApp> {
                 const FavoriteSubjectsSettingsPage(),
             '/change-password': (context) => const ChangePassword(),
             '/bought-notes': (context) => BoughtNotes(),
+            '/update-page': (context) => UpdatePage(),
           },
           localizationsDelegates: [
             TranslationDelegate(locale),

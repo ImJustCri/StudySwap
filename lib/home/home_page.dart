@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:studyswap/providers/circolari_feed_provider.dart';
+import 'package:studyswap/services/updates_manager.dart';
 import '../widgets/main_top_bar.dart';
 import '../pages/settings/favorite_subjects.dart';
 import '../providers/notes_provider.dart';
@@ -41,11 +42,25 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     });
   }
 
+  Future<void> _checkForUpdateAndNavigate() async {
+    final updateAvailable = await UpdatesManager.isNewVersionAvailable();
+    if (updateAvailable) {
+      // Use WidgetsBinding to ensure context is available
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.of(context).pushNamed('/update-page');
+        }
+      });
+    }
+  }
+
   late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _checkForUpdateAndNavigate();
+
     _pages = [
       RefreshIndicator(
         onRefresh: _handleRefresh,
